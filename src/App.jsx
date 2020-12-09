@@ -1,29 +1,30 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import DashboardTable from './components/DashboardTable';
+import Footer from './components/Footer';
+import Header from './components/Header';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit
-          {' '}
-          <code>src/App.js</code>
-          {' '}
-          and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container fluid>
+      <Header />
+
+      <Row>
+        <Col>List</Col>
+        <Col>Map</Col>
+        <Col>
+          <Row>
+            <DashboardTable />
+          </Row>
+          <Row>Chart</Row>
+        </Col>
+      </Row>
+
+      <Footer />
+    </Container>
   );
 }
 
