@@ -3,9 +3,9 @@ import './App.css';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import DashboardTable from './components/DashboardTable';
-import Footer from './components/Footer';
-import Header from './components/Header';
+import DashboardTable from './components/DashboardTable/DashboardTable';
+import Footer from './components/Footer/Footer';
+import Header from './components/Header/Header';
 
 function App() {
   return (

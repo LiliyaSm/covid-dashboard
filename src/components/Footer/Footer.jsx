@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from '../assets/icons/rs_school_js.svg';
+import logo from '../../assets/icons/rs_school_js.svg';
 
 function Footer() {
   return (
