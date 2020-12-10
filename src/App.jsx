@@ -3,24 +3,47 @@ import './App.css';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import axios from 'axios';
 import DashboardTable from './components/DashboardTable/DashboardTable';
 import Footer from './components/Footer/Footer';
 import Header from './components/Header/Header';
 
+import requestService from './services/requests';
+
 const App = () => {
+  const [info, setInfo] = useState({ loadingEnded: false });
+  // Страну можно выбрать:
+
+  // кликом по пункту списка(2)
+  // кликом по интерактивной карте(3)
+  // найти при помощи поиска (в списке?)
+
+  // и она отображается в таблице(1)
+  const [currentCountry] = useState('Whole world');
+  const [tableData, setTableData] = useState('');
+
   const [countriesList, setCountriesList] = useState([]);
 
   useEffect(() => {
-    axios
-      .get('https://restcountries.eu/rest/v2/all?fields=name;population;flag')
-      .then((response) => {
-        setCountriesList(response.data);
-        console.log(response.data);
+    requestService.getCovidInfo().then((covidInfo) => {
+      const isNoData = covidInfo.Message === 'Caching in progress';
+      setTableData({
+        isNoData,
+        currentCountry,
+        ...covidInfo.Global,
       });
+      setInfo({ ...covidInfo, loadingEnded: true });
+      console.log({ currentCountry, ...covidInfo.Global });
+    });
+
+    // получаем список всех стран, он нужен и в таблице(1), и в списке(2)..
+
+    requestService.getAllCounties().then((contriesInfo) => {
+      setCountriesList(contriesInfo);
+      console.log(contriesInfo);
+    });
   }, []);
 
-  return (
+  return info.loadingEnded ? (
     <Container fluid>
       <Header />
 
@@ -29,7 +52,10 @@ const App = () => {
         <Col>Map</Col>
         <Col>
           <Row>
-            <DashboardTable countriesList={countriesList} />
+            <DashboardTable
+              countriesList={countriesList}
+              responseData={tableData}
+            />
           </Row>
           <Row>Chart</Row>
         </Col>
@@ -37,6 +63,8 @@ const App = () => {
 
       <Footer />
     </Container>
+  ) : (
+    <div>loading...</div>
   );
 };
 

@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import axios from 'axios';
 import Table from 'react-bootstrap/Table';
 import RadioBtns from './RadioBtns';
 
-const DashboardTable = ({ countriesList }) => {
+const DashboardTable = ({ countriesList, responseData }) => {
   const [isWholePeriod, setIsWholePeriod] = useState(true);
   const [isFor100, setIsFor100] = useState(false);
 
   const [confirmed, setConfirmed] = useState();
   const [deaths, setDeaths] = useState();
   const [recovered, setRecovered] = useState();
+
+  const [tableData, setTableData] = useState({});
 
   const headings = ['confirmed', 'deaths', 'recovered'];
   const errorMessage = 'Try later...';
@@ -23,32 +24,32 @@ const DashboardTable = ({ countriesList }) => {
 
   const countFor100 = (data, population) => Math.round((data * 100000) / population);
 
-  const updateWholePeriod = (response) => {
+  const updateWholePeriod = (data) => {
     const newTotalConfirmed = isFor100
-      ? countFor100(response.data.Global.TotalConfirmed, totalPopulation)
-      : response.data.Global.TotalConfirmed;
+      ? countFor100(data.TotalConfirmed, totalPopulation)
+      : data.TotalConfirmed;
     const newTotalDeaths = isFor100
-      ? countFor100(response.data.Global.TotalDeaths, totalPopulation)
-      : response.data.Global.TotalDeaths;
+      ? countFor100(data.TotalDeaths, totalPopulation)
+      : data.TotalDeaths;
     const newTotalRecovered = isFor100
-      ? countFor100(response.data.Global.TotalRecovered, totalPopulation)
-      : response.data.Global.TotalRecovered;
+      ? countFor100(data.TotalRecovered, totalPopulation)
+      : data.TotalRecovered;
 
     setConfirmed(newTotalConfirmed);
     setDeaths(newTotalDeaths);
     setRecovered(newTotalRecovered);
   };
 
-  const updateLastDay = (response) => {
+  const updateLastDay = (data) => {
     const newConfirmed = isFor100
-      ? countFor100(response.data.Global.NewConfirmed, totalPopulation)
-      : response.data.Global.NewConfirmed;
+      ? countFor100(data.NewConfirmed, totalPopulation)
+      : data.NewConfirmed;
     const newDeaths = isFor100
-      ? countFor100(response.data.Global.NewDeaths, totalPopulation)
-      : response.data.Global.NewDeaths;
+      ? countFor100(data.NewDeaths, totalPopulation)
+      : data.NewDeaths;
     const newRecovered = isFor100
-      ? countFor100(response.data.Global.NewRecovered, totalPopulation)
-      : response.data.Global.NewRecovered;
+      ? countFor100(data.NewRecovered, totalPopulation)
+      : data.NewRecovered;
 
     setConfirmed(newConfirmed);
     setDeaths(newDeaths);
@@ -67,27 +68,31 @@ const DashboardTable = ({ countriesList }) => {
 
   const handleIsFor100 = () => {
     setIsFor100(!isFor100);
-    console.log(isFor100);
+    // console.log(isFor100);
   };
 
   useEffect(() => {
-    axios.get('https://api.covid19api.com/summary').then((response) => {
-      // come with 200 status without data
-      const isNoData = response.data.Message === 'Caching in progress';
-      if (isNoData) {
-        updateError();
-      }
-      console.log(response);
-      if (isWholePeriod) {
-        updateWholePeriod(response);
-      } else {
-        updateLastDay(response);
-      }
-    });
+    setTableData(responseData);
+    // come with 200 status without data
+    if (responseData.isNoData) {
+      updateError();
+    }
+    console.log(responseData);
+
+    if (isWholePeriod) {
+      updateWholePeriod(responseData);
+    } else {
+      updateLastDay(responseData);
+    }
   }, [isWholePeriod, isFor100]);
 
   return (
+
     <div>
+      <h1>
+        info displayed for
+        {tableData.currentCountry}
+      </h1>
       <Table responsive>
         <thead>
           <tr>
@@ -115,6 +120,7 @@ const DashboardTable = ({ countriesList }) => {
 
 DashboardTable.propTypes = {
   countriesList: PropTypes.arrayOf(PropTypes.object).isRequired,
+  responseData: PropTypes.objectOf(PropTypes.object).isRequired,
 };
 
 export default DashboardTable;
