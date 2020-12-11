@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Table from 'react-bootstrap/Table';
-import RadioBtns from './RadioBtns';
+import TableForm from './TableForm';
+import * as constants from '../../data/constants';
 
 const DashboardTable = ({ countriesList, responseData }) => {
-  const [isWholePeriod, setIsWholePeriod] = useState(true);
+  const [selectedPeriod, setSelectedPeriod] = useState(
+    constants.PERIODS.wholePeriod,
+  );
   const [isFor100, setIsFor100] = useState(false);
 
   const [confirmed, setConfirmed] = useState();
@@ -12,9 +15,6 @@ const DashboardTable = ({ countriesList, responseData }) => {
   const [recovered, setRecovered] = useState();
 
   const [tableData, setTableData] = useState({});
-
-  const headings = ['confirmed', 'deaths', 'recovered'];
-  const errorMessage = 'Try later...';
 
   const totalPopulation = countriesList.reduce(
     (acc, el) => el.population + acc,
@@ -57,18 +57,17 @@ const DashboardTable = ({ countriesList, responseData }) => {
   };
 
   const updateError = () => {
-    setConfirmed(errorMessage);
-    setDeaths(errorMessage);
-    setRecovered(errorMessage);
+    setConfirmed(constants.ERROR_MESSAGE);
+    setDeaths(constants.ERROR_MESSAGE);
+    setRecovered(constants.ERROR_MESSAGE);
   };
 
-  const handleIsWholePeriod = () => {
-    setIsWholePeriod(!isWholePeriod);
+  const handleSelectedPeriod = (period) => {
+    setSelectedPeriod(period);
   };
 
   const handleIsFor100 = () => {
     setIsFor100(!isFor100);
-    // console.log(isFor100);
   };
 
   useEffect(() => {
@@ -76,18 +75,15 @@ const DashboardTable = ({ countriesList, responseData }) => {
     // come with 200 status without data
     if (responseData.isNoData) {
       updateError();
-    }
-    console.log(responseData);
-
-    if (isWholePeriod) {
+    } else if (selectedPeriod === constants.PERIODS.wholePeriod) {
+      console.log(responseData);
       updateWholePeriod(responseData);
     } else {
       updateLastDay(responseData);
     }
-  }, [isWholePeriod, isFor100]);
+  }, [selectedPeriod, isFor100]);
 
   return (
-
     <div>
       <h1>
         info displayed for
@@ -96,7 +92,7 @@ const DashboardTable = ({ countriesList, responseData }) => {
       <Table responsive>
         <thead>
           <tr>
-            {headings.map((heading) => (
+            {constants.HEADINGS.map((heading) => (
               <th key={heading}>{heading}</th>
             ))}
           </tr>
@@ -109,10 +105,10 @@ const DashboardTable = ({ countriesList, responseData }) => {
           </tr>
         </tbody>
       </Table>
-      <RadioBtns
-        wholePeriod={isWholePeriod}
-        handleIsWholePeriod={handleIsWholePeriod}
+      <TableForm
+        handleSelectedPeriod={handleSelectedPeriod}
         handleIsFor100={handleIsFor100}
+        selectedPeriod={selectedPeriod}
       />
     </div>
   );
@@ -120,7 +116,7 @@ const DashboardTable = ({ countriesList, responseData }) => {
 
 DashboardTable.propTypes = {
   countriesList: PropTypes.arrayOf(PropTypes.object).isRequired,
-  responseData: PropTypes.objectOf(PropTypes.object).isRequired,
+  responseData: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 export default DashboardTable;

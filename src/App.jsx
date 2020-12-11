@@ -6,7 +6,6 @@ import Col from 'react-bootstrap/Col';
 import DashboardTable from './components/DashboardTable/DashboardTable';
 import Footer from './components/Footer/Footer';
 import Header from './components/Header/Header';
-
 import requestService from './services/requests';
 
 const App = () => {
@@ -20,10 +19,15 @@ const App = () => {
   // и она отображается в таблице(1)
   const [currentCountry] = useState('Whole world');
   const [tableData, setTableData] = useState('');
-
   const [countriesList, setCountriesList] = useState([]);
 
-  useEffect(() => {
+  const getAllCountriesInfo = () => {
+    requestService.getAllCounties().then((contriesInfo) => {
+      setCountriesList(contriesInfo);
+    });
+  };
+
+  const getCovidInfo = () => {
     requestService.getCovidInfo().then((covidInfo) => {
       const isNoData = covidInfo.Message === 'Caching in progress';
       setTableData({
@@ -34,13 +38,12 @@ const App = () => {
       setInfo({ ...covidInfo, loadingEnded: true });
       console.log({ currentCountry, ...covidInfo.Global });
     });
+  };
 
+  useEffect(() => {
+    getCovidInfo();
     // получаем список всех стран, он нужен и в таблице(1), и в списке(2)..
-
-    requestService.getAllCounties().then((contriesInfo) => {
-      setCountriesList(contriesInfo);
-      console.log(contriesInfo);
-    });
+    getAllCountriesInfo();
   }, []);
 
   return info.loadingEnded ? (
