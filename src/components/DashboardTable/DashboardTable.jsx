@@ -9,11 +9,9 @@ const DashboardTable = ({ countriesList, responseData }) => {
     constants.PERIODS.wholePeriod,
   );
   const [isFor100, setIsFor100] = useState(false);
-
   const [confirmed, setConfirmed] = useState();
   const [deaths, setDeaths] = useState();
   const [recovered, setRecovered] = useState();
-
   const [tableData, setTableData] = useState({});
 
   const totalPopulation = countriesList.reduce(
@@ -24,36 +22,30 @@ const DashboardTable = ({ countriesList, responseData }) => {
 
   const countFor100 = (data, population) => Math.round((data * 100000) / population);
 
-  const updateWholePeriod = (data) => {
-    const newTotalConfirmed = isFor100
-      ? countFor100(data.TotalConfirmed, totalPopulation)
-      : data.TotalConfirmed;
-    const newTotalDeaths = isFor100
-      ? countFor100(data.TotalDeaths, totalPopulation)
-      : data.TotalDeaths;
-    const newTotalRecovered = isFor100
-      ? countFor100(data.TotalRecovered, totalPopulation)
-      : data.TotalRecovered;
-
-    setConfirmed(newTotalConfirmed);
-    setDeaths(newTotalDeaths);
-    setRecovered(newTotalRecovered);
+  const getDataForPeriod = (period, data) => {
+    const result = {};
+    if (period === constants.PERIODS.wholePeriod) {
+      result.confirmed = data.TotalConfirmed;
+      result.deaths = data.TotalDeaths;
+      result.recovered = data.TotalRecovered;
+    } else {
+      result.confirmed = data.NewConfirmed;
+      result.deaths = data.NewDeaths;
+      result.recovered = data.NewRecovered;
+    }
+    return result;
   };
 
-  const updateLastDay = (data) => {
-    const newConfirmed = isFor100
-      ? countFor100(data.NewConfirmed, totalPopulation)
-      : data.NewConfirmed;
-    const newDeaths = isFor100
-      ? countFor100(data.NewDeaths, totalPopulation)
-      : data.NewDeaths;
-    const newRecovered = isFor100
-      ? countFor100(data.NewRecovered, totalPopulation)
-      : data.NewRecovered;
-
-    setConfirmed(newConfirmed);
-    setDeaths(newDeaths);
-    setRecovered(newRecovered);
+  const updateForPeriod = (period, data) => {
+    const periodData = getDataForPeriod(period, data);
+    if (isFor100) {
+      periodData.confirmed = countFor100(periodData.confirmed, totalPopulation);
+      periodData.deaths = countFor100(periodData.deaths, totalPopulation);
+      periodData.recovered = countFor100(periodData.recovered, totalPopulation);
+    }
+    setConfirmed(periodData.confirmed);
+    setDeaths(periodData.deaths);
+    setRecovered(periodData.recovered);
   };
 
   const updateError = () => {
@@ -75,11 +67,8 @@ const DashboardTable = ({ countriesList, responseData }) => {
     // come with 200 status without data
     if (responseData.isNoData) {
       updateError();
-    } else if (selectedPeriod === constants.PERIODS.wholePeriod) {
-      console.log(responseData);
-      updateWholePeriod(responseData);
     } else {
-      updateLastDay(responseData);
+      updateForPeriod(selectedPeriod, responseData);
     }
   }, [selectedPeriod, isFor100]);
 
