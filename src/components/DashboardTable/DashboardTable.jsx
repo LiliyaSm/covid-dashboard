@@ -1,26 +1,33 @@
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import Table from 'react-bootstrap/Table';
-import TableForm from './TableForm';
-import * as constants from '../../data/constants';
+import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
+import Table from "react-bootstrap/Table";
+import TableForm from "./TableForm";
+import * as constants from "../../data/constants";
 
-const DashboardTable = ({ countriesList, responseData }) => {
+const DashboardTable = ({ countriesList, responseData, isDataReady, country }) => {
   const [selectedPeriod, setSelectedPeriod] = useState(
-    constants.PERIODS.wholePeriod,
+    constants.PERIODS.wholePeriod
   );
   const [isFor100, setIsFor100] = useState(false);
-  const [confirmed, setConfirmed] = useState();
-  const [deaths, setDeaths] = useState();
-  const [recovered, setRecovered] = useState();
-  const [tableData, setTableData] = useState({});
 
-  const totalPopulation = countriesList.reduce(
-    (acc, el) => el.population + acc,
-    0,
-  );
+  const getTotalPopulation = (currentCountry) => {
+    let totalPopulation;
+    if (currentCountry === "Whole world") {
+      totalPopulation = countriesList.reduce(
+        (acc, el) => el.population + acc,
+        0
+      );
+    } else {
+      totalPopulation = countriesList.find(
+        (country) => country.name === currentCountry
+      ).population;
+    }
+    return totalPopulation;
+  };
   // console.log(totalPopulation);
 
-  const countFor100 = (data, population) => Math.round((data * 100000) / population);
+  const countFor100 = (data, population) =>
+    Math.round((data * 100000) / population);
 
   const getDataForPeriod = (period, data) => {
     const result = {};
@@ -34,18 +41,6 @@ const DashboardTable = ({ countriesList, responseData }) => {
       result.recovered = data.NewRecovered;
     }
     return result;
-  };
-
-  const updateForPeriod = (period, data) => {
-    const periodData = getDataForPeriod(period, data);
-    if (isFor100) {
-      periodData.confirmed = countFor100(periodData.confirmed, totalPopulation);
-      periodData.deaths = countFor100(periodData.deaths, totalPopulation);
-      periodData.recovered = countFor100(periodData.recovered, totalPopulation);
-    }
-    setConfirmed(periodData.confirmed);
-    setDeaths(periodData.deaths);
-    setRecovered(periodData.recovered);
   };
 
   const updateError = () => {
@@ -62,21 +57,38 @@ const DashboardTable = ({ countriesList, responseData }) => {
     setIsFor100(!isFor100);
   };
 
-  useEffect(() => {
-    setTableData(responseData);
-    // come with 200 status without data
-    if (responseData.isNoData) {
-      updateError();
+  const getTableData = (country, data) => {
+    if (country === "Whole world") {
+      return data.Global;
     } else {
-      updateForPeriod(selectedPeriod, responseData);
+      let dataForCountry = data.Countries.find((el) => el.Country === country);
+      return dataForCountry;
     }
-  }, [selectedPeriod, isFor100]);
+  };
+
+  const renderTableRows = () => {
+    let data = getTableData(country, responseData);
+    let periodData = getDataForPeriod(selectedPeriod, data);
+    let totalPopulation = getTotalPopulation(country);
+    if (isFor100) {
+      periodData.confirmed = countFor100(periodData.confirmed, totalPopulation);
+      periodData.deaths = countFor100(periodData.deaths, totalPopulation);
+      periodData.recovered = countFor100(periodData.recovered, totalPopulation);
+    }
+    return(
+      <tr>
+        <td>{periodData.confirmed}</td>
+        <td>{periodData.deaths}</td>
+        <td>{periodData.recovered}</td>
+      </tr>
+    )
+  }
 
   return (
     <div>
       <h1>
         info displayed for
-        {tableData.currentCountry}
+        {country}
       </h1>
       <Table responsive>
         <thead>
@@ -87,11 +99,11 @@ const DashboardTable = ({ countriesList, responseData }) => {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>{confirmed}</td>
-            <td>{deaths}</td>
-            <td>{recovered}</td>
-          </tr>
+          {isDataReady ? (
+            renderTableRows()
+          ) : (
+            <tr> Data is loading...</tr>
+          )}
         </tbody>
       </Table>
       <TableForm
