@@ -1,5 +1,5 @@
 import React from 'react';
-import Form from 'react-bootstrap/Form';
+import FormCheck from 'react-bootstrap/FormCheck';
 import PropTypes from 'prop-types';
 
 const RadioButtonGroup = ({ handleOnChange, options, selected }) => {
@@ -9,10 +9,11 @@ const RadioButtonGroup = ({ handleOnChange, options, selected }) => {
   };
 
   return (
-    <div>
+    <div className="radio-buttons">
       {options.map((radiobtn) => (
-        <Form.Check
+        <FormCheck
           key={radiobtn.id}
+          type={radiobtn.type}
           id={radiobtn.id}
           label={radiobtn.label}
           onChange={handleCheckChange}

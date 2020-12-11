@@ -11,12 +11,13 @@ const TableForm = ({ selectedPeriod, handleSelectedPeriod, handleIsFor100 }) => 
     {
       label: 'For the whole period',
       id: constants.PERIODS.wholePeriod,
+      type: 'radio',
     },
-    { label: 'For the last day', id: constants.PERIODS.lastDay },
+    { label: 'For the last day', id: constants.PERIODS.lastDay, type: 'radio' },
   ];
 
   return (
-    <Form inline>
+    <Form className="table-form">
       <RadioButtonGroup
         handleOnChange={handleSelectedPeriod}
         options={radioBtns}
