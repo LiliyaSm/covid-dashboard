@@ -1,7 +1,7 @@
 import React from 'react';
 import './ExpandBtn.scss';
 
-const ToggleBtn = () => {
+const ExpandBtn = () => {
   const handleToddleWidth = (event) => {
     event.target.parentNode.classList.toggle('full-container');
     event.target.classList.toggle('shrink-background');
@@ -10,4 +10,4 @@ const ToggleBtn = () => {
   return <button onClick={handleToddleWidth} aria-label="expand" type="button" className="expand-btn" />;
 };
 
-export default ToggleBtn;
+export default ExpandBtn;
