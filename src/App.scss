@@ -11,43 +11,6 @@ html {
   text-align: center;
 }
 
-// .main{
-//   position: relative;
-// }
-
-.toggle-btn {
-  background-image: url("/assets/icons/expandBtn.svg");
-  background-repeat: no-repeat;
-  background-position: center;
-  height: 20px;
-  width: 20px;
-  border-radius: 50%;
-  outline: none;
-  border: 1px solid black;
-  position: absolute;
-  right: -5px;
-  top: -5px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.toggle-btn:hover {
-  box-shadow: 0px 0px 5px #06203a;
-}
-
-.toggle-btn:focus{
-  outline: none;
-
-} 
-
-.full-container {
-  position: fixed !important;
-  top: 25px;
-  left: 25px;
-  width: calc(100vw - 50px);
-  height: calc(100vh - 150px);
-}
-
 .table-header {
   font-size: 18px;
 }
@@ -69,6 +32,7 @@ thead {
 .dashboard-table {
   position: relative;
   padding: 20px;
+  margin-right: 7px;
   margin-bottom: 20px;
   background-color: $basecolor;
   border-radius: 5px;
