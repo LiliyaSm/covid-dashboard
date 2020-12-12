@@ -1,17 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import './App.scss';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import { NotifyContext } from './Providers/NotifyProvider';
 import DashboardTable from './components/TableComponents/DashboardTable';
 import InteractiveMap from './components/MapComponents/InteractiveMap';
 import Footer from './components/Footer/Footer';
 import Header from './components/Header/Header';
 import requestService from './services/requests';
 import * as constants from './data/constants';
+import Alerts from './components/Alerts/Alerts';
+import Loader from './components/Loader/Loader';
 
 const App = () => {
-  const [info, setInfo] = useState();
+  const { notify, addNotify } = useContext(NotifyContext);
+  const [info, setInfo] = useState(null);
   // Страну можно выбрать:
 
   // кликом по пункту списка(2)
@@ -19,12 +23,9 @@ const App = () => {
   // найти при помощи поиска (в списке?)
 
   // и она отображается в таблице(1)
-  const [currentCountry, setCurrentCountry] = useState(
-    constants.WHOLE_WORLD_NAME,
-  );
+  const [currentCountry, setCurrentCountry] = useState(constants.WHOLE_WORLD_NAME);
   const [countriesList, setCountriesList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isError, setIsError] = useState(false);
 
   const getAllCountriesInfo = async () => {
     const contriesInfo = await requestService.getAllCounties();
@@ -42,9 +43,7 @@ const App = () => {
       await getCovidInfo();
       await getAllCountriesInfo();
     } catch (exception) {
-
-      // TODO
-      // рендер компонента ошибки
+      addNotify(constants.NOTIFY_TYPES.error, constants.ERROR_HEADER, constants.ERROR_MESSAGE);
     } finally {
       setIsLoading(false);
     }
@@ -55,19 +54,17 @@ const App = () => {
   }, []);
 
   const renderTable = () => (
-    <DashboardTable
-      countriesList={countriesList}
-      responseData={info}
-      currentCountry={currentCountry}
-    />
+    // TODO
+    // если info нет, рендерить какую-нибудь заглушку или дефолтные данные
+    <DashboardTable countriesList={countriesList} responseData={info} currentCountry={currentCountry} />
   );
 
   return isLoading ? (
-    <div>loading...</div>
+    <Loader />
   ) : (
     <Container fluid>
+      {notify ? <Alerts /> : null}
       <Header />
-
       <Row>
         <Col>List</Col>
         <Col>

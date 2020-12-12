@@ -18,16 +18,8 @@ const TableForm = ({ selectedPeriod, handleSelectedPeriod, handleIsFor100 }) => 
 
   return (
     <Form className="table-form">
-      <RadioButtonGroup
-        handleOnChange={handleSelectedPeriod}
-        options={radioBtns}
-        selected={selectedPeriod}
-      />
-      <Switcher
-        handleOnChange={handleIsFor100}
-        label={switcher.label}
-        id={switcher.id}
-      />
+      <RadioButtonGroup handleOnChange={handleSelectedPeriod} options={radioBtns} selected={selectedPeriod} />
+      <Switcher handleOnChange={handleIsFor100} label={switcher.label} id={switcher.id} />
     </Form>
   );
 };
