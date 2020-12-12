@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Table from 'react-bootstrap/Table';
 import TableForm from './TableForm';
+// import ToggleBtn from '../ToggleBtn';
 import * as constants from '../../data/constants';
 
 const DashboardTable = ({ countriesList, responseData, currentCountry }) => {
@@ -24,7 +25,7 @@ const DashboardTable = ({ countriesList, responseData, currentCountry }) => {
     return totalPopulation;
   };
 
-  const countFor100 = (data, population) => Math.round((data * 100000) / population);
+  const countFor100 = (data, population) => Math.round((data * constants.PER_100_THOUSANDS) / population);
 
   const getDataForPeriod = (period, data) => {
     const result = {};
@@ -76,6 +77,7 @@ const DashboardTable = ({ countriesList, responseData, currentCountry }) => {
 
   return (
     <div className="dashboard-table">
+      {/* <ToggleBtn /> */}
       <h1 className="table-header">
         Info displayed for:&nbsp;
         {currentCountry}
@@ -91,7 +93,9 @@ const DashboardTable = ({ countriesList, responseData, currentCountry }) => {
         <tbody>
           {responseData.isNoData ? (
             <tr>
-              <td colSpan={constants.HEADINGS.length}>{constants.ERROR_MESSAGE}</td>
+              <td colSpan={constants.HEADINGS.length}>
+                {constants.ERROR_MESSAGE}
+              </td>
             </tr>
           ) : (
             renderTableRows()

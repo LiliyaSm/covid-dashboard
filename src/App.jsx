@@ -11,7 +11,7 @@ import requestService from './services/requests';
 import * as constants from './data/constants';
 
 const App = () => {
-  const [info, setInfo] = useState({ loadingEnded: false });
+  const [info, setInfo] = useState();
   // Страну можно выбрать:
 
   // кликом по пункту списка(2)
@@ -23,24 +23,35 @@ const App = () => {
     constants.WHOLE_WORLD_NAME,
   );
   const [countriesList, setCountriesList] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
 
-  const getAllCountriesInfo = () => {
-    requestService.getAllCounties().then((contriesInfo) => {
-      setCountriesList(contriesInfo);
-    });
+  const getAllCountriesInfo = async () => {
+    const contriesInfo = await requestService.getAllCounties();
+    setCountriesList(contriesInfo);
   };
 
-  const getCovidInfo = () => {
-    requestService.getCovidInfo().then((covidInfo) => {
-      const isNoData = covidInfo.Message === constants.CACHING_DATA_MESSAGE;
-      setInfo({ ...covidInfo, isNoData, loadingEnded: true });
-    });
+  const getCovidInfo = async () => {
+    const covidInfo = await requestService.getCovidInfo();
+    const isNoData = covidInfo.Message === constants.CACHING_DATA_MESSAGE;
+    setInfo({ ...covidInfo, isNoData });
+  };
+
+  const getAllData = async () => {
+    try {
+      await getCovidInfo();
+      await getAllCountriesInfo();
+    } catch (exception) {
+      setIsError(true);
+      // TODO
+      //рендер компонента ошибки  
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
-    getCovidInfo();
-    // получаем список всех стран, он нужен и в таблице(1), и в списке(2)..
-    getAllCountriesInfo();
+    getAllData();
   }, []);
 
   const renderTable = () => (
@@ -51,7 +62,9 @@ const App = () => {
     />
   );
 
-  return info.loadingEnded ? (
+  return isLoading ? (
+    <div>loading...</div>
+  ) : (
     <Container fluid>
       <Header />
 
@@ -68,8 +81,6 @@ const App = () => {
 
       <Footer />
     </Container>
-  ) : (
-    <div>loading...</div>
   );
 };
 
