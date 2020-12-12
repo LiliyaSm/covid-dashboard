@@ -11,6 +11,7 @@ import Header from './components/Header/Header';
 import requestService from './services/requests';
 import * as constants from './data/constants';
 import Alerts from './components/Alerts/Alerts';
+import Loader from './components/Loader/Loader';
 
 const App = () => {
   const { notify, addNotify } = useContext(NotifyContext);
@@ -59,7 +60,7 @@ const App = () => {
   );
 
   return isLoading ? (
-    <div>loading...</div>
+    <Loader />
   ) : (
     <Container fluid>
       {notify ? <Alerts /> : null}
