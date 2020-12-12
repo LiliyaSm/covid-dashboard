@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Table from 'react-bootstrap/Table';
 import TableForm from './TableForm';
-// import ToggleBtn from '../ToggleBtn';
+import ToggleBtn from '../ToggleBtn';
 import * as constants from '../../data/constants';
 
 const DashboardTable = ({ countriesList, responseData, currentCountry }) => {
@@ -77,7 +77,7 @@ const DashboardTable = ({ countriesList, responseData, currentCountry }) => {
 
   return (
     <div className="dashboard-table">
-      {/* <ToggleBtn /> */}
+      <ToggleBtn />
       <h1 className="table-header">
         Info displayed for:&nbsp;
         {currentCountry}

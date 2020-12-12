@@ -42,9 +42,9 @@ const App = () => {
       await getCovidInfo();
       await getAllCountriesInfo();
     } catch (exception) {
-      setIsError(true);
+
       // TODO
-      //рендер компонента ошибки  
+      // рендер компонента ошибки
     } finally {
       setIsLoading(false);
     }
