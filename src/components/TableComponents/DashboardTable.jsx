@@ -6,21 +6,15 @@ import TableForm from './TableForm';
 import * as constants from '../../data/constants';
 
 const DashboardTable = ({ countriesList, responseData, currentCountry }) => {
-  const [selectedPeriod, setSelectedPeriod] = useState(
-    constants.PERIODS.wholePeriod,
-  );
+  const [selectedPeriod, setSelectedPeriod] = useState(constants.PERIODS.wholePeriod);
   const [isFor100, setIsFor100] = useState(false);
 
   const getTotalPopulation = (country) => {
     let totalPopulation;
     if (country === constants.WHOLE_WORLD_NAME) {
-      totalPopulation = countriesList.reduce(
-        (acc, el) => el.population + acc,
-        0,
-      );
+      totalPopulation = countriesList.reduce((acc, el) => el.population + acc, 0);
     } else {
-      totalPopulation = countriesList.find((el) => el.name === country)
-        .population;
+      totalPopulation = countriesList.find((el) => el.name === country).population;
     }
     return totalPopulation;
   };
@@ -93,9 +87,7 @@ const DashboardTable = ({ countriesList, responseData, currentCountry }) => {
         <tbody>
           {responseData.isNoData ? (
             <tr>
-              <td colSpan={constants.HEADINGS.length}>
-                {constants.ERROR_MESSAGE}
-              </td>
+              <td colSpan={constants.HEADINGS.length}>{constants.ERROR_MESSAGE}</td>
             </tr>
           ) : (
             renderTableRows()
