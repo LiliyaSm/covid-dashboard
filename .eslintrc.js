@@ -16,6 +16,8 @@ module.exports = {
     'no-continue': 'off',
     'linebreak-style': ['error', 'windows'],
     indent: ['error', 2],
+    'max-len': ['error', { code: 120 }],
+    'object-curly-newline': 'off',
   },
   plugins: ['react'],
 };

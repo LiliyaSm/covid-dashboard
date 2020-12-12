@@ -4,10 +4,13 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import NotifyProvider from './Providers/NotifyProvider';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <NotifyProvider>
+      <App />
+    </NotifyProvider>
   </React.StrictMode>,
   document.getElementById('root'),
 );
