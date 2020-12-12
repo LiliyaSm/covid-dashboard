@@ -9,6 +9,7 @@ import Footer from './components/Footer/Footer';
 import Header from './components/Header/Header';
 import requestService from './services/requests';
 import * as constants from './data/constants';
+import Loader from './components/Loader/Loader';
 
 const App = () => {
   const [info, setInfo] = useState();
@@ -63,7 +64,7 @@ const App = () => {
   );
 
   return isLoading ? (
-    <div>loading...</div>
+    <Loader />
   ) : (
     <Container fluid>
       <Header />
