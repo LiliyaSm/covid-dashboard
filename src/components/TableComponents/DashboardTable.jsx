@@ -105,9 +105,21 @@ const DashboardTable = ({ countriesList, responseData, currentCountry }) => {
 };
 
 DashboardTable.propTypes = {
-  countriesList: PropTypes.arrayOf(PropTypes.object).isRequired,
-  responseData: PropTypes.objectOf(PropTypes.any).isRequired,
-  currentCountry: PropTypes.object.isRequired,
+  countriesList: PropTypes.arrayOf(PropTypes.object),
+  responseData: PropTypes.objectOf(PropTypes.any),
+  currentCountry: PropTypes.shape({
+    name: PropTypes.string,
+    alpha2Code: PropTypes.string,
+  }),
+};
+
+DashboardTable.defaultProps = {
+  currentCountry: PropTypes.shape({
+    name: '',
+    alpha2Code: '',
+  }),
+  countriesList: '',
+  responseData: '',
 };
 
 export default DashboardTable;
