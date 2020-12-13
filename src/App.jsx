@@ -23,7 +23,10 @@ const App = () => {
   // найти при помощи поиска (в списке?)
 
   // и она отображается в таблице(1)
-  const [currentCountry, setCurrentCountry] = useState(constants.WHOLE_WORLD_NAME);
+  const [currentCountry, setCurrentCountry] = useState({
+    name: constants.WHOLE_WORLD_NAME,
+    alpha2Code: constants.WHOLE_WORLD_NAME,
+  });
   const [countriesList, setCountriesList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 

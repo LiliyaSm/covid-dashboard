@@ -12,10 +12,10 @@ const DashboardTable = ({ countriesList, responseData, currentCountry }) => {
 
   const getTotalPopulation = (country) => {
     let totalPopulation;
-    if (country === constants.WHOLE_WORLD_NAME) {
+    if (country.name === constants.WHOLE_WORLD_NAME) {
       totalPopulation = countriesList.reduce((acc, el) => el.population + acc, 0);
     } else {
-      totalPopulation = countriesList.find((el) => el.name === country).population;
+      totalPopulation = countriesList.find((el) => el.alpha2Code === country.alpha2Code).population;
     }
     return totalPopulation;
   };
@@ -45,10 +45,10 @@ const DashboardTable = ({ countriesList, responseData, currentCountry }) => {
   };
 
   const getTableData = (country, data) => {
-    if (country === constants.WHOLE_WORLD_NAME) {
+    if (country.name === constants.WHOLE_WORLD_NAME) {
       return data.Global;
     }
-    const dataForCountry = data.Countries.find((el) => el.Country === country);
+    const dataForCountry = data.Countries.find((el) => el.CountryCode === country.alpha2Code);
     return dataForCountry;
   };
 
@@ -75,7 +75,7 @@ const DashboardTable = ({ countriesList, responseData, currentCountry }) => {
       <ExpandBtn setIsFullScreenSize={setIsFullScreenSize} isFullScreenSize={isFullScreenSize} />
       <h1 className="table-header">
         Info displayed for:&nbsp;
-        {currentCountry}
+        {currentCountry.name}
       </h1>
       <Table responsive>
         <thead>
@@ -86,12 +86,12 @@ const DashboardTable = ({ countriesList, responseData, currentCountry }) => {
           </tr>
         </thead>
         <tbody>
-          {responseData.isNoData ? (
+          {responseData && !responseData.isNoData ? (
+            renderTableRows()
+          ) : (
             <tr>
               <td colSpan={constants.HEADINGS.length}>{constants.ERROR_MESSAGE}</td>
             </tr>
-          ) : (
-            renderTableRows()
           )}
         </tbody>
       </Table>
@@ -107,7 +107,7 @@ const DashboardTable = ({ countriesList, responseData, currentCountry }) => {
 DashboardTable.propTypes = {
   countriesList: PropTypes.arrayOf(PropTypes.object).isRequired,
   responseData: PropTypes.objectOf(PropTypes.any).isRequired,
-  currentCountry: PropTypes.string.isRequired,
+  currentCountry: PropTypes.object.isRequired,
 };
 
 export default DashboardTable;
