@@ -5,7 +5,7 @@ import TableForm from './TableForm';
 import ExpandBtn from '../ExpandBtn/ExpandBtn';
 import * as constants from '../../data/constants';
 
-const DashboardTable = ({ countriesList, responseData, currentCountry }) => {
+const DashboardTable = ({ responseData, responseDataWorld, currentCountry }) => {
   const [selectedPeriod, setSelectedPeriod] = useState(constants.PERIODS.wholePeriod);
   const [isFor100, setIsFor100] = useState(false);
   const [isFullScreenSize, setIsFullScreenSize] = useState(false);
@@ -13,9 +13,9 @@ const DashboardTable = ({ countriesList, responseData, currentCountry }) => {
   const getTotalPopulation = (country) => {
     let totalPopulation;
     if (country === constants.WHOLE_WORLD_NAME) {
-      totalPopulation = countriesList.reduce((acc, el) => el.population + acc, 0);
+      totalPopulation = responseDataWorld.population;
     } else {
-      totalPopulation = countriesList.find((el) => el.name === country).population;
+      totalPopulation = responseData.find((el) => el.country === country).population;
     }
     return totalPopulation;
   };
@@ -25,13 +25,13 @@ const DashboardTable = ({ countriesList, responseData, currentCountry }) => {
   const getDataForPeriod = (period, data) => {
     const result = {};
     if (period === constants.PERIODS.wholePeriod) {
-      result.confirmed = data.TotalConfirmed;
-      result.deaths = data.TotalDeaths;
-      result.recovered = data.TotalRecovered;
+      result.confirmed = data.cases;
+      result.deaths = data.deaths;
+      result.recovered = data.recovered;
     } else {
-      result.confirmed = data.NewConfirmed;
-      result.deaths = data.NewDeaths;
-      result.recovered = data.NewRecovered;
+      result.confirmed = data.todayCases;
+      result.deaths = data.todayDeaths;
+      result.recovered = data.todayRecovered;
     }
     return result;
   };
@@ -46,9 +46,9 @@ const DashboardTable = ({ countriesList, responseData, currentCountry }) => {
 
   const getTableData = (country, data) => {
     if (country === constants.WHOLE_WORLD_NAME) {
-      return data.Global;
+      return responseDataWorld;
     }
-    const dataForCountry = data.Countries.find((el) => el.Country === country);
+    const dataForCountry = data.find((el) => el.country === country);
     return dataForCountry;
   };
 
@@ -75,7 +75,7 @@ const DashboardTable = ({ countriesList, responseData, currentCountry }) => {
       <ExpandBtn setIsFullScreenSize={setIsFullScreenSize} isFullScreenSize={isFullScreenSize} />
       <h1 className="table-header">
         Info displayed for:&nbsp;
-        {currentCountry}
+        {currentCountry.name}
       </h1>
       <Table responsive>
         <thead>
@@ -86,12 +86,12 @@ const DashboardTable = ({ countriesList, responseData, currentCountry }) => {
           </tr>
         </thead>
         <tbody>
-          {responseData.isNoData ? (
+          {responseData ? (
+            renderTableRows()
+          ) : (
             <tr>
               <td colSpan={constants.HEADINGS.length}>{constants.ERROR_MESSAGE}</td>
             </tr>
-          ) : (
-            renderTableRows()
           )}
         </tbody>
       </Table>
@@ -105,9 +105,15 @@ const DashboardTable = ({ countriesList, responseData, currentCountry }) => {
 };
 
 DashboardTable.propTypes = {
-  countriesList: PropTypes.arrayOf(PropTypes.object).isRequired,
-  responseData: PropTypes.objectOf(PropTypes.any).isRequired,
-  currentCountry: PropTypes.string.isRequired,
+  responseData: PropTypes.arrayOf(PropTypes.object),
+  responseDataWorld: PropTypes.objectOf(PropTypes.any),
+  currentCountry: PropTypes.string,
+};
+
+DashboardTable.defaultProps = {
+  currentCountry: '',
+  responseDataWorld: '',
+  responseData: '',
 };
 
 export default DashboardTable;
