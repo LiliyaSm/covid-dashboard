@@ -3,7 +3,7 @@ import axios from 'axios';
 const urlCovid = 'https://api.covid19api.com/summary';
 const urlCountries = 'https://restcountries.eu/rest/v2/all?fields=name;population;flag';
 
-const getAllCounties = async () => {
+const getAllCountries = async () => {
   const response = await axios.get(urlCountries);
   return response.data;
 };
@@ -13,4 +13,4 @@ const getCovidInfo = async () => {
   return covidInfo.data;
 };
 
-export default { getCovidInfo, getAllCounties };
+export default { getCovidInfo, getAllCountries };

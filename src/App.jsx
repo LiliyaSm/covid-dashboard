@@ -12,6 +12,7 @@ import requestService from './services/requests';
 import * as constants from './data/constants';
 import Alerts from './components/Alerts/Alerts';
 import Loader from './components/Loader/Loader';
+import CountryList from './components/CountryList/CountryList';
 
 const App = () => {
   const { notify, addNotify } = useContext(NotifyContext);
@@ -28,7 +29,7 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const getAllCountriesInfo = async () => {
-    const contriesInfo = await requestService.getAllCounties();
+    const contriesInfo = await requestService.getAllCountries();
     setCountriesList(contriesInfo);
   };
 
@@ -66,7 +67,9 @@ const App = () => {
       {notify ? <Alerts /> : null}
       <Header />
       <Row>
-        <Col>List</Col>
+        <Col>
+          <CountryList countriesList={countriesList} />
+        </Col>
         <Col>
           <InteractiveMap setCurrentCountry={setCurrentCountry} />
         </Col>
