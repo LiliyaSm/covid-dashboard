@@ -5,17 +5,17 @@ import TableForm from './TableForm';
 import ExpandBtn from '../ExpandBtn/ExpandBtn';
 import * as constants from '../../data/constants';
 
-const DashboardTable = ({ countriesList, responseData, currentCountry }) => {
+const DashboardTable = ({ responseData, responseDataWorld, currentCountry }) => {
   const [selectedPeriod, setSelectedPeriod] = useState(constants.PERIODS.wholePeriod);
   const [isFor100, setIsFor100] = useState(false);
   const [isFullScreenSize, setIsFullScreenSize] = useState(false);
 
   const getTotalPopulation = (country) => {
     let totalPopulation;
-    if (country.name === constants.WHOLE_WORLD_NAME) {
-      totalPopulation = countriesList.reduce((acc, el) => el.population + acc, 0);
+    if (country === constants.WHOLE_WORLD_NAME) {
+      totalPopulation = responseDataWorld.population;
     } else {
-      totalPopulation = countriesList.find((el) => el.alpha2Code === country.alpha2Code).population;
+      totalPopulation = responseData.find((el) => el.country === country).population;
     }
     return totalPopulation;
   };
@@ -25,13 +25,13 @@ const DashboardTable = ({ countriesList, responseData, currentCountry }) => {
   const getDataForPeriod = (period, data) => {
     const result = {};
     if (period === constants.PERIODS.wholePeriod) {
-      result.confirmed = data.TotalConfirmed;
-      result.deaths = data.TotalDeaths;
-      result.recovered = data.TotalRecovered;
+      result.confirmed = data.cases;
+      result.deaths = data.deaths;
+      result.recovered = data.recovered;
     } else {
-      result.confirmed = data.NewConfirmed;
-      result.deaths = data.NewDeaths;
-      result.recovered = data.NewRecovered;
+      result.confirmed = data.todayCases;
+      result.deaths = data.todayDeaths;
+      result.recovered = data.todayRecovered;
     }
     return result;
   };
@@ -45,10 +45,10 @@ const DashboardTable = ({ countriesList, responseData, currentCountry }) => {
   };
 
   const getTableData = (country, data) => {
-    if (country.name === constants.WHOLE_WORLD_NAME) {
-      return data.Global;
+    if (country === constants.WHOLE_WORLD_NAME) {
+      return responseDataWorld;
     }
-    const dataForCountry = data.Countries.find((el) => el.CountryCode === country.alpha2Code);
+    const dataForCountry = data.find((el) => el.country === country);
     return dataForCountry;
   };
 
@@ -86,7 +86,7 @@ const DashboardTable = ({ countriesList, responseData, currentCountry }) => {
           </tr>
         </thead>
         <tbody>
-          {responseData && !responseData.isNoData ? (
+          {responseData ? (
             renderTableRows()
           ) : (
             <tr>
@@ -105,20 +105,14 @@ const DashboardTable = ({ countriesList, responseData, currentCountry }) => {
 };
 
 DashboardTable.propTypes = {
-  countriesList: PropTypes.arrayOf(PropTypes.object),
-  responseData: PropTypes.objectOf(PropTypes.any),
-  currentCountry: PropTypes.shape({
-    name: PropTypes.string,
-    alpha2Code: PropTypes.string,
-  }),
+  responseData: PropTypes.arrayOf(PropTypes.object),
+  responseDataWorld: PropTypes.objectOf(PropTypes.any),
+  currentCountry: PropTypes.string,
 };
 
 DashboardTable.defaultProps = {
-  currentCountry: PropTypes.shape({
-    name: '',
-    alpha2Code: '',
-  }),
-  countriesList: '',
+  currentCountry: '',
+  responseDataWorld: '',
   responseData: '',
 };
 
