@@ -16,32 +16,26 @@ import Loader from './components/Loader/Loader';
 const App = () => {
   const { notify, addNotify } = useContext(NotifyContext);
   const [info, setInfo] = useState(null);
-  // Страну можно выбрать:
-
-  // кликом по пункту списка(2)
-  // кликом по интерактивной карте(3)
-  // найти при помощи поиска (в списке?)
-
-  // и она отображается в таблице(1)
+  const [infoWorld, setInfoWorld] = useState(null);
   const [currentCountry, setCurrentCountry] = useState(constants.WHOLE_WORLD_NAME);
-  const [countriesList, setCountriesList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
-  const getAllCountriesInfo = async () => {
-    const contriesInfo = await requestService.getAllCounties();
-    setCountriesList(contriesInfo);
-  };
 
   const getCovidInfo = async () => {
     const covidInfo = await requestService.getCovidInfo();
-    const isNoData = covidInfo.Message === constants.CACHING_DATA_MESSAGE;
-    setInfo({ ...covidInfo, isNoData });
+    // console.log(covidInfo);
+    setInfo(covidInfo);
+  };
+
+  const getCovidInfoWorld = async () => {
+    const covidInfoWorld = await requestService.getCovidInfoWorld();
+    // console.log(covidInfo);
+    setInfoWorld(covidInfoWorld);
   };
 
   const getAllData = async () => {
     try {
       await getCovidInfo();
-      await getAllCountriesInfo();
+      await getCovidInfoWorld();
     } catch (exception) {
       addNotify(constants.NOTIFY_TYPES.error, constants.ERROR_HEADER, constants.ERROR_MESSAGE);
     } finally {
@@ -54,9 +48,7 @@ const App = () => {
   }, []);
 
   const renderTable = () => (
-    // TODO
-    // если info нет, рендерить какую-нибудь заглушку или дефолтные данные
-    <DashboardTable countriesList={countriesList} responseData={info} currentCountry={currentCountry} />
+    <DashboardTable responseData={info} responseDataWorld={infoWorld} currentCountry={currentCountry} />
   );
 
   return isLoading ? (
