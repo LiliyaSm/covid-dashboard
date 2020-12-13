@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Table from 'react-bootstrap/Table';
 import TableForm from './TableForm';
-// import ToggleBtn from '../ToggleBtn';
+import ExpandBtn from '../ExpandBtn/ExpandBtn';
 import * as constants from '../../data/constants';
 
 const DashboardTable = ({ countriesList, responseData, currentCountry }) => {
   const [selectedPeriod, setSelectedPeriod] = useState(constants.PERIODS.wholePeriod);
   const [isFor100, setIsFor100] = useState(false);
+  const [isFullScreenSize, setIsFullScreenSize] = useState(false);
 
   const getTotalPopulation = (country) => {
     let totalPopulation;
@@ -70,8 +71,8 @@ const DashboardTable = ({ countriesList, responseData, currentCountry }) => {
   };
 
   return (
-    <div className="dashboard-table">
-      {/* <ToggleBtn /> */}
+    <div className={isFullScreenSize ? 'dashboard-table full-container' : 'dashboard-table'}>
+      <ExpandBtn setIsFullScreenSize={setIsFullScreenSize} isFullScreenSize={isFullScreenSize} />
       <h1 className="table-header">
         Info displayed for:&nbsp;
         {currentCountry}

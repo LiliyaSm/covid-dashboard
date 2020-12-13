@@ -30,7 +30,9 @@ thead {
 }
 
 .dashboard-table {
+  position: relative;
   padding: 20px;
+  margin-right: 7px;
   margin-bottom: 20px;
   background-color: $basecolor;
   border-radius: 5px;
