@@ -19,8 +19,18 @@ const DashboardTable = ({ responseData, responseDataWorld, currentCountry }) => 
     }
     return totalPopulation;
   };
-
-  const countFor100 = (data, population) => Math.round((data * constants.PER_100_THOUSANDS) / population);
+  
+  
+  const handleIsFor100 = () => {
+    setIsFor100(!isFor100);
+  };
+  const countFor100 = (data, population) => {
+    if (population) {
+      return Math.round((data * constants.PER_100_THOUSANDS) / population);
+    } else {
+      return 0;
+    }
+  };
 
   const getDataForPeriod = (period, data) => {
     const result = {};
@@ -38,10 +48,6 @@ const DashboardTable = ({ responseData, responseDataWorld, currentCountry }) => 
 
   const handleSelectedPeriod = (period) => {
     setSelectedPeriod(period);
-  };
-
-  const handleIsFor100 = () => {
-    setIsFor100(!isFor100);
   };
 
   const getTableData = (country, data) => {
@@ -75,7 +81,7 @@ const DashboardTable = ({ responseData, responseDataWorld, currentCountry }) => 
       <ExpandBtn setIsFullScreenSize={setIsFullScreenSize} isFullScreenSize={isFullScreenSize} />
       <h1 className="table-header">
         Info displayed for:&nbsp;
-        {currentCountry.name}
+        {currentCountry}
       </h1>
       <Table responsive>
         <thead>

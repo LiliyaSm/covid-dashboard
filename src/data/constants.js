@@ -21,3 +21,12 @@ export const NOTIFY_TYPES = {
   dark: 'dark',
   light: 'light',
 };
+
+export const VARIANTS_FOR_DISPLAYING = {
+  cases: 'Total number of cases',
+  deaths: 'Total number of deaths',
+  recovered: 'Total number of recovered',
+  todayCases: 'Cases in the last day',
+  todayDeaths: 'Deaths in the last day',
+  todayRecovered: 'Recovered in the last day',
+};
