@@ -30,3 +30,9 @@ export const VARIANTS_FOR_DISPLAYING = {
   todayDeaths: 'Deaths in the last day',
   todayRecovered: 'Recovered in the last day',
 };
+
+export const DEFAULT_ZOOM = 3;
+export const DEFAULT_LAT = 60;
+export const DEFAULT_LONG = 100;
+
+export const MAP_SWITCHER = { label: 'per 100,000 population', id: 'mapSwitcher' };

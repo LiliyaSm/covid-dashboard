@@ -51,18 +51,12 @@ const App = () => {
     <DashboardTable responseData={info} responseDataWorld={infoWorld} currentCountry={currentCountry} />
   );
 
-  const random = () => {
-    let item = info[Math.floor(Math.random() * info.length)];
-    setCurrentCountry(item.country);
-  };
-
   return isLoading ? (
     <Loader />
   ) : (
     <Container fluid>
       {notify ? <Alerts /> : null}
       <Header />
-      <button onClick={random}>info</button>
       <Row>
         <Col>List</Col>
         <Col>

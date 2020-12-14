@@ -19,17 +19,15 @@ const DashboardTable = ({ responseData, responseDataWorld, currentCountry }) => 
     }
     return totalPopulation;
   };
-  
-  
+
   const handleIsFor100 = () => {
     setIsFor100(!isFor100);
   };
   const countFor100 = (data, population) => {
     if (population) {
       return Math.round((data * constants.PER_100_THOUSANDS) / population);
-    } else {
-      return 0;
     }
+    return 0;
   };
 
   const getDataForPeriod = (period, data) => {
