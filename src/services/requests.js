@@ -1,16 +1,16 @@
 import axios from 'axios';
 
-const urlCovid = 'https://api.covid19api.com/summary';
-const urlCountries = 'https://restcountries.eu/rest/v2/all?fields=name;population;flag';
-
-const getAllCountries = async () => {
-  const response = await axios.get(urlCountries);
-  return response.data;
-};
+const urlCovid = 'https://corona.lmao.ninja/v2/countries';
+const urlCovidWorld = 'https://disease.sh/v3/covid-19/all';
 
 const getCovidInfo = async () => {
   const covidInfo = await axios.get(urlCovid);
   return covidInfo.data;
 };
 
-export default { getCovidInfo, getAllCountries };
+const getCovidInfoWorld = async () => {
+  const covidInfoWorld = await axios.get(urlCovidWorld);
+  return covidInfoWorld.data;
+};
+
+export default { getCovidInfo, getCovidInfoWorld };
