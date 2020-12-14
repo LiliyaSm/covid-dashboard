@@ -60,7 +60,7 @@ const App = () => {
       <Header />
       <Row>
         <Col>
-          <CountryList countriesList={countriesList} />
+          <CountryList countriesList={info} />
         </Col>
         <Col>
           <InteractiveMap setCurrentCountry={setCurrentCountry} />

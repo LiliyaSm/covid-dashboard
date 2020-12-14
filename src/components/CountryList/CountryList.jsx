@@ -11,7 +11,7 @@ const CountryList = ({ countriesList }) => {
 
   const sortedCountries = useMemo(() => {
     const countriesSort = [...countriesList];
-    countriesSort.sort((a, b) => b.population - a.population);
+    countriesSort.sort((a, b) => b.cases - a.cases);
     return countriesSort;
   }, [countriesList]);
 
@@ -20,20 +20,20 @@ const CountryList = ({ countriesList }) => {
   }, [sortedCountries]);
 
   const filterCountries = useCallback((value) => {
-    setCountries(sortedCountries.filter((country) => country.name.toLowerCase().includes(value.toLowerCase())));
+    setCountries(sortedCountries.filter((el) => el.country.toLowerCase().includes(value.toLowerCase())));
   });
 
   return (
     <div className={isFullScreenSize ? 'dashboard-table full-container' : 'dashboard-table'}>
       <ExpandBtn setIsFullScreenSize={setIsFullScreenSize} isFullScreenSize={isFullScreenSize} />
-      <Input filterCountries={filterCountries} />
+      <Input filterCountries={filterCountries} placeholder="Country Enter" />
       <div className="country-list">
         <Table striped bordered hover size="sm" variant="dark">
           <tbody>
-            {countries.map((country) => (
-              <tr key={country.name}>
-                <td>{country.population}</td>
-                <td>{country.name}</td>
+            {countries.map((el) => (
+              <tr key={el.country}>
+                <td>{el.cases}</td>
+                <td>{el.country}</td>
               </tr>
             ))}
           </tbody>
