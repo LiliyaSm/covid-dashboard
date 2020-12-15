@@ -50,7 +50,7 @@ const InteractiveMap = ({ responseData, setCurrentCountry, currentCountry }) => 
     if (data <= firstBoundary) {
       return 'low';
     }
-    if (data > firstBoundary && data < secondBoundary) {
+    if (data > firstBoundary && data <= secondBoundary) {
       return 'medium';
     }
     return 'hight';

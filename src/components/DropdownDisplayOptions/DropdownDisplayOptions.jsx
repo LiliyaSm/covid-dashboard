@@ -9,12 +9,7 @@ const DropdownDisplayOptions = ({ setCurrShowingData, options }) => {
   };
   return (
     <Dropdown onSelect={handleSelect}>
-      <Dropdown.Toggle
-        className="btn btn-primary dropdown-toggle"
-        key="info"
-        variant={'info'.toLowerCase()}
-        title="info"
-      >
+      <Dropdown.Toggle className="dropdown-toggle" key="info" variant="info" title="variants">
         Variants for displaying
       </Dropdown.Toggle>
       <Dropdown.Menu>
