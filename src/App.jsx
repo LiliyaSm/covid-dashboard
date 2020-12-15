@@ -63,7 +63,7 @@ const App = () => {
           <CountryList countriesList={info} />
         </Col>
         <Col>
-          <InteractiveMap setCurrentCountry={setCurrentCountry} />
+          <InteractiveMap responseData={info} setCurrentCountry={setCurrentCountry} currentCountry={currentCountry} />
         </Col>
         <Col>
           <Row>{renderTable()}</Row>
