@@ -40,38 +40,34 @@ const InteractiveMap = ({ responseData, setCurrentCountry, currentCountry }) => 
     return 0;
   };
 
-  const getIntensity = (data, population) => {
-    let min = responseData.reduce((prev, curr) => (prev[currShowingData] < curr[currShowingData] ? prev : curr));
-    let max = responseData.reduce((prev, curr) => (prev[currShowingData] > curr[currShowingData] ? prev : curr));
-    if (isFor100) {
-      min = countFor100(min[currShowingData], population);
-      max = countFor100(max[currShowingData], population);
-    } else {
-      min = min[currShowingData];
-      max = max[currShowingData];
-    }
+  const getIntensity = (data, covidData) => {
+    const min = covidData.reduce((acc, curr) => (acc < curr ? acc : curr));
+    const max = covidData.reduce((acc, curr) => (acc > curr ? acc : curr));
     const difference = max - min;
-    const firstBoundary = Math.floor((difference * 5) / 100);
-    const secondBoundary = Math.floor((difference * 50) / 100);
+    const firstBoundary = Math.floor(difference * constants.FIRST_DIVISION);
+    const secondBoundary = Math.floor(difference * constants.SECOND_DIVISION);
 
     if (data <= firstBoundary) {
       return 'low';
-    } if (data > firstBoundary && data < secondBoundary) {
+    }
+    if (data > firstBoundary && data < secondBoundary) {
       return 'medium';
     }
     return 'hight';
   };
 
   const customMarkerIcon = (data, population) => {
-    let markerData;
+    let covidData;
+    let countryData = data;
     if (isFor100) {
-      markerData = countFor100(data, population);
+      covidData = responseData.map((el) => countFor100(el[currShowingData], el.population));
+      countryData = countFor100(data, population);
     } else {
-      markerData = data;
+      covidData = responseData.map((el) => el[currShowingData]);
     }
-    const intensity = getIntensity(markerData, population);
+    const intensity = getIntensity(countryData, covidData);
     return divIcon({
-      html: `<span class="icon-marker-${intensity}">${markerData}</span>`,
+      html: `<span class="icon-marker-${intensity}">${countryData}</span>`,
     });
   };
 
