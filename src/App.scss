@@ -6,6 +6,19 @@ html {
   box-sizing: border-box;
 }
 
+body {
+  background: linear-gradient(225deg, transparent 24.5%, #44b466 24.6%, transparent 24.8%) 37px -37px,
+    linear-gradient(135deg, transparent 24.5%, #44b469 24.6%, transparent 24.8%) 37px 111px,
+    linear-gradient(135deg, transparent 24.5%, #44b466 24.6%, transparent 24.8%) 37px 37px,
+    linear-gradient(225deg, transparent 24.5%, #44b46f 24.6%, transparent 24.8%) 37px 37px,
+    linear-gradient(135deg, transparent 24.5%, #44b44d 24.6%, transparent 24.8%) 74px 0,
+    linear-gradient(225deg, transparent 24.5%, #44b44a 24.6%, transparent 24.8%) 74px 0,
+    linear-gradient(135deg, transparent 24.5%, #44b46f 24.6%, transparent 24.8%) 74px 74px,
+    linear-gradient(225deg, transparent 24.5%, #44b44d 24.6%, transparent 24.8%) 74px 74px;
+  background-color: #f5f5f5 !important;
+  background-size: 148px 148px;
+}
+
 .header {
   margin-top: 20px;
   text-align: center;
