@@ -15,11 +15,6 @@
   }
 }
 
-.country__flag {
-  height: 50px;
-  margin-left: 15px;
-}
-
 .wrapper {
   position: relative;
   padding: 10px;
@@ -30,7 +25,12 @@
 
 .country {
   &_selected {
-    background-color: yellow;
+    background-color: grey;
+  }
+
+  &__flag {
+    width: 40px;
+    height: 30px;
   }
 
   &__cases {
