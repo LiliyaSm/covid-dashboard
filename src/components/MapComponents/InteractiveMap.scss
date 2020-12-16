@@ -1,4 +1,6 @@
 .leaflet-container {
+  position: relative;
+
   z-index: 1;
   width: 100%;
   height: 100%;
@@ -32,7 +34,7 @@
 
   width: 3.6em;
   height: 3.6em;
-  background-color: rgb(255, 174, 0);
+  background-color: #ffae00;
 }
 
 .icon-marker-medium {
@@ -40,7 +42,7 @@
 
   width: 4.6em;
   height: 4.6em;
-  background-color: rgb(255, 102, 0);
+  background-color: #ff6600;
 }
 
 .icon-marker-hight {
@@ -48,7 +50,7 @@
 
   width: 5.6em;
   height: 5.6em;
-  background-color: rgb(255, 30, 0);
+  background-color: #ff1e00;
 }
 
 .switchGroup {
@@ -56,4 +58,41 @@
   justify-content: space-between;
   padding-right: 40px;
   padding-bottom: 10px;
+}
+
+.map-overlay {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.8);
+  margin-right: 20px;
+  font-family: Arial, sans-serif;
+  overflow: auto;
+  border-radius: 3px;
+}
+
+#features {
+  top: 0;
+  height: 100px;
+  margin-top: 20px;
+  width: 250px;
+}
+
+#legend {
+  z-index: 600;
+
+  padding: 10px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  line-height: 18px;
+  height: 150px;
+  margin-bottom: 40px;
+  width: 100px;
+}
+
+.legend-key {
+  display: inline-block;
+  border-radius: 20%;
+  width: 10px;
+  height: 10px;
+  margin-right: 5px;
 }
