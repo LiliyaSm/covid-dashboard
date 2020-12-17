@@ -7,6 +7,7 @@ import './CountryList.scss';
 
 const CountryList = ({ countriesList }) => {
   const [isFullScreenSize, setIsFullScreenSize] = useState(false);
+  const [selectedCountry] = useState('India');
   const [countries, setCountries] = useState([]);
 
   const sortedCountries = useMemo(() => {
@@ -24,16 +25,19 @@ const CountryList = ({ countriesList }) => {
   });
 
   return (
-    <div className={isFullScreenSize ? 'dashboard-table full-container' : 'dashboard-table'}>
+    <div className={isFullScreenSize ? 'wrapper full-container' : 'wrapper'}>
       <ExpandBtn setIsFullScreenSize={setIsFullScreenSize} isFullScreenSize={isFullScreenSize} />
       <Input filterCountries={filterCountries} placeholder="Country Enter" />
-      <div className="country-list">
-        <Table striped bordered hover size="sm" variant="dark">
+      <div className={isFullScreenSize ? 'country-list__fullscreen' : 'country-list'}>
+        <Table striped hover size="sm" variant="dark">
           <tbody>
             {countries.map((el) => (
-              <tr key={el.country}>
-                <td>{el.cases}</td>
-                <td>{el.country}</td>
+              <tr key={el.country} className={selectedCountry === el.country ? 'country_selected' : ''}>
+                <td>
+                  <img src={el.countryInfo.flag} alt={el.country} className="country__flag" />
+                </td>
+                <td className="country__cases">{el.cases}</td>
+                <td className="country__name">{el.country}</td>
               </tr>
             ))}
           </tbody>

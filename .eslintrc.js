@@ -20,4 +20,11 @@ module.exports = {
     'object-curly-newline': 'off',
   },
   plugins: ['react'],
+  settings: {
+    'import/resolver': {
+      node: {
+        extensions: ['.js', '.jsx', '.ts', '.tsx'],
+      },
+    },
+  },
 };
