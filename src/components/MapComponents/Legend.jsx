@@ -5,19 +5,18 @@ import {} from 'mapbox-gl-leaflet';
 import * as constants from '../../data/constants';
 
 export default function Legend({ boundaries }) {
-  console.log(boundaries);
   const layers = {
-    low: `0-${boundaries.firstBoundary}`,
-    medium: `${boundaries.firstBoundary}-${boundaries.secondBoundary}`,
-    hight: `${boundaries.secondBoundary}+`,
+    low: `0 - ${boundaries.firstBoundary}`,
+    medium: `${boundaries.firstBoundary} - ${boundaries.secondBoundary}`,
+    hight: `${boundaries.secondBoundary} and above`,
   };
 
   function createLegend() {
     return Object.keys(layers).map((key, i) => {
       return (
-        <div>
+        <div key={layers[key]}>
           <span style={{ backgroundColor: constants.COLORS[key] }} className="legend-key"></span>
-          <span key={layers[key]}>{layers[key]}</span>
+          <span>{layers[key]}</span>
         </div>
       );
     });
@@ -25,13 +24,13 @@ export default function Legend({ boundaries }) {
 
   return (
     <div>
-      <div class="map-overlay" id="features">
+      {/* <div class="map-overlay" id="features">
         <h2>US population density</h2>
         <div id="pd">
           <p>Hover over a state!</p>
         </div>
-      </div>
-      <div class="map-overlay" id="legend">
+      </div> */}
+      <div className="map-overlay" id="legend">
         {createLegend()}
       </div>
     </div>

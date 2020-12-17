@@ -12,6 +12,7 @@ import * as constants from '../../data/constants';
 import L from 'leaflet';
 import {} from 'mapbox-gl-leaflet';
 import Legend from './Legend';
+import * as countries from './countries.json';
 
 const InteractiveMap = ({ responseData, setCurrentCountry, currentCountry }) => {
   mapboxgl.accessToken = 'pk.eyJ1Ijoic2l6YXlhIiwiYSI6ImNraW4zMGk2aDB6Y2kzMnFqM3k3dHd1cTEifQ.C4b5ctgb9K4koJwzcTycZw';
@@ -20,8 +21,37 @@ const InteractiveMap = ({ responseData, setCurrentCountry, currentCountry }) => 
   const [isFor100, setIsFor100] = useState(false);
   const [map, setMap] = useState('');
   const [currShowingData, setCurrShowingData] = useState('cases');
+  const [showingCountry, setShowingCountry] = useState('cases');
 
   let boundaries = { firstBoundary: 0, secondBoundary: 0 };
+
+  const WhenMapCreated = (mapInstance) => {
+    setMap(mapInstance);
+
+    function showPopup(e) {
+      if (showingCountry !== countryOnHover) {
+        setShowingCountry(countryOnHover);
+      }
+    }
+
+    const onEachFeature = (feature, layer) => {
+      layer.bindTooltip(feature.properties.name, { closeButton: false, offset: L.point(0, -20) });
+      layer.on({
+        mouseover: function (e) {
+          console.log(layer);
+          layer._tooltip.setContent(`${feature.properties.name} ${showingCountry}`);
+        },
+      });
+    };
+
+    // console.log(countries.features);
+    let geojson = L.geoJSON(countries.features, {
+      onEachFeature: onEachFeature,
+    });
+    // console.log(geojson);
+
+    geojson.addTo(mapInstance);
+  };
 
   const positionCalc = () => {
     if (currentCountry === constants.WHOLE_WORLD_NAME) {
@@ -117,9 +147,20 @@ const InteractiveMap = ({ responseData, setCurrentCountry, currentCountry }) => 
     return null;
   };
 
-  const WhenMapCreated = (mapInstance) => {
-    setMap(mapInstance);
+  const CountryToolTip = () => {
+    return (
+      <div className="map-overlay" id="features">
+        <span>{showingCountry}</span>
+      </div>
+    );
   };
+
+  // function handleMouseMove(e) {
+  //   let countries = map.queryRenderedFeatures(e.point);
+  //   //   layers: ['country-boundaries'],
+  //   // });
+  //   // console.log(countries);
+  // }
 
   return responseData ? (
     <div className={isFullScreenSize ? 'interactive-map full-container' : 'interactive-map'}>
@@ -129,6 +170,7 @@ const InteractiveMap = ({ responseData, setCurrentCountry, currentCountry }) => 
         <Switcher handleOnChange={handleIsFor100} label={constants.MAP_SWITCHER.label} id={constants.MAP_SWITCHER.id} />
       </div>
       <MapContainer
+        id="someID"
         fullscreenControl
         attributionControl
         zoomControl
@@ -138,10 +180,11 @@ const InteractiveMap = ({ responseData, setCurrentCountry, currentCountry }) => 
         animate
         whenCreated={WhenMapCreated}
       >
-        <Legend boundaries={boundaries} />
         <StyleView />
 
         {renderMarkers()}
+        <Legend boundaries={boundaries} />
+        <CountryToolTip />
       </MapContainer>
     </div>
   ) : (
