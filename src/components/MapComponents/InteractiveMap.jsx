@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { MapContainer, GeoJSON, Marker } from 'react-leaflet';
+import { MapContainer, GeoJSON } from 'react-leaflet';
 import PropTypes from 'prop-types';
+import L from 'leaflet';
 import ExpandBtn from '../ExpandBtn/ExpandBtn';
 import Switcher from '../TableComponents/Switcher';
 import DropdownDisplayOptions from '../DropdownDisplayOptions/DropdownDisplayOptions';
@@ -8,9 +9,8 @@ import './InteractiveMap.scss';
 import 'leaflet-fullscreen/dist/Leaflet.fullscreen';
 import 'leaflet-fullscreen/dist/leaflet.fullscreen.css';
 import * as constants from '../../data/constants';
-import L from 'leaflet';
+import * as countries from '../../data/countries.json';
 import {} from 'mapbox-gl-leaflet';
-import * as countries from './countries.json';
 import RenderOverlay from './RenderOverlay';
 
 const InteractiveMap = ({ responseData, setCurrentCountry, currentCountry }) => {
@@ -39,7 +39,7 @@ const InteractiveMap = ({ responseData, setCurrentCountry, currentCountry }) => 
       map.invalidateSize();
     }
   }, [isFullScreenSize]);
-  
+
   const handleIsFor100 = () => {
     setIsFor100(!isFor100);
   };
@@ -89,8 +89,8 @@ const InteractiveMap = ({ responseData, setCurrentCountry, currentCountry }) => 
                   setCurrentCountry(feature.properties.name);
                 }
               },
-              mouseover: function (e) {
-                let feature = e.target.feature;
+              mouseover(e) {
+                const { feature } = e.target;
                 layer
                   .bindTooltip(feature.properties.tooltipText, {
                     closeButton: false,
@@ -101,7 +101,7 @@ const InteractiveMap = ({ responseData, setCurrentCountry, currentCountry }) => 
                   .openTooltip();
                 console.log(layer);
               },
-              mouseout: function (e) {
+              mouseout(e) {
                 layer.unbindTooltip(feature.properties.name);
               },
             });

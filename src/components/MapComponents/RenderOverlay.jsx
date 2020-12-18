@@ -1,7 +1,8 @@
-import Legend from './Legend';
-import * as constants from '../../data/constants';
 import { divIcon } from 'leaflet';
 import { Marker } from 'react-leaflet';
+import PropTypes from 'prop-types';
+import * as constants from '../../data/constants';
+import Legend from './Legend';
 
 const RenderOverlay = ({ responseData, isFor100, currShowingData, setCurrentCountry }) => {
   let covidData;
@@ -74,6 +75,20 @@ const RenderOverlay = ({ responseData, isFor100, currShowingData, setCurrentCoun
       <Legend boundaries={boundaries} />
     </>
   );
+};
+
+RenderOverlay.propTypes = {
+  responseData: PropTypes.arrayOf(PropTypes.object),
+  setCurrentCountry: PropTypes.func,
+  currShowingData: PropTypes.string,
+  isFor100: PropTypes.bool,
+};
+
+RenderOverlay.defaultProps = {
+  responseData: '',
+  setCurrentCountry: '',
+  currShowingData: '',
+  isFor100: 'false',
 };
 
 export default RenderOverlay;
