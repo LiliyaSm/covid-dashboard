@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { divIcon } from 'leaflet';
-import { MapContainer, TileLayer, Marker } from 'react-leaflet';
+import { MapContainer, GeoJSON, Marker } from 'react-leaflet';
 import PropTypes from 'prop-types';
 import ExpandBtn from '../ExpandBtn/ExpandBtn';
 import Switcher from '../TableComponents/Switcher';
@@ -11,46 +10,20 @@ import 'leaflet-fullscreen/dist/leaflet.fullscreen.css';
 import * as constants from '../../data/constants';
 import L from 'leaflet';
 import {} from 'mapbox-gl-leaflet';
-import Legend from './Legend';
 import * as countries from './countries.json';
+import RenderOverlay from './RenderOverlay';
 
 const InteractiveMap = ({ responseData, setCurrentCountry, currentCountry }) => {
   mapboxgl.accessToken = 'pk.eyJ1Ijoic2l6YXlhIiwiYSI6ImNraW4zMGk2aDB6Y2kzMnFqM3k3dHd1cTEifQ.C4b5ctgb9K4koJwzcTycZw';
 
+  const [markersAdded, setMarkersAdded] = useState(false);
   const [isFullScreenSize, setIsFullScreenSize] = useState(false);
   const [isFor100, setIsFor100] = useState(false);
   const [map, setMap] = useState('');
   const [currShowingData, setCurrShowingData] = useState('cases');
-  const [showingCountry, setShowingCountry] = useState('cases');
-
-  let boundaries = { firstBoundary: 0, secondBoundary: 0 };
 
   const WhenMapCreated = (mapInstance) => {
     setMap(mapInstance);
-
-    function showPopup(e) {
-      if (showingCountry !== countryOnHover) {
-        setShowingCountry(countryOnHover);
-      }
-    }
-
-    const onEachFeature = (feature, layer) => {
-      layer.bindTooltip(feature.properties.name, { closeButton: false, offset: L.point(0, -20) });
-      layer.on({
-        mouseover: function (e) {
-          console.log(layer);
-          layer._tooltip.setContent(`${feature.properties.name} ${showingCountry}`);
-        },
-      });
-    };
-
-    // console.log(countries.features);
-    let geojson = L.geoJSON(countries.features, {
-      onEachFeature: onEachFeature,
-    });
-    // console.log(geojson);
-
-    geojson.addTo(mapInstance);
   };
 
   const positionCalc = () => {
@@ -66,73 +39,9 @@ const InteractiveMap = ({ responseData, setCurrentCountry, currentCountry }) => 
       map.invalidateSize();
     }
   }, [isFullScreenSize]);
-
+  
   const handleIsFor100 = () => {
     setIsFor100(!isFor100);
-  };
-  const countFor100 = (data, population) => {
-    if (population) {
-      return Math.round((data * constants.PER_100_THOUSANDS) / population);
-    }
-    return 0;
-  };
-
-  const getBoundary = (covidData) => {
-    const min = covidData.reduce((acc, curr) => (acc < curr ? acc : curr));
-    const max = covidData.reduce((acc, curr) => (acc > curr ? acc : curr));
-    const difference = max - min;
-    const firstBoundary = Math.floor(difference * constants.FIRST_DIVISION);
-    const secondBoundary = Math.floor(difference * constants.SECOND_DIVISION);
-    return { firstBoundary, secondBoundary };
-  };
-
-  const getIntensity = (data) => {
-    if (data <= boundaries.firstBoundary) {
-      return 'low';
-    }
-    if (data > boundaries.firstBoundary && data <= boundaries.secondBoundary) {
-      return 'medium';
-    }
-    return 'hight';
-  };
-
-  const customMarkerIcon = (data) => {
-    const intensity = getIntensity(data);
-    return divIcon({
-      html: `<span class="icon-marker-${intensity}">${data}</span>`,
-    });
-  };
-
-  const renderMarkers = () => {
-    let covidData;
-    if (isFor100) {
-      covidData = responseData.map((el) => ({
-        value: countFor100(el[currShowingData], el.population),
-        countryInfo: el.countryInfo,
-        country: el.country,
-      }));
-    } else {
-      covidData = responseData.map((el) => ({
-        value: el[currShowingData],
-        countryInfo: el.countryInfo,
-        country: el.country,
-      }));
-    }
-
-    boundaries = getBoundary(covidData.map((el) => el.value));
-
-    return covidData.map((element) => (
-      <Marker
-        key={element.country}
-        position={[element.countryInfo.lat, element.countryInfo.long]}
-        icon={customMarkerIcon(element.value)}
-        eventHandlers={{
-          click: () => {
-            setCurrentCountry(element.country);
-          },
-        }}
-      />
-    ));
   };
 
   const StyleView = () => {
@@ -146,21 +55,6 @@ const InteractiveMap = ({ responseData, setCurrentCountry, currentCountry }) => 
     }
     return null;
   };
-
-  const CountryToolTip = () => {
-    return (
-      <div className="map-overlay" id="features">
-        <span>{showingCountry}</span>
-      </div>
-    );
-  };
-
-  // function handleMouseMove(e) {
-  //   let countries = map.queryRenderedFeatures(e.point);
-  //   //   layers: ['country-boundaries'],
-  //   // });
-  //   // console.log(countries);
-  // }
 
   return responseData ? (
     <div className={isFullScreenSize ? 'interactive-map full-container' : 'interactive-map'}>
@@ -180,11 +74,48 @@ const InteractiveMap = ({ responseData, setCurrentCountry, currentCountry }) => 
         animate
         whenCreated={WhenMapCreated}
       >
+        <GeoJSON
+          key="my-geojson"
+          data={countries.features}
+          style={{ opacity: 0 }}
+          onEachFeature={(feature, layer) => {
+            feature.properties.tooltipText = `${constants.VARIANTS_FOR_DISPLAYING[currShowingData]} ${
+              isFor100 ? 'for 100K' : ''
+            } <br> for: ${feature.properties.name} `;
+
+            layer.on({
+              click: () => {
+                if (feature.properties.name) {
+                  setCurrentCountry(feature.properties.name);
+                }
+              },
+              mouseover: function (e) {
+                let feature = e.target.feature;
+                layer
+                  .bindTooltip(feature.properties.tooltipText, {
+                    closeButton: false,
+                    offset: L.point(0, -20),
+                    sticky: true,
+                    className: 'toolTip',
+                  })
+                  .openTooltip();
+                console.log(layer);
+              },
+              mouseout: function (e) {
+                layer.unbindTooltip(feature.properties.name);
+              },
+            });
+          }}
+        />
+
         <StyleView />
 
-        {renderMarkers()}
-        <Legend boundaries={boundaries} />
-        <CountryToolTip />
+        <RenderOverlay
+          responseData={responseData}
+          isFor100={isFor100}
+          currShowingData={currShowingData}
+          setCurrentCountry={setCurrentCountry}
+        />
       </MapContainer>
     </div>
   ) : (
