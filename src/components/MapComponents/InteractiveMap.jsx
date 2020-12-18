@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { MapContainer, GeoJSON } from 'react-leaflet';
+import { MapContainer } from 'react-leaflet';
 import PropTypes from 'prop-types';
 import L from 'leaflet';
 import ExpandBtn from '../ExpandBtn/ExpandBtn';
@@ -9,15 +9,16 @@ import './InteractiveMap.scss';
 import 'leaflet-fullscreen/dist/Leaflet.fullscreen';
 import 'leaflet-fullscreen/dist/leaflet.fullscreen.css';
 import * as constants from '../../data/constants';
-import * as countries from '../../data/countries.json';
 import {} from 'mapbox-gl-leaflet';
 import RenderOverlay from './RenderOverlay';
+import GeojsonView from './GeojsonView';
 
 const InteractiveMap = ({ responseData, setCurrentCountry, currentCountry }) => {
   const [isFullScreenSize, setIsFullScreenSize] = useState(false);
-  const [isFor100, setIsFor100] = useState(false);
-  const [map, setMap] = useState('');
   const [currShowingData, setCurrShowingData] = useState('cases');
+  const [isFor100, setIsFor100] = useState(false);
+  const [style, setStyle] = useState('');
+  const [map, setMap] = useState('');
 
   const WhenMapCreated = (mapInstance) => {
     setMap(mapInstance);
@@ -35,6 +36,14 @@ const InteractiveMap = ({ responseData, setCurrentCountry, currentCountry }) => 
   };
 
   useEffect(() => {
+    const mapStyle = L.mapboxGL({
+      style: constants.MAPBOX_STYLE,
+      accessToken: constants.MAPBOX_KEY,
+    });
+    setStyle(mapStyle);
+  }, []);
+
+  useEffect(() => {
     if (map) {
       map.invalidateSize();
     }
@@ -44,21 +53,14 @@ const InteractiveMap = ({ responseData, setCurrentCountry, currentCountry }) => 
     setIsFor100(!isFor100);
   };
 
-  
-
   const StyleView = () => {
     if (map) {
       const position = positionCalc();
       map.setView(position, map.getZoom() || constants.DEFAULT_ZOOM);
-      L.mapboxGL({
-        style: `${'mapbox://styles/sizaya/ckireok4h7hjv17nrqcxeyzkc'}`,
-        accessToken: 'pk.eyJ1Ijoic2l6YXlhIiwiYSI6ImNraW4zMGk2aDB6Y2kzMnFqM3k3dHd1cTEifQ.C4b5ctgb9K4koJwzcTycZw',
-      }).addTo(map);
+      style.addTo(map);
     }
     return null;
   };
-
-  const style = { weight: 0, fillOpacity: 0 };
 
   return responseData ? (
     <div className={isFullScreenSize ? 'interactive-map full-container' : 'interactive-map'}>
@@ -78,42 +80,8 @@ const InteractiveMap = ({ responseData, setCurrentCountry, currentCountry }) => 
         animate
         whenCreated={WhenMapCreated}
       >
-        <GeoJSON
-          key="my-geojson"
-          data={countries.features}
-          style={style}
-          onEachFeature={(feature, layer) => {
-            // eslint-disable-next-line no-param-reassign
-            feature.properties.tooltipText = `${constants.VARIANTS_FOR_DISPLAYING[currShowingData]} ${
-              isFor100 ? 'for 100K' : ''
-            } <br> for: ${feature.properties.name} `;
-
-            layer.on({
-              click: () => {
-                if (feature.properties.name) {
-                  setCurrentCountry(feature.properties.name);
-                }
-              },
-              mouseover(e) {
-                const activeFeature = e.target.feature;
-                layer
-                  .bindTooltip(activeFeature.properties.tooltipText, {
-                    closeButton: false,
-                    offset: L.point(0, -20),
-                    sticky: true,
-                    className: 'toolTip',
-                  })
-                  .openTooltip();
-              },
-              mouseout() {
-                layer.unbindTooltip(feature.properties.name);
-              },
-            });
-          }}
-        />
-
+        <GeojsonView isFor100={isFor100} currShowingData={currShowingData} setCurrentCountry={setCurrentCountry} />
         <StyleView />
-
         <RenderOverlay
           responseData={responseData}
           isFor100={isFor100}
