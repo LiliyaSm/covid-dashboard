@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import {} from 'mapbox-gl-leaflet';
 import PropTypes from 'prop-types';
 import * as constants from '../../data/constants';
@@ -10,19 +10,17 @@ export default function Legend({ boundaries }) {
     hight: `${boundaries.secondBoundary} and above`,
   };
 
-  function renderLegend() {
-    return Object.keys(layers).map((key) => (
-      <div key={layers[key]}>
-        <span style={{ backgroundColor: constants.COLORS[key] }} className="legend-key" />
-        <span>{layers[key]}</span>
-      </div>
-    ));
-  }
+  const legendKeys = useMemo(() => Object.keys(layers).map((key) => (
+    <div key={layers[key]}>
+      <span style={{ backgroundColor: constants.COLORS[key] }} className="legend-key" />
+      <span>{layers[key]}</span>
+    </div>
+  )));
 
   return (
     <div>
       <div className="map-overlay" id="legend">
-        {renderLegend()}
+        { legendKeys }
       </div>
     </div>
   );
