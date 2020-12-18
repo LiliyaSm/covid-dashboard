@@ -38,5 +38,10 @@ export const DEFAULT_LONG = 100;
 export const MAP_SWITCHER = { label: 'per 100,000 population', id: 'mapSwitcher' };
 export const COUNTRY_SWITCHER = { label: 'per 100,000 population', id: 'countrySwitcher' };
 
-export const FIRST_DIVISION = 5 / 100;
+export const FIRST_DIVISION = 10 / 100;
 export const SECOND_DIVISION = 50 / 100;
+
+export const COLORS = { low: '#ffae00', medium: '#ff6600', hight: '#ff1e00' };
+
+export const MAPBOX_STYLE = 'mapbox://styles/sizaya/ckireok4h7hjv17nrqcxeyzkc';
+export const MAPBOX_KEY = 'pk.eyJ1Ijoic2l6YXlhIiwiYSI6ImNraW4zMGk2aDB6Y2kzMnFqM3k3dHd1cTEifQ.C4b5ctgb9K4koJwzcTycZw';

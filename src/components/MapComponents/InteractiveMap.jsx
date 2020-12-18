@@ -1,29 +1,47 @@
 import React, { useState, useEffect } from 'react';
-import { divIcon } from 'leaflet';
-import { MapContainer, TileLayer, Marker } from 'react-leaflet';
+import { MapContainer } from 'react-leaflet';
 import PropTypes from 'prop-types';
+import L from 'leaflet';
 import ExpandBtn from '../ExpandBtn/ExpandBtn';
 import Switcher from '../TableComponents/Switcher';
 import DropdownDisplayOptions from '../DropdownDisplayOptions/DropdownDisplayOptions';
 import './InteractiveMap.scss';
 import 'leaflet-fullscreen/dist/Leaflet.fullscreen';
 import 'leaflet-fullscreen/dist/leaflet.fullscreen.css';
-import { countFor100 } from '../../helpers/helpers';
 import * as constants from '../../data/constants';
+import {} from 'mapbox-gl-leaflet';
+import RenderOverlay from './RenderOverlay';
+import GeojsonView from './GeojsonView';
 
 const InteractiveMap = ({ responseData, setCurrentCountry, currentCountry }) => {
   const [isFullScreenSize, setIsFullScreenSize] = useState(false);
-  const [isFor100, setIsFor100] = useState(false);
-  const [map, setMap] = useState('');
   const [currShowingData, setCurrShowingData] = useState('cases');
+  const [isFor100, setIsFor100] = useState(false);
+  const [style, setStyle] = useState('');
+  const [map, setMap] = useState('');
+
+  const WhenMapCreated = (mapInstance) => {
+    setMap(mapInstance);
+  };
 
   const positionCalc = () => {
     if (currentCountry === constants.WHOLE_WORLD_NAME) {
       return [constants.DEFAULT_LAT, constants.DEFAULT_LONG];
     }
     const position = responseData.find((el) => el.country === currentCountry);
+    if (!position) {
+      return [constants.DEFAULT_LAT, constants.DEFAULT_LONG];
+    }
     return [position.countryInfo.lat, position.countryInfo.long];
   };
+
+  useEffect(() => {
+    const mapStyle = L.mapboxGL({
+      style: constants.MAPBOX_STYLE,
+      accessToken: constants.MAPBOX_KEY,
+    });
+    setStyle(mapStyle);
+  }, []);
 
   useEffect(() => {
     if (map) {
@@ -35,60 +53,13 @@ const InteractiveMap = ({ responseData, setCurrentCountry, currentCountry }) => 
     setIsFor100(!isFor100);
   };
 
-  const getIntensity = (data, covidData) => {
-    const min = covidData.reduce((acc, curr) => (acc < curr ? acc : curr));
-    const max = covidData.reduce((acc, curr) => (acc > curr ? acc : curr));
-    const difference = max - min;
-    const firstBoundary = Math.floor(difference * constants.FIRST_DIVISION);
-    const secondBoundary = Math.floor(difference * constants.SECOND_DIVISION);
-
-    if (data <= firstBoundary) {
-      return 'low';
-    }
-    if (data > firstBoundary && data <= secondBoundary) {
-      return 'medium';
-    }
-    return 'hight';
-  };
-
-  const customMarkerIcon = (data, population) => {
-    let covidData;
-    let countryData = data;
-    if (isFor100) {
-      covidData = responseData.map((el) => countFor100(el[currShowingData], el.population));
-      countryData = countFor100(data, population);
-    } else {
-      covidData = responseData.map((el) => el[currShowingData]);
-    }
-    const intensity = getIntensity(countryData, covidData);
-    return divIcon({
-      html: `<span class="icon-marker-${intensity}">${countryData}</span>`,
-    });
-  };
-
-  const renderMarkers = () => responseData.map((element) => (
-    <Marker
-      key={element.country}
-      position={[element.countryInfo.lat, element.countryInfo.long]}
-      icon={customMarkerIcon(element[currShowingData], element.population)}
-      eventHandlers={{
-        click: () => {
-          setCurrentCountry(element.country);
-        },
-      }}
-    />
-  ));
-
-  const ChangeView = () => {
+  const StyleView = () => {
     if (map) {
       const position = positionCalc();
       map.setView(position, map.getZoom() || constants.DEFAULT_ZOOM);
+      style.addTo(map);
     }
     return null;
-  };
-
-  const WhenMapCreated = (mapInstance) => {
-    setMap(mapInstance);
   };
 
   return responseData ? (
@@ -99,6 +70,7 @@ const InteractiveMap = ({ responseData, setCurrentCountry, currentCountry }) => 
         <Switcher handleOnChange={handleIsFor100} label={constants.MAP_SWITCHER.label} id={constants.MAP_SWITCHER.id} />
       </div>
       <MapContainer
+        id="someID"
         fullscreenControl
         attributionControl
         zoomControl
@@ -108,12 +80,14 @@ const InteractiveMap = ({ responseData, setCurrentCountry, currentCountry }) => 
         animate
         whenCreated={WhenMapCreated}
       >
-        <ChangeView />
-        <TileLayer
-          attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        <GeojsonView isFor100={isFor100} currShowingData={currShowingData} setCurrentCountry={setCurrentCountry} />
+        <StyleView />
+        <RenderOverlay
+          responseData={responseData}
+          isFor100={isFor100}
+          currShowingData={currShowingData}
+          setCurrentCountry={setCurrentCountry}
         />
-        {renderMarkers()}
       </MapContainer>
     </div>
   ) : (
