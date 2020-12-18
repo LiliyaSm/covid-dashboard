@@ -7,18 +7,22 @@ export const countFor100 = (data, population) => {
   return 0;
 };
 
-export const getIntensity = (data, covidData) => {
+const getRoundField = (data) => {
+  if (data < 10) return data;
+  const rank = Math.floor(Math.log10(data));
+  const number = 10 ** rank;
+  const roundedData = Math.round(data / number) * number;
+  return roundedData;
+};
+
+export const getBoundary = (covidData) => {
   const min = covidData.reduce((acc, curr) => (acc < curr ? acc : curr));
   const max = covidData.reduce((acc, curr) => (acc > curr ? acc : curr));
   const difference = max - min;
-  const firstBoundary = Math.floor(difference * constants.FIRST_DIVISION);
-  const secondBoundary = Math.floor(difference * constants.SECOND_DIVISION);
+  let firstBoundary = Math.floor(difference * constants.FIRST_DIVISION);
+  let secondBoundary = Math.floor(difference * constants.SECOND_DIVISION);
 
-  if (data <= firstBoundary) {
-    return 'low';
-  }
-  if (data > firstBoundary && data <= secondBoundary) {
-    return 'medium';
-  }
-  return 'hight';
+  firstBoundary = getRoundField(firstBoundary);
+  secondBoundary = getRoundField(secondBoundary);
+  return { firstBoundary, secondBoundary };
 };
