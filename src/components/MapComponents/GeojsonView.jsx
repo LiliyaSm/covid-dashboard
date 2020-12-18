@@ -16,7 +16,7 @@ const GeojsonView = ({ isFor100, currShowingData, setCurrentCountry }) => {
       onEachFeature={(feature, layer) => {
         // eslint-disable-next-line no-param-reassign
         feature.properties.tooltipText = `${constants.VARIANTS_FOR_DISPLAYING[currShowingData]} ${
-          isFor100 ? 'for 100K' : ''
+          isFor100 ? 'per 100K' : ''
         } <br> for: ${feature.properties.name} `;
 
         layer.on({
