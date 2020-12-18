@@ -8,6 +8,7 @@ import DropdownDisplayOptions from '../DropdownDisplayOptions/DropdownDisplayOpt
 import './InteractiveMap.scss';
 import 'leaflet-fullscreen/dist/Leaflet.fullscreen';
 import 'leaflet-fullscreen/dist/leaflet.fullscreen.css';
+import { countFor100 } from '../../helpers/helpers';
 import * as constants from '../../data/constants';
 
 const InteractiveMap = ({ responseData, setCurrentCountry, currentCountry }) => {
@@ -32,12 +33,6 @@ const InteractiveMap = ({ responseData, setCurrentCountry, currentCountry }) => 
 
   const handleIsFor100 = () => {
     setIsFor100(!isFor100);
-  };
-  const countFor100 = (data, population) => {
-    if (population) {
-      return Math.round((data * constants.PER_100_THOUSANDS) / population);
-    }
-    return 0;
   };
 
   const getIntensity = (data, covidData) => {

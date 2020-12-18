@@ -36,6 +36,7 @@ export const DEFAULT_LAT = 60;
 export const DEFAULT_LONG = 100;
 
 export const MAP_SWITCHER = { label: 'per 100,000 population', id: 'mapSwitcher' };
+export const COUNTRY_SWITCHER = { label: 'per 100,000 population', id: 'countrySwitcher' };
 
 export const FIRST_DIVISION = 5 / 100;
 export const SECOND_DIVISION = 50 / 100;

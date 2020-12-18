@@ -4,6 +4,7 @@ import Table from 'react-bootstrap/Table';
 import TableForm from './TableForm';
 import ExpandBtn from '../ExpandBtn/ExpandBtn';
 import * as constants from '../../data/constants';
+import { countFor100 } from '../../helpers/helpers';
 
 const DashboardTable = ({ responseData, responseDataWorld, currentCountry }) => {
   const [selectedPeriod, setSelectedPeriod] = useState(constants.PERIODS.wholePeriod);
@@ -22,12 +23,6 @@ const DashboardTable = ({ responseData, responseDataWorld, currentCountry }) => 
 
   const handleIsFor100 = () => {
     setIsFor100(!isFor100);
-  };
-  const countFor100 = (data, population) => {
-    if (population) {
-      return Math.round((data * constants.PER_100_THOUSANDS) / population);
-    }
-    return 0;
   };
 
   const getDataForPeriod = (period, data) => {
