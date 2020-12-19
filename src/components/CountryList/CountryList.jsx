@@ -66,8 +66,8 @@ const CountryList = ({ countriesList }) => {
             {countries.map((el) => (
               <tr
                 key={el.country}
-                onClick={() => selectCountry(el.country)}
-                className={currentCountry === el.country ? 'country_selected' : ''}
+                onClick={() => selectCountry(el.countryInfo.iso3)}
+                className={currentCountry === el.countryInfo.iso3 ? 'country_selected' : ''}
               >
                 <td>
                   <img src={el.countryInfo.flag} alt={el.country} className="country__flag" />
