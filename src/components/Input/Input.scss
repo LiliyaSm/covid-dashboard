@@ -20,8 +20,13 @@
   margin: 10px 0;
 }
 
-.input {
+.use-keyboard-input {
   width: 100%;
   padding-left: 10px;
   border-radius: 5px;
+}
+
+
+.keyboard button:focus {
+    outline: none;
 }
