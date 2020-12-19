@@ -5,11 +5,14 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import NotifyProvider from './Providers/NotifyProvider';
+import CommonProvider from './Providers/CommonProvider';
 
 ReactDOM.render(
   <React.StrictMode>
     <NotifyProvider>
-      <App />
+      <CommonProvider>
+        <App />
+      </CommonProvider>
     </NotifyProvider>
   </React.StrictMode>,
   document.getElementById('root'),

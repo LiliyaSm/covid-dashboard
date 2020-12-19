@@ -23,13 +23,11 @@ const App = () => {
 
   const getCovidInfo = async () => {
     const covidInfo = await requestService.getCovidInfo();
-    // console.log(covidInfo);
     setInfo(covidInfo);
   };
 
   const getCovidInfoWorld = async () => {
     const covidInfoWorld = await requestService.getCovidInfoWorld();
-    // console.log(covidInfo);
     setInfoWorld(covidInfoWorld);
   };
 

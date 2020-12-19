@@ -32,7 +32,7 @@
 
 .country {
   &_selected {
-    background-color: grey;
+    background-color: grey !important;
   }
 
   &__flag {

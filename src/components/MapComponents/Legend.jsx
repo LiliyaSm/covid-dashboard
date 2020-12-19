@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import {} from 'mapbox-gl-leaflet';
+import 'mapbox-gl-leaflet';
 import PropTypes from 'prop-types';
 import * as constants from '../../data/constants';
 
