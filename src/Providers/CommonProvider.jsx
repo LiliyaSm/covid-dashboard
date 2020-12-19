@@ -12,7 +12,7 @@ export const CommonContext = React.createContext({
 
 export default function CommonProvider({ children }) {
   const [currentCountry, setCurrentCountry] = useState(null);
-  const selectCountry = useCallback((name) => setCurrentCountry(name), [setCurrentCountry]);
+  const selectCountry = useCallback((code) => setCurrentCountry(code), [setCurrentCountry]);
 
   const [showingData, setShowingData] = useState('cases');
   const changeShowingData = useCallback((data) => setShowingData(data), [setShowingData]);
