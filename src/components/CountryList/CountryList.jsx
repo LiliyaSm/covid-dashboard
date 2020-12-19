@@ -14,7 +14,7 @@ const CountryList = ({ countriesList }) => {
   const { currentCountry, selectCountry, showingData, changeShowingData, isFor100, changeIsFor100 } = useContext(
     CommonContext,
   );
-
+  console.log('currentCountry', currentCountry);
   const [isFullScreenSize, setIsFullScreenSize] = useState(false);
   const [countries, setCountries] = useState([]);
 
@@ -72,7 +72,9 @@ const CountryList = ({ countriesList }) => {
                 <td>
                   <img src={el.countryInfo.flag} alt={el.country} className="country__flag" />
                 </td>
-                <td className="country__cases">{isFor100 ? el.for100Data : el[showingData]}</td>
+                <td className="country__cases">
+                  {isFor100 ? el.for100Data.toLocaleString('ru') : el[showingData].toLocaleString('ru')}
+                </td>
                 <td className="country__name">{el.country}</td>
               </tr>
             ))}
