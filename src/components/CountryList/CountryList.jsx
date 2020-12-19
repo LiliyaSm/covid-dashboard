@@ -57,6 +57,7 @@ const CountryList = ({ countriesList }) => {
           handleOnChange={handleIsFor100}
           label={constants.COUNTRY_SWITCHER.label}
           id={constants.COUNTRY_SWITCHER.id}
+          checked={isFor100}
         />
       </div>
       <Input filterCountries={filterCountries} placeholder="Country Enter" />

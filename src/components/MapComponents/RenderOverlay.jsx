@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { divIcon } from 'leaflet';
 import { Marker } from 'react-leaflet';
 import PropTypes from 'prop-types';
 import Legend from './Legend';
 import { countFor100, getBoundary } from '../../helpers/helpers';
+import { CommonContext } from '../../Providers/CommonProvider';
 
-const RenderOverlay = ({ responseData, isFor100, currShowingData, setCurrentCountry }) => {
+const RenderOverlay = ({ responseData, currShowingData }) => {
+  const { selectCountry: setCurrentCountry, isFor100 } = useContext(CommonContext);
+
   let covidData;
 
   let boundaries = { firstBoundary: 0, secondBoundary: 0 };
@@ -52,7 +55,7 @@ const RenderOverlay = ({ responseData, isFor100, currShowingData, setCurrentCoun
           icon={customMarkerIcon(element.value)}
           eventHandlers={{
             click: () => {
-              setCurrentCountry(element.country);
+              setCurrentCountry(element.countryInfo.iso3);
             },
           }}
         />
@@ -64,16 +67,12 @@ const RenderOverlay = ({ responseData, isFor100, currShowingData, setCurrentCoun
 
 RenderOverlay.propTypes = {
   responseData: PropTypes.arrayOf(PropTypes.object),
-  setCurrentCountry: PropTypes.func,
   currShowingData: PropTypes.string,
-  isFor100: PropTypes.bool,
 };
 
 RenderOverlay.defaultProps = {
   responseData: '',
-  setCurrentCountry: '',
   currShowingData: '',
-  isFor100: 'false',
 };
 
 export default RenderOverlay;

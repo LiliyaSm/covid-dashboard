@@ -1,28 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import Table from 'react-bootstrap/Table';
 import TableForm from './TableForm';
 import ExpandBtn from '../ExpandBtn/ExpandBtn';
 import * as constants from '../../data/constants';
 import { countFor100 } from '../../helpers/helpers';
+import { CommonContext } from '../../Providers/CommonProvider';
 
-const DashboardTable = ({ responseData, responseDataWorld, currentCountry }) => {
+const DashboardTable = ({ responseData, responseDataWorld }) => {
   const [selectedPeriod, setSelectedPeriod] = useState(constants.PERIODS.wholePeriod);
-  const [isFor100, setIsFor100] = useState(false);
   const [isFullScreenSize, setIsFullScreenSize] = useState(false);
+
+  const { currentCountry, isFor100 } = useContext(CommonContext);
 
   const getTotalPopulation = (country) => {
     let totalPopulation;
     if (country === constants.WHOLE_WORLD_NAME) {
       totalPopulation = responseDataWorld.population;
     } else {
-      totalPopulation = responseData.find((el) => el.country === country).population;
+      totalPopulation = responseData.find((el) => el.countryInfo.iso3 === country).population;
     }
     return totalPopulation;
-  };
-
-  const handleIsFor100 = () => {
-    setIsFor100(!isFor100);
   };
 
   const getDataForPeriod = (period, data) => {
@@ -47,8 +45,15 @@ const DashboardTable = ({ responseData, responseDataWorld, currentCountry }) => 
     if (country === constants.WHOLE_WORLD_NAME) {
       return responseDataWorld;
     }
-    const dataForCountry = data.find((el) => el.country === country);
+    const dataForCountry = data.find((el) => el.countryInfo.iso3 === country);
     return dataForCountry;
+  };
+
+  const getCountry = (code) => {
+    if (code === constants.WHOLE_WORLD_NAME) {
+      return constants.WHOLE_WORLD_NAME;
+    }
+    return responseData.find((el) => el.countryInfo.iso3 === code).country;
   };
 
   const renderTableRows = () => {
@@ -74,7 +79,7 @@ const DashboardTable = ({ responseData, responseDataWorld, currentCountry }) => 
       <ExpandBtn setIsFullScreenSize={setIsFullScreenSize} isFullScreenSize={isFullScreenSize} />
       <h1 className="table-header">
         Info displayed for:&nbsp;
-        {currentCountry}
+        {getCountry(currentCountry)}
       </h1>
       <Table responsive>
         <thead>
@@ -96,7 +101,6 @@ const DashboardTable = ({ responseData, responseDataWorld, currentCountry }) => 
       </Table>
       <TableForm
         handleSelectedPeriod={handleSelectedPeriod}
-        handleIsFor100={handleIsFor100}
         selectedPeriod={selectedPeriod}
       />
     </div>
@@ -106,11 +110,9 @@ const DashboardTable = ({ responseData, responseDataWorld, currentCountry }) => 
 DashboardTable.propTypes = {
   responseData: PropTypes.arrayOf(PropTypes.object),
   responseDataWorld: PropTypes.objectOf(PropTypes.any),
-  currentCountry: PropTypes.string,
 };
 
 DashboardTable.defaultProps = {
-  currentCountry: '',
   responseDataWorld: '',
   responseData: '',
 };

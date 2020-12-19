@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { MapContainer } from 'react-leaflet';
 import PropTypes from 'prop-types';
 import L from 'leaflet';
@@ -12,11 +12,13 @@ import * as constants from '../../data/constants';
 import 'mapbox-gl-leaflet';
 import RenderOverlay from './RenderOverlay';
 import GeojsonView from './GeojsonView';
+import { CommonContext } from '../../Providers/CommonProvider';
 
-const InteractiveMap = ({ responseData, setCurrentCountry, currentCountry }) => {
+const InteractiveMap = ({ responseData }) => {
+  const { currentCountry, isFor100, changeIsFor100 } = useContext(CommonContext);
+
   const [isFullScreenSize, setIsFullScreenSize] = useState(false);
   const [currShowingData, setCurrShowingData] = useState('cases');
-  const [isFor100, setIsFor100] = useState(false);
   const [style, setStyle] = useState('');
   const [map, setMap] = useState('');
 
@@ -28,7 +30,7 @@ const InteractiveMap = ({ responseData, setCurrentCountry, currentCountry }) => 
     if (currentCountry === constants.WHOLE_WORLD_NAME) {
       return [constants.DEFAULT_LAT, constants.DEFAULT_LONG];
     }
-    const position = responseData.find((el) => el.country === currentCountry);
+    const position = responseData.find((el) => el.countryInfo.iso3 === currentCountry);
     if (!position) {
       return [constants.DEFAULT_LAT, constants.DEFAULT_LONG];
     }
@@ -49,9 +51,9 @@ const InteractiveMap = ({ responseData, setCurrentCountry, currentCountry }) => 
     }
   }, [isFullScreenSize]);
 
-  const handleIsFor100 = () => {
-    setIsFor100(!isFor100);
-  };
+  const handleIsFor100 = useCallback(() => {
+    changeIsFor100(!isFor100);
+  });
 
   const StyleView = () => {
     if (map) {
@@ -67,7 +69,12 @@ const InteractiveMap = ({ responseData, setCurrentCountry, currentCountry }) => 
       <ExpandBtn setIsFullScreenSize={setIsFullScreenSize} isFullScreenSize={isFullScreenSize} />
       <div className="switchGroup">
         <DropdownDisplayOptions setCurrShowingData={setCurrShowingData} options={constants.VARIANTS_FOR_DISPLAYING} />
-        <Switcher handleOnChange={handleIsFor100} label={constants.MAP_SWITCHER.label} id={constants.MAP_SWITCHER.id} />
+        <Switcher
+          handleOnChange={handleIsFor100}
+          label={constants.MAP_SWITCHER.label}
+          id={constants.MAP_SWITCHER.id}
+          checked={isFor100}
+        />
       </div>
       <MapContainer
         id="someID"
@@ -80,14 +87,9 @@ const InteractiveMap = ({ responseData, setCurrentCountry, currentCountry }) => 
         animate
         whenCreated={WhenMapCreated}
       >
-        <GeojsonView isFor100={isFor100} currShowingData={currShowingData} setCurrentCountry={setCurrentCountry} />
+        <GeojsonView responseData={responseData} currShowingData={currShowingData} />
         <StyleView />
-        <RenderOverlay
-          responseData={responseData}
-          isFor100={isFor100}
-          currShowingData={currShowingData}
-          setCurrentCountry={setCurrentCountry}
-        />
+        <RenderOverlay responseData={responseData} currShowingData={currShowingData} />
       </MapContainer>
     </div>
   ) : (
@@ -97,13 +99,9 @@ const InteractiveMap = ({ responseData, setCurrentCountry, currentCountry }) => 
 
 InteractiveMap.propTypes = {
   responseData: PropTypes.arrayOf(PropTypes.object),
-  setCurrentCountry: PropTypes.func,
-  currentCountry: PropTypes.string,
 };
 
 InteractiveMap.defaultProps = {
-  currentCountry: '',
-  setCurrentCountry: '',
   responseData: '',
 };
 
