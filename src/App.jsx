@@ -18,7 +18,7 @@ import Charts from './components/Charts/Charts';
 
 const App = () => {
   const { notify, addNotify } = useContext(NotifyContext);
-  const { currentCountry: currentCountryCode } = useContext(CommonContext);
+  const { currentCountry: selectedCountry } = useContext(CommonContext);
   const [info, setInfo] = useState(null);
   const [infoWorld, setInfoWorld] = useState(null);
   const [history, setHistory] = useState(null);
@@ -36,8 +36,9 @@ const App = () => {
   };
 
   const getCovidHistory = async (country) => {
-    const covidHistory = await requestService.getCovidHistory(country);
-    const result = Object.entries(covidHistory).reduce((acc, item) => {
+    const data = await requestService.getCovidHistory(country);
+    const covidHistory = country === 'all' ? data : data.timeline;
+    const arrayForChart = Object.entries(covidHistory).reduce((acc, item) => {
       Object.entries(item[1]).forEach((el) => {
         const obj = acc.find((i) => i.data === el[0]);
         if (obj) {
@@ -52,7 +53,7 @@ const App = () => {
 
       return acc;
     }, []);
-    setHistory(result);
+    setHistory(arrayForChart);
   };
 
   const getAllData = async () => {
@@ -68,12 +69,12 @@ const App = () => {
 
   useEffect(async () => {
     try {
-      const country = currentCountryCode ?? 'all';
+      const country = selectedCountry.name ?? 'all';
       await getCovidHistory(country);
     } catch (exception) {
       addNotify(constants.NOTIFY_TYPES.error, constants.ERROR_HEADER, constants.ERROR_MESSAGE);
     }
-  }, [currentCountry]);
+  }, [selectedCountry]);
 
   useEffect(() => {
     getAllData();
