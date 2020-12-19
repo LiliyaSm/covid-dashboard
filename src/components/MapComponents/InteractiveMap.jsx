@@ -9,7 +9,7 @@ import './InteractiveMap.scss';
 import 'leaflet-fullscreen/dist/Leaflet.fullscreen';
 import 'leaflet-fullscreen/dist/leaflet.fullscreen.css';
 import * as constants from '../../data/constants';
-import {} from 'mapbox-gl-leaflet';
+import 'mapbox-gl-leaflet';
 import RenderOverlay from './RenderOverlay';
 import GeojsonView from './GeojsonView';
 

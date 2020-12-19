@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import React, { useEffect, useState, useCallback, useMemo, useContext } from 'react';
 import Table from 'react-bootstrap/Table';
 import PropTypes from 'prop-types';
 import ExpandBtn from '../ExpandBtn/ExpandBtn';
@@ -8,25 +8,27 @@ import * as constants from '../../data/constants';
 import './CountryList.scss';
 import Switcher from '../TableComponents/Switcher';
 import { countFor100 } from '../../helpers/helpers';
+import { CommonContext } from '../../Providers/CommonProvider';
 
 const CountryList = ({ countriesList }) => {
+  const { currentCountry, selectCountry, showingData, changeShowingData, isFor100, changeIsFor100 } = useContext(
+    CommonContext,
+  );
+
   const [isFullScreenSize, setIsFullScreenSize] = useState(false);
-  const [selectedCountry] = useState('India');
   const [countries, setCountries] = useState([]);
-  const [currShowingData, setCurrShowingData] = useState('cases');
-  const [isFor100, setIsFor100] = useState(false);
 
   const sortedCountries = useMemo(() => {
     const countriesSort = [...countriesList];
-    countriesSort.sort((a, b) => b[currShowingData] - a[currShowingData]);
+    countriesSort.sort((a, b) => b[showingData] - a[showingData]);
     return countriesSort;
-  }, [countriesList, currShowingData]);
+  }, [countriesList, showingData]);
 
   useEffect(() => {
     if (isFor100) {
       setCountries(
         sortedCountries
-          .map((el) => ({ ...el, for100Data: countFor100(el[currShowingData], el.population) }))
+          .map((el) => ({ ...el, for100Data: countFor100(el[showingData], el.population) }))
           .sort((a, b) => b.for100Data - a.for100Data),
       );
     } else {
@@ -39,7 +41,7 @@ const CountryList = ({ countriesList }) => {
   });
 
   const handleIsFor100 = useCallback(() => {
-    setIsFor100((prevValue) => !prevValue);
+    changeIsFor100((prevValue) => !prevValue);
   });
 
   return (
@@ -47,9 +49,9 @@ const CountryList = ({ countriesList }) => {
       <ExpandBtn setIsFullScreenSize={setIsFullScreenSize} isFullScreenSize={isFullScreenSize} />
       <div className="country-list__header">
         <DropdownDisplayOptions
-          setCurrShowingData={setCurrShowingData}
+          setCurrShowingData={changeShowingData}
           options={constants.VARIANTS_FOR_DISPLAYING}
-          selectedKey={currShowingData}
+          selectedKey={showingData}
         />
         <Switcher
           handleOnChange={handleIsFor100}
@@ -62,11 +64,15 @@ const CountryList = ({ countriesList }) => {
         <Table striped hover size="sm" variant="dark">
           <tbody>
             {countries.map((el) => (
-              <tr key={el.country} className={selectedCountry === el.country ? 'country_selected' : ''}>
+              <tr
+                key={el.country}
+                onClick={() => selectCountry(el.country)}
+                className={currentCountry === el.country ? 'country_selected' : ''}
+              >
                 <td>
                   <img src={el.countryInfo.flag} alt={el.country} className="country__flag" />
                 </td>
-                <td className="country__cases">{isFor100 ? el.for100Data : el[currShowingData]}</td>
+                <td className="country__cases">{isFor100 ? el.for100Data : el[showingData]}</td>
                 <td className="country__name">{el.country}</td>
               </tr>
             ))}
