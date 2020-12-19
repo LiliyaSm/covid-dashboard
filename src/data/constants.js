@@ -45,3 +45,5 @@ export const COLORS = { low: '#ffae00', medium: '#ff6600', hight: '#ff1e00' };
 
 export const MAPBOX_STYLE = 'mapbox://styles/sizaya/ckireok4h7hjv17nrqcxeyzkc';
 export const MAPBOX_KEY = 'pk.eyJ1Ijoic2l6YXlhIiwiYSI6ImNraW4zMGk2aDB6Y2kzMnFqM3k3dHd1cTEifQ.C4b5ctgb9K4koJwzcTycZw';
+
+export const KEYBOARD_URL = '/virtual-keyboard/index.js';
