@@ -64,6 +64,7 @@ const CountryList = ({ countriesList }) => {
           handleOnChange={handleIsFor100}
           label={constants.COUNTRY_SWITCHER.label}
           id={constants.COUNTRY_SWITCHER.id}
+          checked={isFor100}
         />
       </div>
       <Input filterCountries={filterCountries} placeholder="Country Enter" />
@@ -80,7 +81,7 @@ const CountryList = ({ countriesList }) => {
                   <img src={el.countryInfo.flag} alt={el.country} className="country__flag" />
                 </td>
                 <td className="country__cases">
-                  {isFor100 ? el.for100Data.toLocaleString('ru') : el[showingData].toLocaleString('ru')}
+                  {isFor100 ? el.for100Data?.toLocaleString('ru') : el[showingData]?.toLocaleString('ru')}
                 </td>
                 <td className="country__name">{el.country}</td>
               </tr>

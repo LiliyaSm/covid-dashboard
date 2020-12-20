@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
+import * as constants from '../data/constants';
 
 export const CommonContext = React.createContext({
   // currentCountry: null,
@@ -12,7 +13,10 @@ export const CommonContext = React.createContext({
 });
 
 export default function CommonProvider({ children }) {
-  const [currentCountry, setCurrentCountry] = useState({ name: null, code: null });
+  const [currentCountry, setCurrentCountry] = useState({
+    name: constants.WHOLE_WORLD_NAME,
+    code: constants.WHOLE_WORLD_NAME,
+  });
   const selectCountry = useCallback(({ name, code }) => setCurrentCountry({ name, code }), [setCurrentCountry]);
 
   const [showingData, setShowingData] = useState('cases');

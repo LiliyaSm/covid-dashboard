@@ -1,11 +1,21 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { GeoJSON } from 'react-leaflet';
 import PropTypes from 'prop-types';
 import L from 'leaflet';
 import * as countries from '../../data/countries.json';
 import * as constants from '../../data/constants';
+import { CommonContext } from '../../Providers/CommonProvider';
 
-const GeojsonView = ({ isFor100, currShowingData, setCurrentCountry }) => {
+const GeojsonView = ({ currShowingData, responseData }) => {
+  const { selectCountry: setCurrentCountry, isFor100 } = useContext(CommonContext);
+
+  const handleGeojson = (code) => {
+    const isCountryExists = responseData.find((el) => el.countryInfo.iso3 === code).country;
+    if (isCountryExists) {
+      setCurrentCountry({ code, name: isCountryExists });
+    }
+  };
+
   const geojsonStyle = { weight: 0, fillOpacity: 0 };
 
   return (
@@ -21,9 +31,7 @@ const GeojsonView = ({ isFor100, currShowingData, setCurrentCountry }) => {
 
         layer.on({
           click: () => {
-            if (feature.properties.name) {
-              setCurrentCountry(feature.properties.name);
-            }
+            handleGeojson(feature.properties.ISO_A3);
           },
           mouseover(e) {
             const activeFeature = e.target.feature;
@@ -46,15 +54,12 @@ const GeojsonView = ({ isFor100, currShowingData, setCurrentCountry }) => {
 };
 
 GeojsonView.propTypes = {
-  setCurrentCountry: PropTypes.func,
+  responseData: PropTypes.arrayOf(PropTypes.object).isRequired,
   currShowingData: PropTypes.string,
-  isFor100: PropTypes.bool,
 };
 
 GeojsonView.defaultProps = {
-  setCurrentCountry: '',
   currShowingData: '',
-  isFor100: 'false',
 };
 
 export default GeojsonView;
