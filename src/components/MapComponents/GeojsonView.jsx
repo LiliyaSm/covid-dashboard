@@ -12,7 +12,7 @@ const GeojsonView = ({ currShowingData, responseData }) => {
   const handleGeojson = (code) => {
     const isCountryExists = responseData.find((el) => el.countryInfo.iso3 === code).country;
     if (isCountryExists) {
-      setCurrentCountry(code);
+      setCurrentCountry({ code, name: isCountryExists });
     }
   };
 

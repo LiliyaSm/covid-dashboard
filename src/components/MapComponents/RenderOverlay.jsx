@@ -55,7 +55,7 @@ const RenderOverlay = ({ responseData, currShowingData }) => {
           icon={customMarkerIcon(element.value)}
           eventHandlers={{
             click: () => {
-              setCurrentCountry(element.countryInfo.iso3);
+              setCurrentCountry({ code: element.countryInfo.iso3, name: element.country });
             },
           }}
         />

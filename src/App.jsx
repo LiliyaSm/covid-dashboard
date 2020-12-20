@@ -4,6 +4,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { NotifyContext } from './Providers/NotifyProvider';
+import { CommonContext } from './Providers/CommonProvider';
 import DashboardTable from './components/TableComponents/DashboardTable';
 import InteractiveMap from './components/MapComponents/InteractiveMap';
 import Footer from './components/Footer/Footer';
@@ -13,11 +14,14 @@ import * as constants from './data/constants';
 import Alerts from './components/Alerts/Alerts';
 import Loader from './components/Loader/Loader';
 import CountryList from './components/CountryList/CountryList';
+import Charts from './components/Charts/Charts';
 
 const App = () => {
   const { notify, addNotify } = useContext(NotifyContext);
+  const { currentCountry: selectedCountry } = useContext(CommonContext);
   const [info, setInfo] = useState(null);
   const [infoWorld, setInfoWorld] = useState(null);
+  const [history, setHistory] = useState(null);
   const [currentCountry, setCurrentCountry] = useState(constants.WHOLE_WORLD_NAME);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -31,6 +35,27 @@ const App = () => {
     setInfoWorld(covidInfoWorld);
   };
 
+  const getCovidHistory = async (country) => {
+    const data = await requestService.getCovidHistory(country);
+    const covidHistory = country === 'all' ? data : data.timeline;
+    const arrayForChart = Object.entries(covidHistory).reduce((acc, item) => {
+      Object.entries(item[1]).forEach((el) => {
+        const obj = acc.find((i) => i.data === el[0]);
+        if (obj) {
+          [, obj[item[0]]] = el;
+        } else {
+          const day = {};
+          [, day[item[0]]] = el;
+          [day.data] = el;
+          acc.push(day);
+        }
+      }, []);
+
+      return acc;
+    }, []);
+    setHistory(arrayForChart.slice(0, 10));
+  };
+
   const getAllData = async () => {
     try {
       await getCovidInfo();
@@ -41,6 +66,15 @@ const App = () => {
       setIsLoading(false);
     }
   };
+
+  useEffect(async () => {
+    try {
+      const country = selectedCountry.name ?? 'all';
+      await getCovidHistory(country);
+    } catch (exception) {
+      addNotify(constants.NOTIFY_TYPES.error, constants.ERROR_HEADER, constants.ERROR_MESSAGE);
+    }
+  }, [selectedCountry]);
 
   useEffect(() => {
     getAllData();
@@ -65,7 +99,9 @@ const App = () => {
         </Col>
         <Col>
           <Row>{renderTable()}</Row>
-          <Row>Chart</Row>
+          <Row>
+            <Charts chartsList={history} />
+          </Row>
         </Col>
       </Row>
 

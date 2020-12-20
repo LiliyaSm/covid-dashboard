@@ -9,6 +9,8 @@
     "axios": "^0.21.0",
     "axios-react": "^2.0.2",
     "bootstrap": "^4.5.3",
+    "devextreme": "20.2.4",
+    "devextreme-react": "20.2.4",
     "geojson-world-map": "0.0.2",
     "leaflet": "^1.7.1",
     "leaflet-fullscreen": "^1.0.2",

@@ -27,10 +27,10 @@ const InteractiveMap = ({ responseData }) => {
   };
 
   const positionCalc = () => {
-    if (currentCountry === constants.WHOLE_WORLD_NAME) {
+    if (currentCountry.code === constants.WHOLE_WORLD_NAME) {
       return [constants.DEFAULT_LAT, constants.DEFAULT_LONG];
     }
-    const position = responseData.find((el) => el.countryInfo.iso3 === currentCountry);
+    const position = responseData.find((el) => el.countryInfo.iso3 === currentCountry.code);
     if (!position) {
       return [constants.DEFAULT_LAT, constants.DEFAULT_LONG];
     }

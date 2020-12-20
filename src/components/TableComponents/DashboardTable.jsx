@@ -49,17 +49,10 @@ const DashboardTable = ({ responseData, responseDataWorld }) => {
     return dataForCountry;
   };
 
-  const getCountry = (code) => {
-    if (code === constants.WHOLE_WORLD_NAME) {
-      return constants.WHOLE_WORLD_NAME;
-    }
-    return responseData.find((el) => el.countryInfo.iso3 === code).country;
-  };
-
   const renderTableRows = () => {
-    const data = getTableData(currentCountry, responseData);
+    const data = getTableData(currentCountry.code, responseData);
     const periodData = getDataForPeriod(selectedPeriod, data);
-    const totalPopulation = getTotalPopulation(currentCountry);
+    const totalPopulation = getTotalPopulation(currentCountry.code);
     if (isFor100) {
       periodData.confirmed = countFor100(periodData.confirmed, totalPopulation);
       periodData.deaths = countFor100(periodData.deaths, totalPopulation);
@@ -79,7 +72,7 @@ const DashboardTable = ({ responseData, responseDataWorld }) => {
       <ExpandBtn setIsFullScreenSize={setIsFullScreenSize} isFullScreenSize={isFullScreenSize} />
       <h1 className="table-header">
         Info displayed for:&nbsp;
-        {getCountry(currentCountry)}
+        {currentCountry.name}
       </h1>
       <Table responsive>
         <thead>
