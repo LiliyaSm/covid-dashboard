@@ -11,7 +11,7 @@ export default function Legend({ boundaries }) {
   };
 
   const legendKeys = useMemo(() => Object.keys(layers).map((key) => (
-    <div key={layers[key] - constants.COLORS[key]}>
+    <div key={layers[key] + constants.COLORS[key]}>
       <span style={{ backgroundColor: constants.COLORS[key] }} className="legend-key" />
       <span>{layers[key]}</span>
     </div>

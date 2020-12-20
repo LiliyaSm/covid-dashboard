@@ -22,7 +22,6 @@ const App = () => {
   const [info, setInfo] = useState(null);
   const [infoWorld, setInfoWorld] = useState(null);
   const [history, setHistory] = useState(null);
-  const [currentCountry, setCurrentCountry] = useState(constants.WHOLE_WORLD_NAME);
   const [isLoading, setIsLoading] = useState(true);
 
   const getCovidInfo = async () => {
@@ -53,7 +52,7 @@ const App = () => {
 
       return acc;
     }, []);
-    setHistory(arrayForChart.slice(0, 10));
+    setHistory(arrayForChart);
   };
 
   const getAllData = async () => {
@@ -69,7 +68,7 @@ const App = () => {
 
   useEffect(async () => {
     try {
-      const country = selectedCountry.name ?? 'all';
+      const country = selectedCountry.name === constants.WHOLE_WORLD_NAME ? 'all' : selectedCountry.name;
       await getCovidHistory(country);
     } catch (exception) {
       addNotify(constants.NOTIFY_TYPES.error, constants.ERROR_HEADER, constants.ERROR_MESSAGE);
@@ -80,9 +79,7 @@ const App = () => {
     getAllData();
   }, []);
 
-  const renderTable = () => (
-    <DashboardTable responseData={info} responseDataWorld={infoWorld} currentCountry={currentCountry} />
-  );
+  const renderTable = () => <DashboardTable responseData={info} responseDataWorld={infoWorld} />;
 
   return isLoading ? (
     <Loader />
@@ -95,7 +92,7 @@ const App = () => {
           <CountryList countriesList={info} />
         </Col>
         <Col>
-          <InteractiveMap responseData={info} setCurrentCountry={setCurrentCountry} currentCountry={currentCountry} />
+          <InteractiveMap responseData={info} />
         </Col>
         <Col>
           <Row>{renderTable()}</Row>
