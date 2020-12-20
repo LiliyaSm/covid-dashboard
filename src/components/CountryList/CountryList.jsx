@@ -45,7 +45,7 @@ const CountryList = ({ countriesList }) => {
 
   const onCountryClick = useCallback((el) => {
     if (currentCountry.code === el.countryInfo.iso3) {
-      selectCountry({ name: null, code: null });
+      selectCountry({ name: constants.WHOLE_WORLD_NAME, code: constants.WHOLE_WORLD_NAME });
     } else {
       selectCountry({ name: el.country, code: el.countryInfo.iso3 });
     }
