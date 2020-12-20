@@ -19,8 +19,13 @@ body {
   background-size: 148px 148px;
 }
 
+.main-wrapper {
+  max-width: 1680px;
+  margin: 0 auto;
+}
+
 .header {
-  margin-top: 20px;
+  font-size: 40px;
   text-align: center;
 }
 

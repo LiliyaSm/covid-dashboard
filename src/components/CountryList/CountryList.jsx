@@ -3,17 +3,13 @@ import Table from 'react-bootstrap/Table';
 import PropTypes from 'prop-types';
 import ExpandBtn from '../ExpandBtn/ExpandBtn';
 import Input from '../Input/Input';
-import DropdownDisplayOptions from '../DropdownDisplayOptions/DropdownDisplayOptions';
 import * as constants from '../../data/constants';
 import './CountryList.scss';
-import Switcher from '../TableComponents/Switcher';
 import { countFor100 } from '../../helpers/helpers';
 import { CommonContext } from '../../Providers/CommonProvider';
 
 const CountryList = ({ countriesList }) => {
-  const { currentCountry, selectCountry, showingData, changeShowingData, isFor100, changeIsFor100 } = useContext(
-    CommonContext,
-  );
+  const { currentCountry, selectCountry, showingData, isFor100 } = useContext(CommonContext);
   const [isFullScreenSize, setIsFullScreenSize] = useState(false);
   const [countries, setCountries] = useState([]);
 
@@ -39,10 +35,6 @@ const CountryList = ({ countriesList }) => {
     setCountries(sortedCountries.filter((el) => el.country.toLowerCase().includes(value.toLowerCase())));
   });
 
-  const handleIsFor100 = useCallback(() => {
-    changeIsFor100((prevValue) => !prevValue);
-  });
-
   const onCountryClick = useCallback((el) => {
     if (currentCountry.code === el.countryInfo.iso3) {
       selectCountry({ name: constants.WHOLE_WORLD_NAME, code: constants.WHOLE_WORLD_NAME });
@@ -54,19 +46,6 @@ const CountryList = ({ countriesList }) => {
   return (
     <div className={isFullScreenSize ? 'wrapper full-container' : 'wrapper'}>
       <ExpandBtn setIsFullScreenSize={setIsFullScreenSize} isFullScreenSize={isFullScreenSize} />
-      <div className="country-list__header">
-        <DropdownDisplayOptions
-          setCurrShowingData={changeShowingData}
-          options={constants.VARIANTS_FOR_DISPLAYING}
-          selectedKey={showingData}
-        />
-        <Switcher
-          handleOnChange={handleIsFor100}
-          label={constants.COUNTRY_SWITCHER.label}
-          id={constants.COUNTRY_SWITCHER.id}
-          checked={isFor100}
-        />
-      </div>
       <Input filterCountries={filterCountries} placeholder="Country Enter" />
       <div className={isFullScreenSize ? 'country-list__fullscreen' : 'country-list'}>
         <Table striped hover size="sm" variant="dark">

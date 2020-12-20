@@ -3,13 +3,14 @@ import PropTypes from 'prop-types';
 import * as constants from '../data/constants';
 
 export const CommonContext = React.createContext({
-  // currentCountry: null,
   currentCountry: { name: null, code: null },
   selectCountry: () => {},
   showingData: 'cases',
   changeShowingData: () => {},
   isFor100: false,
   changeIsFor100: () => {},
+  isFullScreenOptions: false,
+  changeIsFullScreenOptions: () => {},
 });
 
 export default function CommonProvider({ children }) {
@@ -25,6 +26,9 @@ export default function CommonProvider({ children }) {
   const [isFor100, setIsFor100] = useState(false);
   const changeIsFor100 = useCallback((status) => setIsFor100(status), [setIsFor100]);
 
+  const [isFullScreenOptions, setIsFullScreenOptions] = useState(false);
+  const changeIsFullScreenOptions = useCallback((status) => setIsFullScreenOptions(status), [setIsFullScreenOptions]);
+
   const contextValue = {
     currentCountry,
     selectCountry,
@@ -32,6 +36,8 @@ export default function CommonProvider({ children }) {
     changeShowingData,
     isFor100,
     changeIsFor100,
+    isFullScreenOptions,
+    changeIsFullScreenOptions,
   };
 
   return <CommonContext.Provider value={contextValue}>{children}</CommonContext.Provider>;
