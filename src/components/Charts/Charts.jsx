@@ -13,9 +13,10 @@ import Chart, {
   ValueAxis,
   Tooltip,
 } from 'devextreme-react/chart';
-import './Charts.scss';
 import { CommonContext } from '../../Providers/CommonProvider';
 import ExpandBtn from '../ExpandBtn/ExpandBtn';
+import { WHOLE_WORLD_NAME } from '../../data/constants';
+import './Charts.scss';
 
 const Charts = ({ chartsList }) => {
   const { currentCountry } = useContext(CommonContext);
@@ -33,7 +34,12 @@ const Charts = ({ chartsList }) => {
   return (
     <div className={isFullScreenSize ? 'chart-container full-container' : 'chart-container'}>
       <ExpandBtn setIsFullScreenSize={setIsFullScreenSize} isFullScreenSize={isFullScreenSize} />
-      <Chart dataSource={chartsList} title={currentCountry.name ?? 'World'} theme="generic.darkmoon" size={size}>
+      <Chart
+        dataSource={chartsList}
+        title={currentCountry.name ?? WHOLE_WORLD_NAME}
+        theme="generic.darkmoon"
+        size={size}
+      >
         <CommonSeriesSettings argumentField="data" type="spline" />
         <CommonAxisSettings>
           <Grid />

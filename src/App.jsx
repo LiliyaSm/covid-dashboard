@@ -53,7 +53,7 @@ const App = () => {
 
       return acc;
     }, []);
-    setHistory(arrayForChart);
+    setHistory(arrayForChart.slice(0, 10));
   };
 
   const getAllData = async () => {
