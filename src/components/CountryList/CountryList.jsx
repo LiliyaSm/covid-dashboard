@@ -80,7 +80,7 @@ const CountryList = ({ countriesList }) => {
                   <img src={el.countryInfo.flag} alt={el.country} className="country__flag" />
                 </td>
                 <td className="country__cases">
-                  {isFor100 ? el.for100Data.toLocaleString('ru') : el[showingData].toLocaleString('ru')}
+                  {isFor100 ? el.for100Data?.toLocaleString('ru') : el[showingData]?.toLocaleString('ru')}
                 </td>
                 <td className="country__name">{el.country}</td>
               </tr>
