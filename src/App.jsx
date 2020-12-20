@@ -15,6 +15,7 @@ import Alerts from './components/Alerts/Alerts';
 import Loader from './components/Loader/Loader';
 import CountryList from './components/CountryList/CountryList';
 import Charts from './components/Charts/Charts';
+import FilterCommon from './components/FilterCommon/FilterCommon';
 
 const App = () => {
   const { notify, addNotify } = useContext(NotifyContext);
@@ -84,9 +85,10 @@ const App = () => {
   return isLoading ? (
     <Loader />
   ) : (
-    <Container fluid>
+    <Container fluid className="main-wrapper">
       {notify ? <Alerts /> : null}
       <Header />
+      <FilterCommon />
       <Row>
         <Col>
           <CountryList countriesList={info} />

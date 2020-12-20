@@ -1,10 +1,8 @@
-import React, { useState, useEffect, useContext, useCallback } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { MapContainer } from 'react-leaflet';
 import PropTypes from 'prop-types';
 import L from 'leaflet';
 import ExpandBtn from '../ExpandBtn/ExpandBtn';
-import Switcher from '../TableComponents/Switcher';
-import DropdownDisplayOptions from '../DropdownDisplayOptions/DropdownDisplayOptions';
 import './InteractiveMap.scss';
 import 'leaflet-fullscreen/dist/Leaflet.fullscreen';
 import 'leaflet-fullscreen/dist/leaflet.fullscreen.css';
@@ -15,10 +13,9 @@ import GeojsonView from './GeojsonView';
 import { CommonContext } from '../../Providers/CommonProvider';
 
 const InteractiveMap = ({ responseData }) => {
-  const { currentCountry, isFor100, changeIsFor100 } = useContext(CommonContext);
+  const { currentCountry, showingData } = useContext(CommonContext);
 
   const [isFullScreenSize, setIsFullScreenSize] = useState(false);
-  const [currShowingData, setCurrShowingData] = useState('cases');
   const [style, setStyle] = useState('');
   const [map, setMap] = useState('');
 
@@ -51,10 +48,6 @@ const InteractiveMap = ({ responseData }) => {
     }
   }, [isFullScreenSize]);
 
-  const handleIsFor100 = useCallback(() => {
-    changeIsFor100(!isFor100);
-  });
-
   const StyleView = () => {
     if (map) {
       const position = positionCalc();
@@ -67,15 +60,6 @@ const InteractiveMap = ({ responseData }) => {
   return responseData ? (
     <div className={isFullScreenSize ? 'interactive-map full-container' : 'interactive-map'}>
       <ExpandBtn setIsFullScreenSize={setIsFullScreenSize} isFullScreenSize={isFullScreenSize} />
-      <div className="switchGroup">
-        <DropdownDisplayOptions setCurrShowingData={setCurrShowingData} options={constants.VARIANTS_FOR_DISPLAYING} />
-        <Switcher
-          handleOnChange={handleIsFor100}
-          label={constants.MAP_SWITCHER.label}
-          id={constants.MAP_SWITCHER.id}
-          checked={isFor100}
-        />
-      </div>
       <MapContainer
         id="someID"
         fullscreenControl
@@ -87,9 +71,9 @@ const InteractiveMap = ({ responseData }) => {
         animate
         whenCreated={WhenMapCreated}
       >
-        <GeojsonView responseData={responseData} currShowingData={currShowingData} />
+        <GeojsonView responseData={responseData} currShowingData={showingData} />
         <StyleView />
-        <RenderOverlay responseData={responseData} currShowingData={currShowingData} />
+        <RenderOverlay responseData={responseData} currShowingData={showingData} />
       </MapContainer>
     </div>
   ) : (
