@@ -2,7 +2,8 @@ import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 
 export const CommonContext = React.createContext({
-  currentCountry: null,
+  // currentCountry: null,
+  currentCountry: { name: null, code: null },
   selectCountry: () => {},
   showingData: 'cases',
   changeShowingData: () => {},
@@ -11,8 +12,8 @@ export const CommonContext = React.createContext({
 });
 
 export default function CommonProvider({ children }) {
-  const [currentCountry, setCurrentCountry] = useState(null);
-  const selectCountry = useCallback((code) => setCurrentCountry(code), [setCurrentCountry]);
+  const [currentCountry, setCurrentCountry] = useState({ name: null, code: null });
+  const selectCountry = useCallback(({ name, code }) => setCurrentCountry({ name, code }), [setCurrentCountry]);
 
   const [showingData, setShowingData] = useState('cases');
   const changeShowingData = useCallback((data) => setShowingData(data), [setShowingData]);

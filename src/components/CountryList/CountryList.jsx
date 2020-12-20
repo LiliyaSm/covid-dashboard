@@ -14,7 +14,6 @@ const CountryList = ({ countriesList }) => {
   const { currentCountry, selectCountry, showingData, changeShowingData, isFor100, changeIsFor100 } = useContext(
     CommonContext,
   );
-
   const [isFullScreenSize, setIsFullScreenSize] = useState(false);
   const [countries, setCountries] = useState([]);
 
@@ -44,6 +43,14 @@ const CountryList = ({ countriesList }) => {
     changeIsFor100((prevValue) => !prevValue);
   });
 
+  const onCountryClick = useCallback((el) => {
+    if (currentCountry.code === el.countryInfo.iso3) {
+      selectCountry({ name: null, code: null });
+    } else {
+      selectCountry({ name: el.country, code: el.countryInfo.iso3 });
+    }
+  });
+
   return (
     <div className={isFullScreenSize ? 'wrapper full-container' : 'wrapper'}>
       <ExpandBtn setIsFullScreenSize={setIsFullScreenSize} isFullScreenSize={isFullScreenSize} />
@@ -66,13 +73,15 @@ const CountryList = ({ countriesList }) => {
             {countries.map((el) => (
               <tr
                 key={el.country}
-                onClick={() => selectCountry(el.countryInfo.iso3)}
-                className={currentCountry === el.countryInfo.iso3 ? 'country_selected' : ''}
+                onClick={() => onCountryClick(el)}
+                className={currentCountry.name === el.country ? 'country_selected' : ''}
               >
                 <td>
                   <img src={el.countryInfo.flag} alt={el.country} className="country__flag" />
                 </td>
-                <td className="country__cases">{isFor100 ? el.for100Data : el[showingData]}</td>
+                <td className="country__cases">
+                  {isFor100 ? el.for100Data.toLocaleString('ru') : el[showingData].toLocaleString('ru')}
+                </td>
                 <td className="country__name">{el.country}</td>
               </tr>
             ))}
