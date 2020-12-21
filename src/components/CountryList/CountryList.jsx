@@ -9,7 +9,9 @@ import { countFor100, getDataForPeriod } from '../../helpers/helpers';
 import { CommonContext } from '../../Providers/CommonProvider';
 
 const CountryList = ({ countriesList }) => {
-  const { currentCountry, selectCountry, showingData, isFor100, selectedPeriod } = useContext(CommonContext);
+  const { currentCountry, selectCountry, showingData, isFor100, selectedPeriod, population } = useContext(
+    CommonContext,
+  );
   const [isFullScreenSize, setIsFullScreenSize] = useState(false);
   const [countries, setCountries] = useState([]);
 
@@ -42,9 +44,9 @@ const CountryList = ({ countriesList }) => {
 
   const onCountryClick = useCallback((el) => {
     if (currentCountry.code === el.countryInfo.iso3) {
-      selectCountry({ name: constants.WHOLE_WORLD_NAME, code: constants.WHOLE_WORLD_NAME });
+      selectCountry({ name: constants.WHOLE_WORLD_NAME, code: constants.WHOLE_WORLD_NAME, population });
     } else {
-      selectCountry({ name: el.country, code: el.countryInfo.iso3 });
+      selectCountry({ name: el.country, code: el.countryInfo.iso3, population: el.population });
     }
   });
 

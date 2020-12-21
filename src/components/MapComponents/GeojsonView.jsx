@@ -10,9 +10,9 @@ const GeojsonView = ({ currShowingData, responseData }) => {
   const { selectCountry: setCurrentCountry, isFor100, selectedPeriod } = useContext(CommonContext);
 
   const handleGeojson = (code) => {
-    const isCountryExists = responseData.find((el) => el.countryInfo.iso3 === code).country;
-    if (isCountryExists) {
-      setCurrentCountry({ code, name: isCountryExists });
+    const isCountryExists = responseData.find((el) => el.countryInfo.iso3 === code);
+    if (isCountryExists.country) {
+      setCurrentCountry({ code, name: isCountryExists.country, population: isCountryExists.population });
     }
   };
 
