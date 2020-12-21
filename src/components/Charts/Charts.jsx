@@ -16,26 +16,36 @@ import Chart, {
 import { CommonContext } from '../../Providers/CommonProvider';
 import ExpandBtn from '../ExpandBtn/ExpandBtn';
 import { WHOLE_WORLD_NAME } from '../../data/constants';
+import { countFor100 } from '../../helpers/helpers';
 import './Charts.scss';
 
 const Charts = ({ chartsList }) => {
-  const { currentCountry } = useContext(CommonContext);
+  const { currentCountry, isFor100, population } = useContext(CommonContext);
   const [isFullScreenSize, setIsFullScreenSize] = useState(false);
+
+  const dataWithPer100 = useMemo(() => {
+    const populationCount = currentCountry.name === WHOLE_WORLD_NAME ? population : currentCountry.population;
+    return chartsList.map((item) => ({
+      ...item,
+      casesIsFor100: countFor100(item.cases, populationCount),
+      deathsIsFor100: countFor100(item.deaths, populationCount),
+      recoveredIsFor100: countFor100(item.recovered, populationCount),
+    }));
+  }, [chartsList, currentCountry, population]);
 
   const customizeTooltip = useCallback((pointInfo) => ({
     text: `${pointInfo.argumentText}<br/>${pointInfo.value.toLocaleString('ru')}`,
   }));
 
-  const size = useMemo(
-    () => (isFullScreenSize ? { height: '100%', width: '100%' } : { height: '400', width: '400' }),
-    [isFullScreenSize],
-  );
+  const size = useMemo(() => (isFullScreenSize ? { height: '100%', width: '100%' } : { height: '400', width: '400' }), [
+    isFullScreenSize,
+  ]);
 
   return (
     <div className={isFullScreenSize ? 'chart-container full-container' : 'chart-container'}>
       <ExpandBtn setIsFullScreenSize={setIsFullScreenSize} isFullScreenSize={isFullScreenSize} />
       <Chart
-        dataSource={chartsList}
+        dataSource={dataWithPer100}
         title={currentCountry.name ?? WHOLE_WORLD_NAME}
         theme="generic.darkmoon"
         size={size}
@@ -44,9 +54,9 @@ const Charts = ({ chartsList }) => {
         <CommonAxisSettings>
           <Grid />
         </CommonAxisSettings>
-        <Series valueField="deaths" name="Deaths" />
-        <Series valueField="recovered" name="Recovered" />
-        <Series valueField="cases" name="Cases" />
+        <Series valueField={isFor100 ? 'casesIsFor100' : 'cases'} name="Cases" />
+        <Series valueField={isFor100 ? 'deathsIsFor100' : 'deaths'} name="Deaths" />
+        <Series valueField={isFor100 ? 'recoveredIsFor100' : 'recovered'} name="Recovered" />
         <ArgumentAxis>
           <Label>
             <Format type="string" />

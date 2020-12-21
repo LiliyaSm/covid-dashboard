@@ -6,7 +6,7 @@ import Switcher from './Switcher';
 import * as constants from '../../data/constants';
 import { CommonContext } from '../../Providers/CommonProvider';
 
-const TableForm = ({ selectedPeriod, handleSelectedPeriod }) => {
+const FilterForm = ({ selectedPeriod, handleSelectedPeriod }) => {
   const { isFor100, changeIsFor100 } = useContext(CommonContext);
   const switcher = { label: 'per 100,000 population', id: 'tableSwitcher' };
   const radioBtns = [
@@ -30,9 +30,9 @@ const TableForm = ({ selectedPeriod, handleSelectedPeriod }) => {
   );
 };
 
-TableForm.propTypes = {
+FilterForm.propTypes = {
   selectedPeriod: PropTypes.string.isRequired,
   handleSelectedPeriod: PropTypes.func.isRequired,
 };
 
-export default TableForm;
+export default FilterForm;

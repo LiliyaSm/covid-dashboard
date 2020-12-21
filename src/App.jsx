@@ -19,7 +19,7 @@ import FilterCommon from './components/FilterCommon/FilterCommon';
 
 const App = () => {
   const { notify, addNotify } = useContext(NotifyContext);
-  const { currentCountry: selectedCountry } = useContext(CommonContext);
+  const { currentCountry, changePopulation } = useContext(CommonContext);
   const [info, setInfo] = useState(null);
   const [geoJson, setGeoJson] = useState(null);
   const [infoWorld, setInfoWorld] = useState(null);
@@ -38,6 +38,7 @@ const App = () => {
   const getCovidInfoWorld = async () => {
     const covidInfoWorld = await requestService.getCovidInfoWorld();
     setInfoWorld(covidInfoWorld);
+    changePopulation(covidInfoWorld.population);
   };
 
   const getCovidHistory = async (country) => {
@@ -75,12 +76,12 @@ const App = () => {
 
   useEffect(async () => {
     try {
-      const country = selectedCountry.name === constants.WHOLE_WORLD_NAME ? 'all' : selectedCountry.name;
+      const country = currentCountry.name === constants.WHOLE_WORLD_NAME ? 'all' : currentCountry.name;
       await getCovidHistory(country);
     } catch (exception) {
       addNotify(constants.NOTIFY_TYPES.error, constants.ERROR_HEADER, constants.ERROR_MESSAGE);
     }
-  }, [selectedCountry]);
+  }, [currentCountry]);
 
   useEffect(() => {
     getAllData();

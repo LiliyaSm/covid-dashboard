@@ -6,14 +6,13 @@ import L from 'leaflet';
 import * as constants from '../../data/constants';
 import { CommonContext } from '../../Providers/CommonProvider';
 
-const GeojsonView = ({ currShowingData, responseData }) => {
-  const { selectCountry: setCurrentCountry, isFor100 } = useContext(CommonContext);
-
+const GeojsonView = ({ currShowingData, responseData, countries }) => {
+  const { selectCountry: setCurrentCountry, isFor100, selectedPeriod } = useContext(CommonContext);
 
   const handleGeojson = (code) => {
-    const isCountryExists = responseData.find((el) => el.countryInfo.iso3 === code).country;
-    if (isCountryExists) {
-      setCurrentCountry({ code, name: isCountryExists });
+    const isCountryExists = responseData.find((el) => el.countryInfo.iso3 === code);
+    if (isCountryExists.country) {
+      setCurrentCountry({ code, name: isCountryExists.country, population: isCountryExists.population });
     }
   };
 
@@ -27,32 +26,30 @@ const GeojsonView = ({ currShowingData, responseData }) => {
       onEachFeature={(feature, layer) => {
         // eslint-disable-next-line no-param-reassign
         feature.properties.tooltipText = `${constants.VARIANTS_FOR_DISPLAYING[currShowingData]} ${
-          isFor100 ? 'per 100K' : ''
-        } <br> for: ${feature.properties.name} `;
+          selectedPeriod === constants.PERIODS.lastDay ? 'for last day' : 'for whole period'
+        } ${isFor100 ? 'per 100K' : ''} <br> for: ${feature.properties.name} `;
 
-          layer.on({
-            click: () => {
-              handleGeojson(feature.properties.ISO_A3);
-            },
-            mouseover(e) {
-              const activeFeature = e.target.feature;
-              layer
-                .bindTooltip(activeFeature.properties.tooltipText, {
-                  closeButton: false,
-                  offset: L.point(0, -20),
-                  sticky: true,
-                  className: 'toolTip',
-                })
-                .openTooltip();
-            },
-            mouseout() {
-              layer.unbindTooltip(feature.properties.name);
-            },
-          });
-        }}
-      />
-    ),
-    [isFor100, selectedPeriod],
+        layer.on({
+          click: () => {
+            handleGeojson(feature.properties.ISO_A3);
+          },
+          mouseover(e) {
+            const activeFeature = e.target.feature;
+            layer
+              .bindTooltip(activeFeature.properties.tooltipText, {
+                closeButton: false,
+                offset: L.point(0, -20),
+                sticky: true,
+                className: 'toolTip',
+              })
+              .openTooltip();
+          },
+          mouseout() {
+            layer.unbindTooltip(feature.properties.name);
+          },
+        });
+      }}
+    />
   );
 };
 

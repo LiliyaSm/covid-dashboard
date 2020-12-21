@@ -5,25 +5,32 @@ import ExpandBtn from '../ExpandBtn/ExpandBtn';
 import Input from '../Input/Input';
 import * as constants from '../../data/constants';
 import './CountryList.scss';
-import { countFor100 } from '../../helpers/helpers';
+import { countFor100, getDataForPeriod } from '../../helpers/helpers';
 import { CommonContext } from '../../Providers/CommonProvider';
 
 const CountryList = ({ countriesList }) => {
-  const { currentCountry, selectCountry, showingData, isFor100 } = useContext(CommonContext);
+  const { currentCountry, selectCountry, showingData, isFor100, selectedPeriod, population } = useContext(
+    CommonContext,
+  );
   const [isFullScreenSize, setIsFullScreenSize] = useState(false);
   const [countries, setCountries] = useState([]);
 
+  const currShowingDataForPeriod = useMemo(() => getDataForPeriod(selectedPeriod, showingData), [
+    selectedPeriod,
+    showingData,
+  ]);
+
   const sortedCountries = useMemo(() => {
     const countriesSort = [...countriesList];
-    countriesSort.sort((a, b) => b[showingData] - a[showingData]);
+    countriesSort.sort((a, b) => b[currShowingDataForPeriod] - a[currShowingDataForPeriod]);
     return countriesSort;
-  }, [countriesList, showingData]);
+  }, [countriesList, currShowingDataForPeriod]);
 
   useEffect(() => {
     if (isFor100) {
       setCountries(
         sortedCountries
-          .map((el) => ({ ...el, for100Data: countFor100(el[showingData], el.population) }))
+          .map((el) => ({ ...el, for100Data: countFor100(el[currShowingDataForPeriod], el.population) }))
           .sort((a, b) => b.for100Data - a.for100Data),
       );
     } else {
@@ -37,9 +44,9 @@ const CountryList = ({ countriesList }) => {
 
   const onCountryClick = useCallback((el) => {
     if (currentCountry.code === el.countryInfo.iso3) {
-      selectCountry({ name: constants.WHOLE_WORLD_NAME, code: constants.WHOLE_WORLD_NAME });
+      selectCountry({ name: constants.WHOLE_WORLD_NAME, code: constants.WHOLE_WORLD_NAME, population });
     } else {
-      selectCountry({ name: el.country, code: el.countryInfo.iso3 });
+      selectCountry({ name: el.country, code: el.countryInfo.iso3, population: el.population });
     }
   });
 
@@ -60,7 +67,7 @@ const CountryList = ({ countriesList }) => {
                   <img src={el.countryInfo.flag} alt={el.country} className="country__flag" />
                 </td>
                 <td className="country__cases">
-                  {isFor100 ? el.for100Data?.toLocaleString('ru') : el[showingData]?.toLocaleString('ru')}
+                  {isFor100 ? el.for100Data?.toLocaleString('ru') : el[currShowingDataForPeriod]?.toLocaleString('ru')}
                 </td>
                 <td className="country__name">{el.country}</td>
               </tr>
