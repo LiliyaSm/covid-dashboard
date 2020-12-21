@@ -36,12 +36,14 @@ const RenderOverlay = ({ responseData }) => {
       value: countFor100(el[currShowingDataForPeriod], el.population),
       countryInfo: el.countryInfo,
       country: el.country,
+      population: el.population,
     }));
   } else {
     covidData = responseData.map((el) => ({
       value: el[currShowingDataForPeriod],
       countryInfo: el.countryInfo,
       country: el.country,
+      population: el.population,
     }));
   }
 
@@ -56,7 +58,7 @@ const RenderOverlay = ({ responseData }) => {
           icon={customMarkerIcon(element.value)}
           eventHandlers={{
             click: () => {
-              selectCountry({ code: element.countryInfo.iso3, name: element.country });
+              selectCountry({ code: element.countryInfo.iso3, name: element.country, population: element.population });
             },
           }}
         />
