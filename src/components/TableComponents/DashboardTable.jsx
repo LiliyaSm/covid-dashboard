@@ -1,17 +1,15 @@
 import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import Table from 'react-bootstrap/Table';
-import TableForm from './TableForm';
 import ExpandBtn from '../ExpandBtn/ExpandBtn';
 import * as constants from '../../data/constants';
 import { countFor100 } from '../../helpers/helpers';
 import { CommonContext } from '../../Providers/CommonProvider';
 
 const DashboardTable = ({ responseData, responseDataWorld }) => {
-  const [selectedPeriod, setSelectedPeriod] = useState(constants.PERIODS.wholePeriod);
   const [isFullScreenSize, setIsFullScreenSize] = useState(false);
 
-  const { currentCountry, isFor100 } = useContext(CommonContext);
+  const { currentCountry, isFor100, selectedPeriod } = useContext(CommonContext);
 
   const getTotalPopulation = (country) => {
     let totalPopulation;
@@ -35,10 +33,6 @@ const DashboardTable = ({ responseData, responseDataWorld }) => {
       result.recovered = data.todayRecovered;
     }
     return result;
-  };
-
-  const handleSelectedPeriod = (period) => {
-    setSelectedPeriod(period);
   };
 
   const getTableData = (country, data) => {
@@ -92,10 +86,6 @@ const DashboardTable = ({ responseData, responseDataWorld }) => {
           )}
         </tbody>
       </Table>
-      <TableForm
-        handleSelectedPeriod={handleSelectedPeriod}
-        selectedPeriod={selectedPeriod}
-      />
     </div>
   );
 };

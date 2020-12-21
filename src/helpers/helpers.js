@@ -26,3 +26,14 @@ export const getBoundary = (covidData) => {
   secondBoundary = getRoundField(secondBoundary);
   return { firstBoundary, secondBoundary };
 };
+
+export const getDataForPeriod = (selectedPeriod, currShowingData) => {
+  let currShowingDataForPeriod;
+  if (selectedPeriod === constants.PERIODS.lastDay) {
+    currShowingDataForPeriod = constants.TODAY[currShowingData];
+  } else {
+    currShowingDataForPeriod = currShowingData;
+  }
+
+  return currShowingDataForPeriod;
+};
