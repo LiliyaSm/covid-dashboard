@@ -73,7 +73,7 @@ const InteractiveMap = ({ responseData }) => {
       >
         <GeojsonView responseData={responseData} currShowingData={showingData} />
         <StyleView />
-        <RenderOverlay responseData={responseData} currShowingData={showingData} />
+        <RenderOverlay responseData={responseData} />
       </MapContainer>
     </div>
   ) : (

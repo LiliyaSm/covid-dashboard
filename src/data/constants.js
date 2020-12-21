@@ -23,12 +23,16 @@ export const NOTIFY_TYPES = {
 };
 
 export const VARIANTS_FOR_DISPLAYING = {
-  cases: 'Total number of cases',
-  deaths: 'Total number of deaths',
-  recovered: 'Total number of recovered',
-  todayCases: 'Cases in the last day',
-  todayDeaths: 'Deaths in the last day',
-  todayRecovered: 'Recovered in the last day',
+  cases: 'Number of cases',
+  deaths: 'Number of deaths',
+  recovered: 'Number of recovered',
+};
+
+export const TODAY = {
+  cases: 'todayCases',
+  deaths: 'todayDeaths',
+  recovered: 'todayRecovered',
+
 };
 
 export const DEFAULT_ZOOM = 3;

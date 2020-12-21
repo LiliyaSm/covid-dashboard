@@ -3,13 +3,11 @@ import { divIcon } from 'leaflet';
 import { Marker } from 'react-leaflet';
 import PropTypes from 'prop-types';
 import Legend from './Legend';
-import { countFor100, getBoundary } from '../../helpers/helpers';
+import { countFor100, getBoundary, getDataForPeriod } from '../../helpers/helpers';
 import { CommonContext } from '../../Providers/CommonProvider';
 
-const RenderOverlay = ({ responseData, currShowingData }) => {
-  const { selectCountry: setCurrentCountry, isFor100 } = useContext(CommonContext);
-
-  let covidData;
+const RenderOverlay = ({ responseData }) => {
+  const { selectCountry, isFor100, selectedPeriod, showingData } = useContext(CommonContext);
 
   let boundaries = { firstBoundary: 0, secondBoundary: 0 };
 
@@ -30,15 +28,18 @@ const RenderOverlay = ({ responseData, currShowingData }) => {
     });
   };
 
+  const currShowingDataForPeriod = getDataForPeriod(selectedPeriod, showingData);
+
+  let covidData;
   if (isFor100) {
     covidData = responseData.map((el) => ({
-      value: countFor100(el[currShowingData], el.population),
+      value: countFor100(el[currShowingDataForPeriod], el.population),
       countryInfo: el.countryInfo,
       country: el.country,
     }));
   } else {
     covidData = responseData.map((el) => ({
-      value: el[currShowingData],
+      value: el[currShowingDataForPeriod],
       countryInfo: el.countryInfo,
       country: el.country,
     }));
@@ -55,7 +56,7 @@ const RenderOverlay = ({ responseData, currShowingData }) => {
           icon={customMarkerIcon(element.value)}
           eventHandlers={{
             click: () => {
-              setCurrentCountry({ code: element.countryInfo.iso3, name: element.country });
+              selectCountry({ code: element.countryInfo.iso3, name: element.country });
             },
           }}
         />
@@ -67,12 +68,10 @@ const RenderOverlay = ({ responseData, currShowingData }) => {
 
 RenderOverlay.propTypes = {
   responseData: PropTypes.arrayOf(PropTypes.object),
-  currShowingData: PropTypes.string,
 };
 
 RenderOverlay.defaultProps = {
   responseData: '',
-  currShowingData: '',
 };
 
 export default RenderOverlay;
