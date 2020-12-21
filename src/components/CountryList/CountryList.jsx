@@ -13,7 +13,10 @@ const CountryList = ({ countriesList }) => {
   const [isFullScreenSize, setIsFullScreenSize] = useState(false);
   const [countries, setCountries] = useState([]);
 
-  const currShowingDataForPeriod = getDataForPeriod(selectedPeriod, showingData);
+  const currShowingDataForPeriod = useMemo(() => getDataForPeriod(selectedPeriod, showingData), [
+    selectedPeriod,
+    showingData,
+  ]);
 
   const sortedCountries = useMemo(() => {
     const countriesSort = [...countriesList];
