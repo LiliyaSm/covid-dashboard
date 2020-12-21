@@ -1,0 +1,41 @@
+$basecolor: #b9f7ed;
+$darkBlue: #06203a;
+$lightBlue: #a7d3ff;
+
+.table-header {
+  font-size: 18px;
+}
+
+thead {
+  text-transform: uppercase;
+}
+
+.table tbody td {
+  border-bottom: 2px solid $lightBlue;
+}
+
+.dashboard-table .table thead th {
+  padding-top: 15px;
+  border-top: 2px solid $darkBlue;
+  border-bottom: 2px solid $lightBlue;
+}
+
+.dashboard-table {
+  position: relative;
+  padding: 20px;
+  margin-right: 7px;
+  margin-bottom: 20px;
+  background-color: $basecolor;
+  border-radius: 5px;
+  width: 100%;
+}
+
+table {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.table-form input,
+.table-form label {
+  cursor: pointer;
+}

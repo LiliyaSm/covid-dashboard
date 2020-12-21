@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import './DashboardTable.scss';
 import PropTypes from 'prop-types';
 import Table from 'react-bootstrap/Table';
 import TableForm from './TableForm';
@@ -74,7 +75,7 @@ const DashboardTable = ({ responseData, responseDataWorld }) => {
         Info displayed for:&nbsp;
         {currentCountry.name}
       </h1>
-      <Table responsive>
+      <Table>
         <thead>
           <tr>
             {constants.HEADINGS.map((heading) => (

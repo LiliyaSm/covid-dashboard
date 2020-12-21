@@ -21,6 +21,7 @@ const App = () => {
   const { notify, addNotify } = useContext(NotifyContext);
   const { currentCountry: selectedCountry } = useContext(CommonContext);
   const [info, setInfo] = useState(null);
+  const [geoJson, setGeoJson] = useState(null);
   const [infoWorld, setInfoWorld] = useState(null);
   const [history, setHistory] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -28,6 +29,10 @@ const App = () => {
   const getCovidInfo = async () => {
     const covidInfo = await requestService.getCovidInfo();
     setInfo(covidInfo);
+  };
+  const getWorldGeojson = async () => {
+    const geoJsonWorld = await requestService.getGeojson();
+    setGeoJson(geoJsonWorld);
   };
 
   const getCovidInfoWorld = async () => {
@@ -60,6 +65,7 @@ const App = () => {
     try {
       await getCovidInfo();
       await getCovidInfoWorld();
+      await getWorldGeojson();
     } catch (exception) {
       addNotify(constants.NOTIFY_TYPES.error, constants.ERROR_HEADER, constants.ERROR_MESSAGE);
     } finally {
@@ -90,13 +96,13 @@ const App = () => {
       <Header />
       <FilterCommon />
       <Row>
-        <Col>
+        <Col sm={12} md={6} lg={3}>
           <CountryList countriesList={info} />
         </Col>
-        <Col>
-          <InteractiveMap responseData={info} />
+        <Col sm={12} sm={12} lg={6}>
+          <InteractiveMap responseData={info} geoJson={geoJson} />
         </Col>
-        <Col>
+        <Col sm={12} md={12} lg={3}>
           <Row>{renderTable()}</Row>
           <Row>
             <Charts chartsList={history} />

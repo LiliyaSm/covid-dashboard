@@ -45,3 +45,14 @@
 tr {
   cursor: pointer;
 }
+
+@media (max-width: 1300px) {
+  .country-list {
+    font-size: 14px;
+  }
+
+  .table-sm td,
+  .table-sm th {
+    padding: 0.1rem;
+  }
+}

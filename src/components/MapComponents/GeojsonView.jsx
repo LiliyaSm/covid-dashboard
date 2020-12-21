@@ -1,13 +1,14 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { GeoJSON } from 'react-leaflet';
 import PropTypes from 'prop-types';
 import L from 'leaflet';
-import * as countries from '../../data/countries.json';
+// import * as countries from '../../data/countries.json';
 import * as constants from '../../data/constants';
 import { CommonContext } from '../../Providers/CommonProvider';
 
 const GeojsonView = ({ currShowingData, responseData }) => {
   const { selectCountry: setCurrentCountry, isFor100 } = useContext(CommonContext);
+
 
   const handleGeojson = (code) => {
     const isCountryExists = responseData.find((el) => el.countryInfo.iso3 === code).country;
@@ -29,27 +30,29 @@ const GeojsonView = ({ currShowingData, responseData }) => {
           isFor100 ? 'per 100K' : ''
         } <br> for: ${feature.properties.name} `;
 
-        layer.on({
-          click: () => {
-            handleGeojson(feature.properties.ISO_A3);
-          },
-          mouseover(e) {
-            const activeFeature = e.target.feature;
-            layer
-              .bindTooltip(activeFeature.properties.tooltipText, {
-                closeButton: false,
-                offset: L.point(0, -20),
-                sticky: true,
-                className: 'toolTip',
-              })
-              .openTooltip();
-          },
-          mouseout() {
-            layer.unbindTooltip(feature.properties.name);
-          },
-        });
-      }}
-    />
+          layer.on({
+            click: () => {
+              handleGeojson(feature.properties.ISO_A3);
+            },
+            mouseover(e) {
+              const activeFeature = e.target.feature;
+              layer
+                .bindTooltip(activeFeature.properties.tooltipText, {
+                  closeButton: false,
+                  offset: L.point(0, -20),
+                  sticky: true,
+                  className: 'toolTip',
+                })
+                .openTooltip();
+            },
+            mouseout() {
+              layer.unbindTooltip(feature.properties.name);
+            },
+          });
+        }}
+      />
+    ),
+    [isFor100, selectedPeriod],
   );
 };
 
