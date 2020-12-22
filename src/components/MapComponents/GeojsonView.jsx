@@ -7,7 +7,7 @@ import * as constants from '../../data/constants';
 import { CommonContext } from '../../Providers/CommonProvider';
 
 const GeojsonView = ({ currShowingData, responseData, countries }) => {
-  const { selectCountry: setCurrentCountry, isFor100, selectedPeriod } = useContext(CommonContext);
+  const { selectCountry: setCurrentCountry, isFor100, isLastDay } = useContext(CommonContext);
 
   const handleGeojson = (code) => {
     const isCountryExists = responseData.find((el) => el.countryInfo.iso3 === code);
@@ -26,7 +26,7 @@ const GeojsonView = ({ currShowingData, responseData, countries }) => {
       onEachFeature={(feature, layer) => {
         // eslint-disable-next-line no-param-reassign
         feature.properties.tooltipText = `${constants.VARIANTS_FOR_DISPLAYING[currShowingData]} ${
-          selectedPeriod === constants.PERIODS.lastDay ? 'for last day' : 'for whole period'
+          isLastDay ? 'for last day' : 'for whole period'
         } ${isFor100 ? 'per 100K' : ''} <br> for: ${feature.properties.name} `;
 
         layer.on({

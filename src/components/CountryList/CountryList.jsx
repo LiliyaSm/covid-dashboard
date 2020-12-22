@@ -9,14 +9,14 @@ import { countFor100, getDataForPeriod } from '../../helpers/helpers';
 import { CommonContext } from '../../Providers/CommonProvider';
 
 const CountryList = ({ countriesList }) => {
-  const { currentCountry, selectCountry, showingData, isFor100, selectedPeriod, population } = useContext(
+  const { currentCountry, selectCountry, showingData, isFor100, isLastDay, population } = useContext(
     CommonContext,
   );
   const [isFullScreenSize, setIsFullScreenSize] = useState(false);
   const [countries, setCountries] = useState([]);
 
-  const currShowingDataForPeriod = useMemo(() => getDataForPeriod(selectedPeriod, showingData), [
-    selectedPeriod,
+  const currShowingDataForPeriod = useMemo(() => getDataForPeriod(isLastDay, showingData), [
+    isLastDay,
     showingData,
   ]);
 

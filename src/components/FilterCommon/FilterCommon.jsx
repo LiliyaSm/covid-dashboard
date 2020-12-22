@@ -6,13 +6,7 @@ import FilterForm from './FilterForm';
 import { CommonContext } from '../../Providers/CommonProvider';
 
 const FilterCommon = () => {
-  const {
-    showingData,
-    changeShowingData,
-    isFullScreenOptions,
-    selectedPeriod,
-    changeSelectedPeriod,
-  } = useContext(CommonContext);
+  const { showingData, changeShowingData, isFullScreenOptions } = useContext(CommonContext);
 
   return (
     <div className={isFullScreenOptions ? 'filter filter__full' : 'filter'}>
@@ -21,7 +15,7 @@ const FilterCommon = () => {
         options={constants.VARIANTS_FOR_DISPLAYING}
         selectedKey={showingData}
       />
-      <FilterForm handleSelectedPeriod={changeSelectedPeriod} selectedPeriod={selectedPeriod} />
+      <FilterForm />
     </div>
   );
 };

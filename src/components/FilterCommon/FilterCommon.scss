@@ -3,7 +3,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 10px;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   color: white;
   background-color: grey;
   border-radius: 5px;
@@ -12,7 +12,27 @@
     position: fixed;
     top: 15px;
     left: 15px;
-    z-index: 100;
-    width: calc(100vw - 50px);
+    z-index: 3;
+    width: calc(100vw - 20px);
   }
+}
+.filter-form {
+  display: flex;
+}
+
+.filter-form input,
+.filter-form label {
+  cursor: pointer;
+}
+
+.period-switcher {
+  margin-right: 20px;
+}
+
+.filter-form > .custom-control {
+  margin-right: 10px;
+}
+
+.filter button {
+  margin-right: 15px;
 }

@@ -7,7 +7,7 @@ import { countFor100, getBoundary, getDataForPeriod } from '../../helpers/helper
 import { CommonContext } from '../../Providers/CommonProvider';
 
 const RenderOverlay = ({ responseData }) => {
-  const { selectCountry, isFor100, selectedPeriod, showingData } = useContext(CommonContext);
+  const { selectCountry, isFor100, isLastDay, showingData } = useContext(CommonContext);
 
   let boundaries = { firstBoundary: 0, secondBoundary: 0 };
 
@@ -28,7 +28,7 @@ const RenderOverlay = ({ responseData }) => {
     });
   };
 
-  const currShowingDataForPeriod = getDataForPeriod(selectedPeriod, showingData);
+  const currShowingDataForPeriod = getDataForPeriod(isLastDay, showingData);
 
   let covidData;
   if (isFor100) {

@@ -5,6 +5,10 @@ $lightBlue: #a7d3ff;
 html {
   box-sizing: border-box;
 }
+html,
+body {
+  min-height: 100%;
+}
 
 body {
   background: linear-gradient(225deg, transparent 24.5%, #44b466 24.6%, transparent 24.8%) 37px -37px,
@@ -29,7 +33,6 @@ body {
   text-align: center;
 }
 
-
 .radio-buttons {
   margin-right: 40px;
 }
@@ -43,7 +46,119 @@ body {
   margin-bottom: 10px;
 }
 
+.widget-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.list-col {
+  min-width: 230px;
+}
+
+.map-col {
+  flex-grow: 2;
+  min-width: 455px;
+}
+
+footer {
+  padding-left: 20px;
+  padding-right: 20px;
+  background: $basecolor;
+  height: 42px;
+}
 
 .logo {
+  margin-right: 20px;
+  margin-left: 20px;
   height: 20px;
+  background-repeat: no-repeat;
+}
+
+footer a {
+  color: $darkBlue;
+}
+
+.footer-wrapper {
+  max-width: 1400px;
+  padding-top: 10px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.content {
+  min-height: 100vh;
+  /* equal to footer height */
+  margin-bottom: -42px;
+}
+.content:after {
+  content: '';
+  display: block;
+}
+
+.content:after {
+  height: 42px;
+}
+
+@media (max-width: 1500px) {
+  .country-list {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 1350px) {
+  .wrapper {
+    width: 280px;
+  }
+}
+@media (max-width: 1200px) {
+  .filter label,
+  .filter button {
+    font-size: 14px;
+  }
+
+  .wrapper {
+    width: 100%;
+  }
+
+  .list-col {
+    order: 2;
+    flex-grow: 2;
+    margin-right: 5px;
+  }
+
+  .map-col {
+    order: 1;
+    width: 100%;
+  }
+
+  .map-col .interactive-map {
+    height: 600px;
+  }
+
+  .chart-col {
+    order: 2;
+  }
+  .list-col .wrapper {
+    height: 610px;
+  }
+
+  .list-col .country-list {
+    height: 540px;
+  }
+}
+
+@media (max-width: 830px) {
+  .wrapper {
+    width: 280px;
+  }
+}
+
+@media (max-width: 730px) {
+  .chart-container,
+  .chart-col,
+  .wrapper {
+    width: 100%;
+  }
 }

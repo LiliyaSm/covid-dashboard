@@ -92,27 +92,30 @@ const App = () => {
   return isLoading ? (
     <Loader />
   ) : (
-    <Container fluid className="main-wrapper">
-      {notify ? <Alerts /> : null}
-      <Header />
-      <FilterCommon />
-      <Row>
-        <Col sm={12} md={6} lg={3}>
-          <CountryList countriesList={info} />
-        </Col>
-        <Col sm={12} sm={12} lg={6}>
-          <InteractiveMap responseData={info} geoJson={geoJson} />
-        </Col>
-        <Col sm={12} md={12} lg={3}>
-          <Row>{renderTable()}</Row>
-          <Row>
-            <Charts chartsList={history} />
-          </Row>
-        </Col>
-      </Row>
-
+    <>
+      <div className="content">
+        <Container fluid className="main-wrapper">
+          {notify ? <Alerts /> : null}
+          <Header />
+          <FilterCommon />
+          <div className="widget-wrapper">
+            <div className="list-col">
+              <CountryList countriesList={info} />
+            </div>
+            <div className="map-col">
+              <InteractiveMap responseData={info} geoJson={geoJson} />
+            </div>
+            <div className="chart-col">
+              <div>{renderTable()}</div>
+              <div>
+                <Charts chartsList={history} />
+              </div>
+            </div>
+          </div>
+        </Container>
+      </div>
       <Footer />
-    </Container>
+    </>
   );
 };
 

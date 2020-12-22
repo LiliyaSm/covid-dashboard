@@ -21,11 +21,12 @@ thead {
 }
 
 .dashboard-table {
+  box-sizing: border-box;
   position: relative;
-  padding: 20px;
+  padding: 10px;
   margin-right: 7px;
   margin-bottom: 20px;
-  background-color: $basecolor;
+  background-color: grey;
   border-radius: 5px;
   width: 100%;
 }
@@ -38,4 +39,11 @@ table {
 .table-form input,
 .table-form label {
   cursor: pointer;
+}
+
+.table-wrapper {
+  width: 100%;
+  padding: 15px;
+  height: 100%;
+  background-color: $basecolor;
 }
