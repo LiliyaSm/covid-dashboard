@@ -6,4 +6,3 @@ build/*
 !build/index.js
 
 public/virtual-keyboard/
-*

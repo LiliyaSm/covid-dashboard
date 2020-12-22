@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import './App.scss';
 import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import { NotifyContext } from './Providers/NotifyProvider';
 import { CommonContext } from './Providers/CommonProvider';
 import DashboardTable from './components/TableComponents/DashboardTable';

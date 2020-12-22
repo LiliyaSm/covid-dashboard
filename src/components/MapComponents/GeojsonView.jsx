@@ -1,8 +1,7 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useContext } from 'react';
 import { GeoJSON } from 'react-leaflet';
 import PropTypes from 'prop-types';
 import L from 'leaflet';
-// import * as countries from '../../data/countries.json';
 import * as constants from '../../data/constants';
 import { CommonContext } from '../../Providers/CommonProvider';
 
@@ -55,11 +54,13 @@ const GeojsonView = ({ currShowingData, responseData, countries }) => {
 
 GeojsonView.propTypes = {
   responseData: PropTypes.arrayOf(PropTypes.object).isRequired,
+  countries: PropTypes.objectOf(PropTypes.object),
   currShowingData: PropTypes.string,
 };
 
 GeojsonView.defaultProps = {
   currShowingData: '',
+  countries: '',
 };
 
 export default GeojsonView;

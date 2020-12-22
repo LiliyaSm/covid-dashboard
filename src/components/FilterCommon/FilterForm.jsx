@@ -1,6 +1,5 @@
 import React, { useContext, useCallback } from 'react';
 import Form from 'react-bootstrap/Form';
-import PropTypes from 'prop-types';
 import Switcher from './Switcher';
 import { CommonContext } from '../../Providers/CommonProvider';
 
@@ -12,7 +11,7 @@ const FilterForm = () => {
   const handleIsFor100 = useCallback(() => {
     changeIsFor100(!isFor100);
   });
-  
+
   const handleSelectedPeriod = useCallback(() => {
     changeSelectedPeriod(!isLastDay);
   });
@@ -20,7 +19,7 @@ const FilterForm = () => {
   return (
     <Form className="filter-form">
       <Switcher
-        className ="period-switcher"
+        className="period-switcher"
         handleOnChange={handleSelectedPeriod}
         label={periodSwitcher.label}
         id={periodSwitcher.id}

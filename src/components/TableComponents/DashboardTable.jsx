@@ -64,7 +64,7 @@ const DashboardTable = ({ responseData, responseDataWorld }) => {
 
   return (
     <div className={isFullScreenSize ? 'dashboard-table full-container' : 'dashboard-table'}>
-     <div className = "table-wrapper">
+      <div className="table-wrapper">
         <ExpandBtn setIsFullScreenSize={setIsFullScreenSize} isFullScreenSize={isFullScreenSize} />
         <h1 className="table-header">
           Info displayed for:&nbsp;
@@ -88,7 +88,7 @@ const DashboardTable = ({ responseData, responseDataWorld }) => {
             )}
           </tbody>
         </Table>
-     </div>
+      </div>
     </div>
   );
 };

@@ -19,7 +19,7 @@ const InteractiveMap = ({ responseData, geoJson }) => {
   const [style, setStyle] = useState('');
   const [map, setMap] = useState('');
 
-  mapboxgl.accessToken = constants.MAPBOX_KEY;
+  //   mapboxgl.accessToken = constants.MAPBOX_KEY;
 
   const WhenMapCreated = (mapInstance) => {
     style.addTo(mapInstance);
@@ -86,10 +86,12 @@ const InteractiveMap = ({ responseData, geoJson }) => {
 
 InteractiveMap.propTypes = {
   responseData: PropTypes.arrayOf(PropTypes.object),
+  geoJson: PropTypes.objectOf(PropTypes.object),
 };
 
 InteractiveMap.defaultProps = {
   responseData: '',
+  geoJson: '',
 };
 
 export default InteractiveMap;
