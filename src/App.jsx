@@ -1,8 +1,6 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useMemo } from 'react';
 import './App.scss';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import { Container, Row, Col } from 'react-bootstrap';
 import { NotifyContext } from './Providers/NotifyProvider';
 import { CommonContext } from './Providers/CommonProvider';
 import DashboardTable from './components/TableComponents/DashboardTable';
@@ -16,10 +14,20 @@ import Loader from './components/Loader/Loader';
 import CountryList from './components/CountryList/CountryList';
 import Charts from './components/Charts/Charts';
 import FilterCommon from './components/FilterCommon/FilterCommon';
+import GeojsonView from './components/MapComponents/GeojsonView';
+import RenderOverlay from './components/MapComponents/RenderOverlay';
 
 const App = () => {
   const { notify, addNotify } = useContext(NotifyContext);
-  const { currentCountry, changePopulation } = useContext(CommonContext);
+  const {
+    currentCountry,
+    changePopulation,
+    showingData,
+    selectCountry,
+    isFor100,
+    selectedPeriod,
+    population,
+  } = useContext(CommonContext);
   const [info, setInfo] = useState(null);
   const [infoWorld, setInfoWorld] = useState(null);
   const [history, setHistory] = useState(null);
@@ -81,7 +89,44 @@ const App = () => {
     getAllData();
   }, []);
 
-  const renderTable = () => <DashboardTable responseData={info} responseDataWorld={infoWorld} />;
+  const renderTable = useMemo(
+    () => (
+      <DashboardTable
+        responseData={info}
+        responseDataWorld={infoWorld}
+        currentCountry={currentCountry}
+        isFor100={isFor100}
+        selectedPeriod={selectedPeriod}
+      />
+    ),
+    [info, infoWorld, currentCountry, isFor100, selectedPeriod],
+  );
+
+  const renderGeoJsonView = useMemo(
+    () => (
+      <GeojsonView
+        currShowingData={showingData}
+        responseData={info ?? []}
+        selectCountry={selectCountry}
+        isFor100={isFor100}
+        selectedPeriod={selectedPeriod}
+      />
+    ),
+    [showingData, info, selectCountry, isFor100, selectedPeriod],
+  );
+
+  const renderOverlay = useMemo(
+    () => (
+      <RenderOverlay
+        responseData={info ?? []}
+        showingData={showingData}
+        selectCountry={selectCountry}
+        isFor100={isFor100}
+        selectedPeriod={selectedPeriod}
+      />
+    ),
+    [showingData, info, selectCountry, isFor100, selectedPeriod],
+  );
 
   return isLoading ? (
     <Loader />
@@ -92,15 +137,34 @@ const App = () => {
       <FilterCommon />
       <Row>
         <Col>
-          <CountryList countriesList={info} />
+          <CountryList
+            countriesList={info}
+            countryCode={currentCountry.code}
+            selectCountry={selectCountry}
+            showingData={showingData}
+            isFor100={isFor100}
+            selectedPeriod={selectedPeriod}
+            population={population}
+          />
         </Col>
         <Col>
-          <InteractiveMap responseData={info} />
+          <InteractiveMap
+            responseData={info ?? []}
+            countryCode={currentCountry.code}
+            GeojsonView={renderGeoJsonView}
+            renderOverlay={renderOverlay}
+          />
         </Col>
         <Col>
-          <Row>{renderTable()}</Row>
+          <Row>{renderTable}</Row>
           <Row>
-            <Charts chartsList={history} />
+            <Charts
+              chartsList={history}
+              countryName={currentCountry.name}
+              isFor100={isFor100}
+              population={population}
+              countryPopulation={currentCountry.population}
+            />
           </Row>
         </Col>
       </Row>

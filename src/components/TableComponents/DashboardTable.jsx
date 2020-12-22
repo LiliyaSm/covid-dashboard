@@ -1,51 +1,40 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Table from 'react-bootstrap/Table';
 import ExpandBtn from '../ExpandBtn/ExpandBtn';
 import * as constants from '../../data/constants';
-import { countFor100 } from '../../helpers/helpers';
-import { CommonContext } from '../../Providers/CommonProvider';
+import { countFor100, getDataForPeriodDashboard } from '../../helpers/helpers';
 
-const DashboardTable = ({ responseData, responseDataWorld }) => {
+const DashboardTable = React.memo(({ responseData, responseDataWorld, currentCountry, isFor100, selectedPeriod }) => {
   const [isFullScreenSize, setIsFullScreenSize] = useState(false);
 
-  const { currentCountry, isFor100, selectedPeriod } = useContext(CommonContext);
+  const getTotalPopulation = useCallback(
+    (country) => {
+      let totalPopulation;
+      if (country === constants.WHOLE_WORLD_NAME) {
+        totalPopulation = responseDataWorld.population;
+      } else {
+        totalPopulation = responseData.find((el) => el.countryInfo.iso3 === country).population;
+      }
+      return totalPopulation;
+    },
+    [responseDataWorld, responseData],
+  );
 
-  const getTotalPopulation = (country) => {
-    let totalPopulation;
-    if (country === constants.WHOLE_WORLD_NAME) {
-      totalPopulation = responseDataWorld.population;
-    } else {
-      totalPopulation = responseData.find((el) => el.countryInfo.iso3 === country).population;
-    }
-    return totalPopulation;
-  };
+  const getTableData = useCallback(
+    (country, data) => {
+      if (country === constants.WHOLE_WORLD_NAME) {
+        return responseDataWorld;
+      }
+      const dataForCountry = data.find((el) => el.countryInfo.iso3 === country);
+      return dataForCountry;
+    },
+    [responseDataWorld],
+  );
 
-  const getDataForPeriod = (period, data) => {
-    const result = {};
-    if (period === constants.PERIODS.wholePeriod) {
-      result.confirmed = data.cases;
-      result.deaths = data.deaths;
-      result.recovered = data.recovered;
-    } else {
-      result.confirmed = data.todayCases;
-      result.deaths = data.todayDeaths;
-      result.recovered = data.todayRecovered;
-    }
-    return result;
-  };
-
-  const getTableData = (country, data) => {
-    if (country === constants.WHOLE_WORLD_NAME) {
-      return responseDataWorld;
-    }
-    const dataForCountry = data.find((el) => el.countryInfo.iso3 === country);
-    return dataForCountry;
-  };
-
-  const renderTableRows = () => {
+  const renderTableRows = useMemo(() => {
     const data = getTableData(currentCountry.code, responseData);
-    const periodData = getDataForPeriod(selectedPeriod, data);
+    const periodData = getDataForPeriodDashboard(selectedPeriod, data);
     const totalPopulation = getTotalPopulation(currentCountry.code);
     if (isFor100) {
       periodData.confirmed = countFor100(periodData.confirmed, totalPopulation);
@@ -54,12 +43,12 @@ const DashboardTable = ({ responseData, responseDataWorld }) => {
     }
     return (
       <tr>
-        <td>{periodData.confirmed}</td>
-        <td>{periodData.deaths}</td>
-        <td>{periodData.recovered}</td>
+        <td>{periodData.confirmed.toLocaleString('ru')}</td>
+        <td>{periodData.deaths.toLocaleString('ru')}</td>
+        <td>{periodData.recovered.toLocaleString('ru')}</td>
       </tr>
     );
-  };
+  }, [currentCountry.code, responseData, selectedPeriod, isFor100]);
 
   return (
     <div className={isFullScreenSize ? 'dashboard-table full-container' : 'dashboard-table'}>
@@ -78,7 +67,7 @@ const DashboardTable = ({ responseData, responseDataWorld }) => {
         </thead>
         <tbody>
           {responseData ? (
-            renderTableRows()
+            renderTableRows
           ) : (
             <tr>
               <td colSpan={constants.HEADINGS.length}>{constants.ERROR_MESSAGE}</td>
@@ -88,11 +77,14 @@ const DashboardTable = ({ responseData, responseDataWorld }) => {
       </Table>
     </div>
   );
-};
+});
 
 DashboardTable.propTypes = {
   responseData: PropTypes.arrayOf(PropTypes.object),
   responseDataWorld: PropTypes.objectOf(PropTypes.any),
+  currentCountry: PropTypes.objectOf(PropTypes.any).isRequired,
+  isFor100: PropTypes.bool.isRequired,
+  selectedPeriod: PropTypes.string.isRequired,
 };
 
 DashboardTable.defaultProps = {

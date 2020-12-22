@@ -37,3 +37,17 @@ export const getDataForPeriod = (selectedPeriod, currShowingData) => {
 
   return currShowingDataForPeriod;
 };
+
+export const getDataForPeriodDashboard = (period, data) => {
+  const result = {};
+  if (period === constants.PERIODS.wholePeriod) {
+    result.confirmed = data.cases;
+    result.deaths = data.deaths;
+    result.recovered = data.recovered;
+  } else {
+    result.confirmed = data.todayCases;
+    result.deaths = data.todayDeaths;
+    result.recovered = data.todayRecovered;
+  }
+  return result;
+};

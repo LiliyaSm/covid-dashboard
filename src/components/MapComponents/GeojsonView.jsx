@@ -1,22 +1,22 @@
-import React, { useContext } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { GeoJSON } from 'react-leaflet';
 import PropTypes from 'prop-types';
 import L from 'leaflet';
 import * as countries from '../../data/countries.json';
 import * as constants from '../../data/constants';
-import { CommonContext } from '../../Providers/CommonProvider';
 
-const GeojsonView = ({ currShowingData, responseData }) => {
-  const { selectCountry: setCurrentCountry, isFor100, selectedPeriod } = useContext(CommonContext);
+const GeojsonView = React.memo(({ currShowingData, responseData, selectCountry, isFor100, selectedPeriod }) => {
+  const handleGeojson = useCallback(
+    (code) => {
+      const isCountryExists = responseData.find((el) => el.countryInfo.iso3 === code);
+      if (isCountryExists.country) {
+        selectCountry({ code, name: isCountryExists.country, population: isCountryExists.population });
+      }
+    },
+    [responseData, selectCountry],
+  );
 
-  const handleGeojson = (code) => {
-    const isCountryExists = responseData.find((el) => el.countryInfo.iso3 === code);
-    if (isCountryExists.country) {
-      setCurrentCountry({ code, name: isCountryExists.country, population: isCountryExists.population });
-    }
-  };
-
-  const geojsonStyle = { weight: 0, fillOpacity: 0 };
+  const geojsonStyle = useMemo(() => ({ weight: 0, fillOpacity: 0 }), []);
 
   return (
     <GeoJSON
@@ -51,15 +51,14 @@ const GeojsonView = ({ currShowingData, responseData }) => {
       }}
     />
   );
-};
+});
 
 GeojsonView.propTypes = {
   responseData: PropTypes.arrayOf(PropTypes.object).isRequired,
-  currShowingData: PropTypes.string,
-};
-
-GeojsonView.defaultProps = {
-  currShowingData: '',
+  selectCountry: PropTypes.func.isRequired,
+  currShowingData: PropTypes.string.isRequired,
+  isFor100: PropTypes.bool.isRequired,
+  selectedPeriod: PropTypes.string.isRequired,
 };
 
 export default GeojsonView;

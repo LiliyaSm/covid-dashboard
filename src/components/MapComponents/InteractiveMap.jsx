@@ -1,38 +1,36 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { MapContainer } from 'react-leaflet';
 import PropTypes from 'prop-types';
+import {} from 'mapbox-gl-leaflet';
 import L from 'leaflet';
 import ExpandBtn from '../ExpandBtn/ExpandBtn';
 import './InteractiveMap.scss';
 import 'leaflet-fullscreen/dist/Leaflet.fullscreen';
 import 'leaflet-fullscreen/dist/leaflet.fullscreen.css';
 import * as constants from '../../data/constants';
-import 'mapbox-gl-leaflet';
-import RenderOverlay from './RenderOverlay';
-import GeojsonView from './GeojsonView';
-import { CommonContext } from '../../Providers/CommonProvider';
 
-const InteractiveMap = ({ responseData }) => {
-  const { currentCountry, showingData } = useContext(CommonContext);
-
+const InteractiveMap = React.memo(({ responseData, GeojsonView, renderOverlay, countryCode }) => {
   const [isFullScreenSize, setIsFullScreenSize] = useState(false);
-  const [style, setStyle] = useState('');
-  const [map, setMap] = useState('');
+  const [style, setStyle] = useState(null);
+  const [map, setMap] = useState(null);
 
-  const WhenMapCreated = (mapInstance) => {
-    setMap(mapInstance);
-  };
+  const WhenMapCreated = useCallback(
+    (mapInstance) => {
+      setMap(mapInstance);
+    },
+    [setMap],
+  );
 
-  const positionCalc = () => {
-    if (currentCountry.code === constants.WHOLE_WORLD_NAME) {
+  const positionCalc = useMemo(() => {
+    if (countryCode === constants.WHOLE_WORLD_NAME) {
       return [constants.DEFAULT_LAT, constants.DEFAULT_LONG];
     }
-    const position = responseData.find((el) => el.countryInfo.iso3 === currentCountry.code);
+    const position = responseData.find((el) => el.countryInfo.iso3 === countryCode);
     if (!position) {
       return [constants.DEFAULT_LAT, constants.DEFAULT_LONG];
     }
     return [position.countryInfo.lat, position.countryInfo.long];
-  };
+  }, [countryCode, responseData]);
 
   useEffect(() => {
     const mapStyle = L.mapboxGL({
@@ -48,16 +46,14 @@ const InteractiveMap = ({ responseData }) => {
     }
   }, [isFullScreenSize]);
 
-  const StyleView = () => {
+  useEffect(() => {
     if (map) {
-      const position = positionCalc();
-      map.setView(position, map.getZoom() || constants.DEFAULT_ZOOM);
+      map.setView(positionCalc, map.getZoom() || constants.DEFAULT_ZOOM);
       style.addTo(map);
     }
-    return null;
-  };
+  }, [map, positionCalc, style]);
 
-  return responseData ? (
+  return responseData.length ? (
     <div className={isFullScreenSize ? 'interactive-map full-container' : 'interactive-map'}>
       <ExpandBtn setIsFullScreenSize={setIsFullScreenSize} isFullScreenSize={isFullScreenSize} />
       <MapContainer
@@ -71,22 +67,20 @@ const InteractiveMap = ({ responseData }) => {
         animate
         whenCreated={WhenMapCreated}
       >
-        <GeojsonView responseData={responseData} currShowingData={showingData} />
-        <StyleView />
-        <RenderOverlay responseData={responseData} />
+        {GeojsonView}
+        {renderOverlay}
       </MapContainer>
     </div>
   ) : (
     <div>{constants.ERROR_MESSAGE}</div>
   );
-};
+});
 
 InteractiveMap.propTypes = {
-  responseData: PropTypes.arrayOf(PropTypes.object),
-};
-
-InteractiveMap.defaultProps = {
-  responseData: '',
+  responseData: PropTypes.arrayOf(PropTypes.object).isRequired,
+  GeojsonView: PropTypes.element.isRequired,
+  renderOverlay: PropTypes.element.isRequired,
+  countryCode: PropTypes.string.isRequired,
 };
 
 export default InteractiveMap;

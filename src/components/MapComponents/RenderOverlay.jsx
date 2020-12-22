@@ -1,15 +1,12 @@
-import React, { useContext } from 'react';
+import React, { useMemo } from 'react';
 import { divIcon } from 'leaflet';
 import { Marker } from 'react-leaflet';
 import PropTypes from 'prop-types';
 import Legend from './Legend';
 import { countFor100, getBoundary, getDataForPeriod } from '../../helpers/helpers';
-import { CommonContext } from '../../Providers/CommonProvider';
 
-const RenderOverlay = ({ responseData }) => {
-  const { selectCountry, isFor100, selectedPeriod, showingData } = useContext(CommonContext);
-
-  let boundaries = { firstBoundary: 0, secondBoundary: 0 };
+const RenderOverlay = React.memo(({ responseData, showingData, selectCountry, isFor100, selectedPeriod }) => {
+  let boundaries = useMemo(() => ({ firstBoundary: 0, secondBoundary: 0 }), []);
 
   const getIntensity = (data) => {
     if (data <= boundaries.firstBoundary) {
@@ -28,26 +25,29 @@ const RenderOverlay = ({ responseData }) => {
     });
   };
 
-  const currShowingDataForPeriod = getDataForPeriod(selectedPeriod, showingData);
+  const currShowingDataForPeriod = useMemo(() => getDataForPeriod(selectedPeriod, showingData), [
+    selectedPeriod,
+    showingData,
+  ]);
 
-  let covidData;
-  if (isFor100) {
-    covidData = responseData.map((el) => ({
-      value: countFor100(el[currShowingDataForPeriod], el.population),
-      countryInfo: el.countryInfo,
-      country: el.country,
-      population: el.population,
-    }));
-  } else {
-    covidData = responseData.map((el) => ({
+  const covidData = useMemo(() => {
+    if (isFor100) {
+      return responseData.map((el) => ({
+        value: countFor100(el[currShowingDataForPeriod], el.population),
+        countryInfo: el.countryInfo,
+        country: el.country,
+        population: el.population,
+      }));
+    }
+    return responseData.map((el) => ({
       value: el[currShowingDataForPeriod],
       countryInfo: el.countryInfo,
       country: el.country,
       population: el.population,
     }));
-  }
+  }, [isFor100, responseData]);
 
-  boundaries = getBoundary(covidData.map((el) => el.value));
+  boundaries = useMemo(() => getBoundary(covidData.map((el) => el.value)), [covidData]);
 
   return (
     <>
@@ -66,14 +66,14 @@ const RenderOverlay = ({ responseData }) => {
       <Legend boundaries={boundaries} />
     </>
   );
-};
+});
 
 RenderOverlay.propTypes = {
-  responseData: PropTypes.arrayOf(PropTypes.object),
-};
-
-RenderOverlay.defaultProps = {
-  responseData: '',
+  responseData: PropTypes.arrayOf(PropTypes.object).isRequired,
+  selectCountry: PropTypes.func.isRequired,
+  showingData: PropTypes.string.isRequired,
+  isFor100: PropTypes.bool.isRequired,
+  selectedPeriod: PropTypes.string.isRequired,
 };
 
 export default RenderOverlay;
