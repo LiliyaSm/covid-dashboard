@@ -51,3 +51,9 @@ export const getDataForPeriodDashboard = (lastDay, data) => {
   }
   return result;
 };
+
+
+export const filterData = (covidInfo, covidHistory) => {
+    let filteredArray = covidInfo.filter((el)=> covidHistory.some(x => x.country === el.country));
+    return filteredArray;
+};
