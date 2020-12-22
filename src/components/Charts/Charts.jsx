@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState, useMemo } from 'react';
+import React, { useCallback, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import 'devextreme/dist/css/dx.common.css';
 import 'devextreme/dist/css/dx.light.css';
@@ -13,25 +13,23 @@ import Chart, {
   ValueAxis,
   Tooltip,
 } from 'devextreme-react/chart';
-import { CommonContext } from '../../Providers/CommonProvider';
 import ExpandBtn from '../ExpandBtn/ExpandBtn';
 import { WHOLE_WORLD_NAME } from '../../data/constants';
 import { countFor100 } from '../../helpers/helpers';
 import './Charts.scss';
 
-const Charts = ({ chartsList }) => {
-  const { currentCountry, isFor100, population } = useContext(CommonContext);
+const Charts = React.memo(({ chartsList, countryName, isFor100, population, countryPopulation }) => {
   const [isFullScreenSize, setIsFullScreenSize] = useState(false);
 
   const dataWithPer100 = useMemo(() => {
-    const populationCount = currentCountry.name === WHOLE_WORLD_NAME ? population : currentCountry.population;
-    return chartsList.map((item) => ({
+    const populationCount = countryName === WHOLE_WORLD_NAME ? population : countryPopulation;
+    return chartsList?.map((item) => ({
       ...item,
       casesIsFor100: countFor100(item.cases, populationCount),
       deathsIsFor100: countFor100(item.deaths, populationCount),
       recoveredIsFor100: countFor100(item.recovered, populationCount),
     }));
-  }, [chartsList, currentCountry, population]);
+  }, [chartsList, countryName, population]);
 
   const customizeTooltip = useCallback((pointInfo) => ({
     text: `${pointInfo.argumentText}<br/>${pointInfo.value.toLocaleString('ru')}`,
@@ -44,12 +42,7 @@ const Charts = ({ chartsList }) => {
   return (
     <div className={isFullScreenSize ? 'chart-container full-container' : 'chart-container'}>
       <ExpandBtn setIsFullScreenSize={setIsFullScreenSize} isFullScreenSize={isFullScreenSize} />
-      <Chart
-        dataSource={dataWithPer100}
-        title={currentCountry.name ?? WHOLE_WORLD_NAME}
-        theme="generic.darkmoon"
-        size={size}
-      >
+      <Chart dataSource={dataWithPer100} title={countryName ?? WHOLE_WORLD_NAME} theme="generic.darkmoon" size={size}>
         <CommonSeriesSettings argumentField="data" type="spline" />
         <CommonAxisSettings>
           <Grid />
@@ -71,10 +64,14 @@ const Charts = ({ chartsList }) => {
       </Chart>
     </div>
   );
-};
+});
 
 Charts.propTypes = {
   chartsList: PropTypes.arrayOf(PropTypes.object),
+  countryName: PropTypes.string.isRequired,
+  isFor100: PropTypes.bool.isRequired,
+  population: PropTypes.number.isRequired,
+  countryPopulation: PropTypes.number.isRequired,
 };
 
 Charts.defaultProps = {

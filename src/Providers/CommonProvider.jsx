@@ -11,7 +11,7 @@ export const CommonContext = React.createContext({
   changeIsFor100: () => {},
   isFullScreenOptions: false,
   changeIsFullScreenOptions: () => {},
-  selectedPeriod: constants.PERIODS.wholePeriod,
+  isLastDay: constants.PERIODS.wholePeriod,
   changeSelectedPeriod: () => {},
   population: 0,
   changePopulation: () => {},

@@ -1,7 +1,7 @@
 .country-list {
   width: 100%;
-  overflow-y: auto;
   height: calc(100vh - 280px);
+  overflow-y: auto;
 
   &__row {
     display: flex;
@@ -17,15 +17,14 @@
 }
 
 .wrapper {
-  // overflow-y: hidden;
-  margin-right: 5px;
-  height: calc(100vh - 200px);
   position: relative;
+  height: calc(100vh - 200px);
   padding: 10px;
+  margin-right: 5px;
+  margin-bottom: 5px;
   color: white;
   background-color: grey;
   border-radius: 5px;
-  margin-bottom: 5px;
 }
 
 .country {

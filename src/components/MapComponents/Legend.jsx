@@ -3,19 +3,25 @@ import 'mapbox-gl-leaflet';
 import PropTypes from 'prop-types';
 import * as constants from '../../data/constants';
 
-export default function Legend({ boundaries }) {
-  const layers = {
-    low: `0 - ${boundaries.firstBoundary}`,
-    medium: `${boundaries.firstBoundary} - ${boundaries.secondBoundary}`,
-    hight: `${boundaries.secondBoundary} and above`,
-  };
+const Legend = React.memo(({ boundaries }) => {
+  const layers = useMemo(
+    () => ({
+      low: `0 - ${boundaries.firstBoundary}`,
+      medium: `${boundaries.firstBoundary} - ${boundaries.secondBoundary}`,
+      hight: `${boundaries.secondBoundary} and above`,
+    }),
+    [boundaries],
+  );
 
-  const legendKeys = useMemo(() => Object.keys(layers).map((key) => (
-    <div key={layers[key] + constants.COLORS[key]}>
-      <span style={{ backgroundColor: constants.COLORS[key] }} className="legend-key" />
-      <span>{layers[key]}</span>
-    </div>
-  )));
+  const legendKeys = useMemo(() => {
+    const layersArray = Object.keys(layers);
+    return layersArray.map((key) => (
+      <div key={layers[key] + constants.COLORS[key]}>
+        <span style={{ backgroundColor: constants.COLORS[key] }} className="legend-key" />
+        <span>{layers[key]}</span>
+      </div>
+    ));
+  }, [layers]);
 
   return (
     <div>
@@ -24,7 +30,7 @@ export default function Legend({ boundaries }) {
       </div>
     </div>
   );
-}
+});
 
 Legend.propTypes = {
   boundaries: PropTypes.objectOf(PropTypes.any),
@@ -33,3 +39,5 @@ Legend.propTypes = {
 Legend.defaultProps = {
   boundaries: '',
 };
+
+export default Legend;
