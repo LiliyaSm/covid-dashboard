@@ -31,6 +31,7 @@ body {
 .header {
   font-size: 40px;
   text-align: center;
+  transition: all;
 }
 
 .radio-buttons {
@@ -61,16 +62,16 @@ body {
 }
 
 footer {
-  padding-left: 20px;
-  padding-right: 20px;
-  background: $basecolor;
   height: 42px;
+  padding-right: 20px;
+  padding-left: 20px;
+  background: $basecolor;
 }
 
 .logo {
+  height: 20px;
   margin-right: 20px;
   margin-left: 20px;
-  height: 20px;
   background-repeat: no-repeat;
 }
 
@@ -79,25 +80,25 @@ footer a {
 }
 
 .footer-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   max-width: 1400px;
   padding-top: 10px;
   margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 }
 
 .content {
   min-height: 100vh;
-  /* equal to footer height */
   margin-bottom: -42px;
 }
-.content:after {
+
+.content::after {
   content: '';
   display: block;
 }
 
-.content:after {
+.content::after {
   height: 42px;
 }
 
@@ -108,10 +109,15 @@ footer a {
 }
 
 @media (max-width: 1350px) {
+  .list-col {
+    min-width: auto;
+  }
+
   .wrapper {
     width: 280px;
   }
 }
+
 @media (max-width: 1200px) {
   .filter label,
   .filter button {
@@ -123,8 +129,8 @@ footer a {
   }
 
   .list-col {
-    order: 2;
     flex-grow: 2;
+    order: 2;
     margin-right: 5px;
   }
 
@@ -134,12 +140,13 @@ footer a {
   }
 
   .map-col .interactive-map {
-    height: 600px;
+    height: 550px;
   }
 
   .chart-col {
     order: 2;
   }
+
   .list-col .wrapper {
     height: 610px;
   }
@@ -150,6 +157,10 @@ footer a {
 }
 
 @media (max-width: 830px) {
+  .header {
+    font-size: 20px;
+  }
+  
   .wrapper {
     width: 280px;
   }

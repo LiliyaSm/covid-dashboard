@@ -6,15 +6,21 @@ function Footer() {
     <footer>
       <div className="footer-wrapper">
         <img alt="logo" className="logo" src={logo} />
-        <span>
-          by
+        <div>
+          <span>
+            by
+            {' '}
+            <a href="https://github.com/LiliyaSm">LiliyaSm</a>
+          </span>
           {' '}
-          <a href="https://github.com/LiliyaSm">LiliyaSm</a>
-        </span>
-        {' '}
-        <a href="https://rs.school/js/">
+          <span>
+            and
+            {' '}
+            <a href="https://github.com/gentaliana">Gentaliana</a>
+          </span>
           {' '}
-        </a>
+          <a href="https://rs.school/js/"> </a>
+        </div>
         2020
       </div>
     </footer>
