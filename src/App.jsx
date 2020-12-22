@@ -18,7 +18,6 @@ import GeojsonView from './components/MapComponents/GeojsonView';
 import RenderOverlay from './components/MapComponents/RenderOverlay';
 import { filterData } from './helpers/helpers';
 
-
 const App = () => {
   const { notify, addNotify } = useContext(NotifyContext);
   const { currentCountry, changePopulation, showingData, selectCountry, isFor100, isLastDay, population } = useContext(
@@ -46,7 +45,6 @@ const App = () => {
     setInfoWorld(covidInfoWorld);
     changePopulation(covidInfoWorld.population);
   };
-
 
   const getCovidHistory = async (country) => {
     const data = await requestService.getCovidHistory(country);

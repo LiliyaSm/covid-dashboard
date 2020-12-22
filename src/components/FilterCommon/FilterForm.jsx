@@ -1,7 +1,8 @@
 import React, { useContext, useCallback } from 'react';
 import Form from 'react-bootstrap/Form';
-import Switcher from './Switcher';
 import Button from 'react-bootstrap/Button';
+import PropTypes from 'prop-types';
+import Switcher from './Switcher';
 import { CommonContext } from '../../Providers/CommonProvider';
 import * as constants from '../../data/constants';
 
@@ -51,3 +52,7 @@ const FilterForm = ({ infoWorld }) => {
 };
 
 export default FilterForm;
+
+FilterForm.propTypes = {
+  infoWorld: PropTypes.object.isRequired,
+};

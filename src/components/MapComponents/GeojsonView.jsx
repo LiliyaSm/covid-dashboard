@@ -8,7 +8,7 @@ const GeojsonView = React.memo(({ currShowingData, responseData, selectCountry, 
   const handleGeojson = useCallback(
     (code) => {
       const isCountryExists = responseData.find((el) => el.countryInfo.iso3 === code);
-      if (isCountryExists.country) {
+      if (isCountryExists && isCountryExists.country) {
         selectCountry({ code, name: isCountryExists.country, population: isCountryExists.population });
       }
     },

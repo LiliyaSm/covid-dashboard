@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import './FilterCommon.scss';
+import PropTypes from 'prop-types';
 import * as constants from '../../data/constants';
 import DropdownDisplayOptions from '../DropdownDisplayOptions/DropdownDisplayOptions';
 import FilterForm from './FilterForm';
@@ -21,3 +22,7 @@ const FilterCommon = ({ infoWorld }) => {
 };
 
 export default FilterCommon;
+
+FilterCommon.propTypes = {
+  infoWorld: PropTypes.object.isRequired,
+};

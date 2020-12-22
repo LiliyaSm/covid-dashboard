@@ -7,10 +7,15 @@ function Footer() {
       <div className="footer-wrapper">
         <div>
           <span>
-            by <a href="https://github.com/LiliyaSm">LiliyaSm</a>
-          </span>{' '}
+            by
+            {' '}
+            <a href="https://github.com/LiliyaSm">LiliyaSm</a>
+          </span>
+          {' '}
           <span>
-            and <a href="https://github.com/gentaliana">Gentaliana</a>
+            and
+            {' '}
+            <a href="https://github.com/gentaliana">Gentaliana</a>
           </span>
           <a href="https://rs.school/js/"> </a>
         </div>
