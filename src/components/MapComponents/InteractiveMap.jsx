@@ -12,14 +12,17 @@ import RenderOverlay from './RenderOverlay';
 import GeojsonView from './GeojsonView';
 import { CommonContext } from '../../Providers/CommonProvider';
 
-const InteractiveMap = ({ responseData }) => {
+const InteractiveMap = ({ responseData, geoJson }) => {
   const { currentCountry, showingData } = useContext(CommonContext);
 
   const [isFullScreenSize, setIsFullScreenSize] = useState(false);
   const [style, setStyle] = useState('');
   const [map, setMap] = useState('');
 
+  //   mapboxgl.accessToken = constants.MAPBOX_KEY;
+
   const WhenMapCreated = (mapInstance) => {
+    style.addTo(mapInstance);
     setMap(mapInstance);
   };
 
@@ -52,7 +55,6 @@ const InteractiveMap = ({ responseData }) => {
     if (map) {
       const position = positionCalc();
       map.setView(position, map.getZoom() || constants.DEFAULT_ZOOM);
-      style.addTo(map);
     }
     return null;
   };
@@ -70,8 +72,9 @@ const InteractiveMap = ({ responseData }) => {
         dragging
         animate
         whenCreated={WhenMapCreated}
+        preferCanvas
       >
-        <GeojsonView responseData={responseData} currShowingData={showingData} />
+        <GeojsonView responseData={responseData} currShowingData={showingData} countries={geoJson} />
         <StyleView />
         <RenderOverlay responseData={responseData} />
       </MapContainer>
@@ -83,10 +86,12 @@ const InteractiveMap = ({ responseData }) => {
 
 InteractiveMap.propTypes = {
   responseData: PropTypes.arrayOf(PropTypes.object),
+  geoJson: PropTypes.objectOf(PropTypes.object),
 };
 
 InteractiveMap.defaultProps = {
   responseData: '',
+  geoJson: '',
 };
 
 export default InteractiveMap;

@@ -19,4 +19,9 @@ const getCovidHistory = async (country) => {
   return covidHistory.data;
 };
 
-export default { getCovidInfo, getCovidInfoWorld, getCovidHistory };
+const getGeojson = async () => {
+  const countries = await axios.get('countries.json');
+  return countries.data;
+};
+
+export default { getCovidInfo, getCovidInfoWorld, getCovidHistory, getGeojson };

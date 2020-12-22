@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import './DashboardTable.scss';
 import PropTypes from 'prop-types';
 import Table from 'react-bootstrap/Table';
 import ExpandBtn from '../ExpandBtn/ExpandBtn';
@@ -9,7 +10,7 @@ import { CommonContext } from '../../Providers/CommonProvider';
 const DashboardTable = ({ responseData, responseDataWorld }) => {
   const [isFullScreenSize, setIsFullScreenSize] = useState(false);
 
-  const { currentCountry, isFor100, selectedPeriod } = useContext(CommonContext);
+  const { currentCountry, isFor100, isLastDay } = useContext(CommonContext);
 
   const getTotalPopulation = (country) => {
     let totalPopulation;
@@ -21,9 +22,9 @@ const DashboardTable = ({ responseData, responseDataWorld }) => {
     return totalPopulation;
   };
 
-  const getDataForPeriod = (period, data) => {
+  const getDataForPeriod = (lastDay, data) => {
     const result = {};
-    if (period === constants.PERIODS.wholePeriod) {
+    if (!lastDay) {
       result.confirmed = data.cases;
       result.deaths = data.deaths;
       result.recovered = data.recovered;
@@ -45,7 +46,7 @@ const DashboardTable = ({ responseData, responseDataWorld }) => {
 
   const renderTableRows = () => {
     const data = getTableData(currentCountry.code, responseData);
-    const periodData = getDataForPeriod(selectedPeriod, data);
+    const periodData = getDataForPeriod(isLastDay, data);
     const totalPopulation = getTotalPopulation(currentCountry.code);
     if (isFor100) {
       periodData.confirmed = countFor100(periodData.confirmed, totalPopulation);
@@ -63,29 +64,31 @@ const DashboardTable = ({ responseData, responseDataWorld }) => {
 
   return (
     <div className={isFullScreenSize ? 'dashboard-table full-container' : 'dashboard-table'}>
-      <ExpandBtn setIsFullScreenSize={setIsFullScreenSize} isFullScreenSize={isFullScreenSize} />
-      <h1 className="table-header">
-        Info displayed for:&nbsp;
-        {currentCountry.name}
-      </h1>
-      <Table responsive>
-        <thead>
-          <tr>
-            {constants.HEADINGS.map((heading) => (
-              <th key={heading}>{heading}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {responseData ? (
-            renderTableRows()
-          ) : (
+      <div className="table-wrapper">
+        <ExpandBtn setIsFullScreenSize={setIsFullScreenSize} isFullScreenSize={isFullScreenSize} />
+        <h1 className="table-header">
+          Info displayed for:&nbsp;
+          {currentCountry.name}
+        </h1>
+        <Table>
+          <thead>
             <tr>
-              <td colSpan={constants.HEADINGS.length}>{constants.ERROR_MESSAGE}</td>
+              {constants.HEADINGS.map((heading) => (
+                <th key={heading}>{heading}</th>
+              ))}
             </tr>
-          )}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {responseData ? (
+              renderTableRows()
+            ) : (
+              <tr>
+                <td colSpan={constants.HEADINGS.length}>{constants.ERROR_MESSAGE}</td>
+              </tr>
+            )}
+          </tbody>
+        </Table>
+      </div>
     </div>
   );
 };

@@ -36,6 +36,8 @@ export const TODAY = {
 };
 
 export const DEFAULT_ZOOM = 3;
+export const COUNTRY_ZOOM = 4;
+
 export const DEFAULT_LAT = 60;
 export const DEFAULT_LONG = 100;
 

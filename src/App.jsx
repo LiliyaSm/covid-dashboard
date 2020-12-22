@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import './App.scss';
 import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import { NotifyContext } from './Providers/NotifyProvider';
 import { CommonContext } from './Providers/CommonProvider';
 import DashboardTable from './components/TableComponents/DashboardTable';
@@ -21,6 +19,7 @@ const App = () => {
   const { notify, addNotify } = useContext(NotifyContext);
   const { currentCountry, changePopulation } = useContext(CommonContext);
   const [info, setInfo] = useState(null);
+  const [geoJson, setGeoJson] = useState(null);
   const [infoWorld, setInfoWorld] = useState(null);
   const [history, setHistory] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -28,6 +27,10 @@ const App = () => {
   const getCovidInfo = async () => {
     const covidInfo = await requestService.getCovidInfo();
     setInfo(covidInfo);
+  };
+  const getWorldGeojson = async () => {
+    const geoJsonWorld = await requestService.getGeojson();
+    setGeoJson(geoJsonWorld);
   };
 
   const getCovidInfoWorld = async () => {
@@ -61,6 +64,7 @@ const App = () => {
     try {
       await getCovidInfo();
       await getCovidInfoWorld();
+      await getWorldGeojson();
     } catch (exception) {
       addNotify(constants.NOTIFY_TYPES.error, constants.ERROR_HEADER, constants.ERROR_MESSAGE);
     } finally {
@@ -86,27 +90,30 @@ const App = () => {
   return isLoading ? (
     <Loader />
   ) : (
-    <Container fluid className="main-wrapper">
-      {notify ? <Alerts /> : null}
-      <Header />
-      <FilterCommon />
-      <Row>
-        <Col>
-          <CountryList countriesList={info} />
-        </Col>
-        <Col>
-          <InteractiveMap responseData={info} />
-        </Col>
-        <Col>
-          <Row>{renderTable()}</Row>
-          <Row>
-            <Charts chartsList={history} />
-          </Row>
-        </Col>
-      </Row>
-
+    <>
+      <div className="content">
+        <Container fluid className="main-wrapper">
+          {notify ? <Alerts /> : null}
+          <Header />
+          <FilterCommon />
+          <div className="widget-wrapper">
+            <div className="list-col">
+              <CountryList countriesList={info} />
+            </div>
+            <div className="map-col">
+              <InteractiveMap responseData={info} geoJson={geoJson} />
+            </div>
+            <div className="chart-col">
+              <div>{renderTable()}</div>
+              <div>
+                <Charts chartsList={history} />
+              </div>
+            </div>
+          </div>
+        </Container>
+      </div>
       <Footer />
-    </Container>
+    </>
   );
 };
 

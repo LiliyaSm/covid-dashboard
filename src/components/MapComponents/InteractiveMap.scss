@@ -9,17 +9,19 @@ $lightBlue: #a7d3ff;
   position: relative;
   z-index: 1;
   width: 100%;
-  height: calc(100% - 50px);
+  height: calc(100%);
   margin: 0 auto;
 }
 
 .interactive-map {
   position: relative;
-  width: 900px;
-  height: calc(100vh - 100px);
+  max-width: 100%;
+  height: calc(100vh - 200px);
   padding: 10px;
   background-color: grey;
   border-radius: 5px;
+  margin-right: 5px ;
+  margin-bottom: 5px;
 }
 
 @mixin icon-marker {
@@ -100,7 +102,6 @@ $lightBlue: #a7d3ff;
   line-height: 20px;
   border: 2px solid $lightBlue;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-
 }
 
 .legend-key {

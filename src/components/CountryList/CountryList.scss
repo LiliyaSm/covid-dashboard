@@ -1,6 +1,7 @@
 .country-list {
-  max-height: 500px;
+  width: 100%;
   overflow-y: auto;
+  height: calc(100vh - 280px);
 
   &__row {
     display: flex;
@@ -16,11 +17,15 @@
 }
 
 .wrapper {
+  // overflow-y: hidden;
+  margin-right: 5px;
+  height: calc(100vh - 200px);
   position: relative;
   padding: 10px;
   color: white;
   background-color: grey;
   border-radius: 5px;
+  margin-bottom: 5px;
 }
 
 .country {

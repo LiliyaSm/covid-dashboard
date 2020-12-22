@@ -29,7 +29,7 @@ export const getBoundary = (covidData) => {
 
 export const getDataForPeriod = (selectedPeriod, currShowingData) => {
   let currShowingDataForPeriod;
-  if (selectedPeriod === constants.PERIODS.lastDay) {
+  if (selectedPeriod) {
     currShowingDataForPeriod = constants.TODAY[currShowingData];
   } else {
     currShowingDataForPeriod = currShowingData;
