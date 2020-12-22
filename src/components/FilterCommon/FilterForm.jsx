@@ -1,38 +1,38 @@
 import React, { useContext, useCallback } from 'react';
 import Form from 'react-bootstrap/Form';
-import PropTypes from 'prop-types';
-import RadioButtonGroup from './RadioButtonGroup';
 import Switcher from './Switcher';
-import * as constants from '../../data/constants';
 import { CommonContext } from '../../Providers/CommonProvider';
 
-const FilterForm = ({ selectedPeriod, handleSelectedPeriod }) => {
-  const { isFor100, changeIsFor100 } = useContext(CommonContext);
-  const switcher = { label: 'per 100,000 population', id: 'tableSwitcher' };
-  const radioBtns = [
-    {
-      label: 'For the whole period',
-      id: constants.PERIODS.wholePeriod,
-      type: 'radio',
-    },
-    { label: 'For the last day', id: constants.PERIODS.lastDay, type: 'radio' },
-  ];
+const FilterForm = () => {
+  const { isFor100, changeIsFor100, isLastDay, changeSelectedPeriod } = useContext(CommonContext);
+  const switcherFor100 = { label: 'per 100,000 population', id: 'tableSwitcher' };
+  const periodSwitcher = { label: 'for the last day', id: 'periodSwitcher' };
 
   const handleIsFor100 = useCallback(() => {
     changeIsFor100(!isFor100);
   });
 
+  const handleSelectedPeriod = useCallback(() => {
+    changeSelectedPeriod(!isLastDay);
+  });
+
   return (
-    <Form className="table-form">
-      <RadioButtonGroup handleOnChange={handleSelectedPeriod} options={radioBtns} selected={selectedPeriod} />
-      <Switcher handleOnChange={handleIsFor100} label={switcher.label} id={switcher.id} checked={isFor100} />
+    <Form className="filter-form">
+      <Switcher
+        className="period-switcher"
+        handleOnChange={handleSelectedPeriod}
+        label={periodSwitcher.label}
+        id={periodSwitcher.id}
+        checked={isLastDay}
+      />
+      <Switcher
+        handleOnChange={handleIsFor100}
+        label={switcherFor100.label}
+        id={switcherFor100.id}
+        checked={isFor100}
+      />
     </Form>
   );
-};
-
-FilterForm.propTypes = {
-  selectedPeriod: PropTypes.string.isRequired,
-  handleSelectedPeriod: PropTypes.func.isRequired,
 };
 
 export default FilterForm;

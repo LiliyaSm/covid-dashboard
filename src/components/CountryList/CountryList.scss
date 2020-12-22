@@ -1,5 +1,6 @@
 .country-list {
-  max-height: 500px;
+  width: 100%;
+  height: calc(100vh - 280px);
   overflow-y: auto;
 
   &__row {
@@ -17,7 +18,10 @@
 
 .wrapper {
   position: relative;
+  height: calc(100vh - 200px);
   padding: 10px;
+  margin-right: 5px;
+  margin-bottom: 5px;
   color: white;
   background-color: grey;
   border-radius: 5px;

@@ -11,7 +11,7 @@ export const CommonContext = React.createContext({
   changeIsFor100: () => {},
   isFullScreenOptions: false,
   changeIsFullScreenOptions: () => {},
-  selectedPeriod: constants.PERIODS.wholePeriod,
+  isLastDay: constants.PERIODS.wholePeriod,
   changeSelectedPeriod: () => {},
   population: 0,
   changePopulation: () => {},
@@ -33,7 +33,7 @@ export default function CommonProvider({ children }) {
   const [isFor100, setIsFor100] = useState(false);
   const changeIsFor100 = useCallback((status) => setIsFor100(status), [setIsFor100]);
 
-  const [selectedPeriod, setSelectedPeriod] = useState(constants.PERIODS.wholePeriod);
+  const [isLastDay, setSelectedPeriod] = useState(false);
   const changeSelectedPeriod = useCallback((period) => setSelectedPeriod(period), [setSelectedPeriod]);
 
   const [isFullScreenOptions, setIsFullScreenOptions] = useState(false);
@@ -45,7 +45,7 @@ export default function CommonProvider({ children }) {
   const contextValue = {
     currentCountry,
     selectCountry,
-    selectedPeriod,
+    isLastDay,
     changeSelectedPeriod,
     showingData,
     changeShowingData,

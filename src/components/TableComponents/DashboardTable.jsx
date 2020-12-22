@@ -4,8 +4,9 @@ import Table from 'react-bootstrap/Table';
 import ExpandBtn from '../ExpandBtn/ExpandBtn';
 import * as constants from '../../data/constants';
 import { countFor100, getDataForPeriodDashboard } from '../../helpers/helpers';
+import './DashboardTable.scss';
 
-const DashboardTable = React.memo(({ responseData, responseDataWorld, currentCountry, isFor100, selectedPeriod }) => {
+const DashboardTable = React.memo(({ responseData, responseDataWorld, currentCountry, isFor100, isLastDay }) => {
   const [isFullScreenSize, setIsFullScreenSize] = useState(false);
 
   const getTotalPopulation = useCallback(
@@ -34,7 +35,7 @@ const DashboardTable = React.memo(({ responseData, responseDataWorld, currentCou
 
   const renderTableRows = useMemo(() => {
     const data = getTableData(currentCountry.code, responseData);
-    const periodData = getDataForPeriodDashboard(selectedPeriod, data);
+    const periodData = getDataForPeriodDashboard(isLastDay, data);
     const totalPopulation = getTotalPopulation(currentCountry.code);
     if (isFor100) {
       periodData.confirmed = countFor100(periodData.confirmed, totalPopulation);
@@ -48,33 +49,35 @@ const DashboardTable = React.memo(({ responseData, responseDataWorld, currentCou
         <td>{periodData.recovered.toLocaleString('ru')}</td>
       </tr>
     );
-  }, [currentCountry.code, responseData, selectedPeriod, isFor100]);
+  }, [currentCountry.code, responseData, isLastDay, isFor100]);
 
   return (
     <div className={isFullScreenSize ? 'dashboard-table full-container' : 'dashboard-table'}>
-      <ExpandBtn setIsFullScreenSize={setIsFullScreenSize} isFullScreenSize={isFullScreenSize} />
-      <h1 className="table-header">
-        Info displayed for:&nbsp;
-        {currentCountry.name}
-      </h1>
-      <Table responsive>
-        <thead>
-          <tr>
-            {constants.HEADINGS.map((heading) => (
-              <th key={heading}>{heading}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {responseData ? (
-            renderTableRows
-          ) : (
+      <div className="table-wrapper">
+        <ExpandBtn setIsFullScreenSize={setIsFullScreenSize} isFullScreenSize={isFullScreenSize} />
+        <h1 className="table-header">
+          Info displayed for:&nbsp;
+          {currentCountry.name}
+        </h1>
+        <Table>
+          <thead>
             <tr>
-              <td colSpan={constants.HEADINGS.length}>{constants.ERROR_MESSAGE}</td>
+              {constants.HEADINGS.map((heading) => (
+                <th key={heading}>{heading}</th>
+              ))}
             </tr>
-          )}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {responseData ? (
+              renderTableRows
+            ) : (
+              <tr>
+                <td colSpan={constants.HEADINGS.length}>{constants.ERROR_MESSAGE}</td>
+              </tr>
+            )}
+          </tbody>
+        </Table>
+      </div>
     </div>
   );
 });
@@ -84,7 +87,7 @@ DashboardTable.propTypes = {
   responseDataWorld: PropTypes.objectOf(PropTypes.any),
   currentCountry: PropTypes.objectOf(PropTypes.any).isRequired,
   isFor100: PropTypes.bool.isRequired,
-  selectedPeriod: PropTypes.string.isRequired,
+  isLastDay: PropTypes.bool.isRequired,
 };
 
 DashboardTable.defaultProps = {

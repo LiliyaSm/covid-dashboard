@@ -8,14 +8,11 @@ import { countFor100, getDataForPeriod } from '../../helpers/helpers';
 import './CountryList.scss';
 
 const CountryList = React.memo(
-  ({ countriesList, countryCode, selectCountry, showingData, isFor100, selectedPeriod, population }) => {
+  ({ countriesList, countryCode, selectCountry, showingData, isFor100, isLastDay, population }) => {
     const [isFullScreenSize, setIsFullScreenSize] = useState(false);
     const [countries, setCountries] = useState([]);
 
-    const currShowingDataForPeriod = useMemo(() => getDataForPeriod(selectedPeriod, showingData), [
-      selectedPeriod,
-      showingData,
-    ]);
+    const currShowingDataForPeriod = useMemo(() => getDataForPeriod(isLastDay, showingData), [isLastDay, showingData]);
 
     const sortedCountries = useMemo(() => {
       const countriesSort = [...countriesList];
@@ -85,7 +82,7 @@ CountryList.propTypes = {
   selectCountry: PropTypes.func.isRequired,
   showingData: PropTypes.string.isRequired,
   isFor100: PropTypes.bool.isRequired,
-  selectedPeriod: PropTypes.string.isRequired,
+  isLastDay: PropTypes.bool.isRequired,
   population: PropTypes.number.isRequired,
 };
 

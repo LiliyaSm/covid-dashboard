@@ -35,7 +35,7 @@ const Charts = React.memo(({ chartsList, countryName, isFor100, population, coun
     text: `${pointInfo.argumentText}<br/>${pointInfo.value.toLocaleString('ru')}`,
   }));
 
-  const size = useMemo(() => (isFullScreenSize ? { height: '100%', width: '100%' } : { height: '400', width: '400' }), [
+  const size = useMemo(() => (isFullScreenSize ? { height: '100%', width: '100%' } : { height: '350', width: '350' }), [
     isFullScreenSize,
   ]);
 

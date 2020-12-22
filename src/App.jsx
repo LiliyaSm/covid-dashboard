@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext, useMemo } from 'react';
 import './App.scss';
-import { Container, Row, Col } from 'react-bootstrap';
+import Container from 'react-bootstrap/Container';
 import { NotifyContext } from './Providers/NotifyProvider';
 import { CommonContext } from './Providers/CommonProvider';
 import DashboardTable from './components/TableComponents/DashboardTable';
@@ -19,16 +19,11 @@ import RenderOverlay from './components/MapComponents/RenderOverlay';
 
 const App = () => {
   const { notify, addNotify } = useContext(NotifyContext);
-  const {
-    currentCountry,
-    changePopulation,
-    showingData,
-    selectCountry,
-    isFor100,
-    selectedPeriod,
-    population,
-  } = useContext(CommonContext);
+  const { currentCountry, changePopulation, showingData, selectCountry, isFor100, isLastDay, population } = useContext(
+    CommonContext,
+  );
   const [info, setInfo] = useState(null);
+  const [geoJson, setGeoJson] = useState(null);
   const [infoWorld, setInfoWorld] = useState(null);
   const [history, setHistory] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -36,6 +31,10 @@ const App = () => {
   const getCovidInfo = async () => {
     const covidInfo = await requestService.getCovidInfo();
     setInfo(covidInfo);
+  };
+  const getWorldGeojson = async () => {
+    const geoJsonWorld = await requestService.getGeojson();
+    setGeoJson(geoJsonWorld);
   };
 
   const getCovidInfoWorld = async () => {
@@ -69,6 +68,7 @@ const App = () => {
     try {
       await getCovidInfo();
       await getCovidInfoWorld();
+      await getWorldGeojson();
     } catch (exception) {
       addNotify(constants.NOTIFY_TYPES.error, constants.ERROR_HEADER, constants.ERROR_MESSAGE);
     } finally {
@@ -96,10 +96,10 @@ const App = () => {
         responseDataWorld={infoWorld}
         currentCountry={currentCountry}
         isFor100={isFor100}
-        selectedPeriod={selectedPeriod}
+        isLastDay={isLastDay}
       />
     ),
-    [info, infoWorld, currentCountry, isFor100, selectedPeriod],
+    [info, infoWorld, currentCountry, isFor100, isLastDay],
   );
 
   const renderGeoJsonView = useMemo(
@@ -109,10 +109,11 @@ const App = () => {
         responseData={info ?? []}
         selectCountry={selectCountry}
         isFor100={isFor100}
-        selectedPeriod={selectedPeriod}
+        isLastDay={isLastDay}
+        countries={geoJson}
       />
     ),
-    [showingData, info, selectCountry, isFor100, selectedPeriod],
+    [showingData, info, selectCountry, isFor100, isLastDay, geoJson],
   );
 
   const renderOverlay = useMemo(
@@ -122,55 +123,58 @@ const App = () => {
         showingData={showingData}
         selectCountry={selectCountry}
         isFor100={isFor100}
-        selectedPeriod={selectedPeriod}
+        isLastDay={isLastDay}
       />
     ),
-    [showingData, info, selectCountry, isFor100, selectedPeriod],
+    [showingData, info, selectCountry, isFor100, isLastDay],
   );
 
   return isLoading ? (
     <Loader />
   ) : (
-    <Container fluid className="main-wrapper">
-      {notify ? <Alerts /> : null}
-      <Header />
-      <FilterCommon />
-      <Row>
-        <Col>
-          <CountryList
-            countriesList={info}
-            countryCode={currentCountry.code}
-            selectCountry={selectCountry}
-            showingData={showingData}
-            isFor100={isFor100}
-            selectedPeriod={selectedPeriod}
-            population={population}
-          />
-        </Col>
-        <Col>
-          <InteractiveMap
-            responseData={info ?? []}
-            countryCode={currentCountry.code}
-            GeojsonView={renderGeoJsonView}
-            renderOverlay={renderOverlay}
-          />
-        </Col>
-        <Col>
-          <Row>{renderTable}</Row>
-          <Row>
-            <Charts
-              chartsList={history}
-              countryName={currentCountry.name}
-              isFor100={isFor100}
-              population={population}
-              countryPopulation={currentCountry.population}
-            />
-          </Row>
-        </Col>
-      </Row>
-
+    <>
+      <div className="content">
+        <Container fluid className="main-wrapper">
+          {notify ? <Alerts /> : null}
+          <Header />
+          <FilterCommon />
+          <div className="widget-wrapper">
+            <div className="list-col">
+              <CountryList
+                countriesList={info}
+                countryCode={currentCountry.code}
+                selectCountry={selectCountry}
+                showingData={showingData}
+                isFor100={isFor100}
+                isLastDay={isLastDay}
+                population={population}
+              />
+            </div>
+            <div className="map-col">
+              <InteractiveMap
+                responseData={info ?? []}
+                countryCode={currentCountry.code}
+                GeojsonView={renderGeoJsonView}
+                renderOverlay={renderOverlay}
+              />
+            </div>
+            <div className="chart-col">
+              <div>{renderTable}</div>
+              <div>
+                <Charts
+                  chartsList={history}
+                  countryName={currentCountry.name}
+                  isFor100={isFor100}
+                  population={population}
+                  countryPopulation={currentCountry.population}
+                />
+              </div>
+            </div>
+          </div>
+        </Container>
+      </div>
       <Footer />
-    </Container>
+    </>
   );
 };
 

@@ -11,14 +11,15 @@ import * as constants from '../../data/constants';
 
 const InteractiveMap = React.memo(({ responseData, GeojsonView, renderOverlay, countryCode }) => {
   const [isFullScreenSize, setIsFullScreenSize] = useState(false);
-  const [style, setStyle] = useState(null);
-  const [map, setMap] = useState(null);
+  const [style, setStyle] = useState('');
+  const [map, setMap] = useState('');
 
   const WhenMapCreated = useCallback(
     (mapInstance) => {
+      style.addTo(mapInstance);
       setMap(mapInstance);
     },
-    [setMap],
+    [style, setMap],
   );
 
   const positionCalc = useMemo(() => {
@@ -46,12 +47,12 @@ const InteractiveMap = React.memo(({ responseData, GeojsonView, renderOverlay, c
     }
   }, [isFullScreenSize]);
 
-  useEffect(() => {
+  const StyleView = () => {
     if (map) {
       map.setView(positionCalc, map.getZoom() || constants.DEFAULT_ZOOM);
-      style.addTo(map);
     }
-  }, [map, positionCalc, style]);
+    return null;
+  };
 
   return responseData.length ? (
     <div className={isFullScreenSize ? 'interactive-map full-container' : 'interactive-map'}>
@@ -66,7 +67,9 @@ const InteractiveMap = React.memo(({ responseData, GeojsonView, renderOverlay, c
         dragging
         animate
         whenCreated={WhenMapCreated}
+        preferCanvas
       >
+        <StyleView />
         {GeojsonView}
         {renderOverlay}
       </MapContainer>

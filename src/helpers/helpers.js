@@ -29,7 +29,7 @@ export const getBoundary = (covidData) => {
 
 export const getDataForPeriod = (selectedPeriod, currShowingData) => {
   let currShowingDataForPeriod;
-  if (selectedPeriod === constants.PERIODS.lastDay) {
+  if (selectedPeriod) {
     currShowingDataForPeriod = constants.TODAY[currShowingData];
   } else {
     currShowingDataForPeriod = currShowingData;
@@ -38,9 +38,9 @@ export const getDataForPeriod = (selectedPeriod, currShowingData) => {
   return currShowingDataForPeriod;
 };
 
-export const getDataForPeriodDashboard = (period, data) => {
+export const getDataForPeriodDashboard = (lastDay, data) => {
   const result = {};
-  if (period === constants.PERIODS.wholePeriod) {
+  if (!lastDay) {
     result.confirmed = data.cases;
     result.deaths = data.deaths;
     result.recovered = data.recovered;

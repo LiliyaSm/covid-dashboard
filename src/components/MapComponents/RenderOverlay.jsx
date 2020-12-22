@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import Legend from './Legend';
 import { countFor100, getBoundary, getDataForPeriod } from '../../helpers/helpers';
 
-const RenderOverlay = React.memo(({ responseData, showingData, selectCountry, isFor100, selectedPeriod }) => {
+const RenderOverlay = React.memo(({ responseData, showingData, selectCountry, isFor100, isLastDay }) => {
   let boundaries = useMemo(() => ({ firstBoundary: 0, secondBoundary: 0 }), []);
 
   const getIntensity = (data) => {
@@ -25,10 +25,7 @@ const RenderOverlay = React.memo(({ responseData, showingData, selectCountry, is
     });
   };
 
-  const currShowingDataForPeriod = useMemo(() => getDataForPeriod(selectedPeriod, showingData), [
-    selectedPeriod,
-    showingData,
-  ]);
+  const currShowingDataForPeriod = useMemo(() => getDataForPeriod(isLastDay, showingData), [isLastDay, showingData]);
 
   const covidData = useMemo(() => {
     if (isFor100) {
@@ -45,7 +42,7 @@ const RenderOverlay = React.memo(({ responseData, showingData, selectCountry, is
       country: el.country,
       population: el.population,
     }));
-  }, [isFor100, responseData]);
+  }, [isFor100, responseData, currShowingDataForPeriod]);
 
   boundaries = useMemo(() => getBoundary(covidData.map((el) => el.value)), [covidData]);
 
@@ -73,7 +70,7 @@ RenderOverlay.propTypes = {
   selectCountry: PropTypes.func.isRequired,
   showingData: PropTypes.string.isRequired,
   isFor100: PropTypes.bool.isRequired,
-  selectedPeriod: PropTypes.string.isRequired,
+  isLastDay: PropTypes.bool.isRequired,
 };
 
 export default RenderOverlay;

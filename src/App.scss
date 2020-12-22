@@ -6,6 +6,11 @@ html {
   box-sizing: border-box;
 }
 
+html,
+body {
+  min-height: 100%;
+}
+
 body {
   background: linear-gradient(225deg, transparent 24.5%, #44b466 24.6%, transparent 24.8%) 37px -37px,
     linear-gradient(135deg, transparent 24.5%, #44b469 24.6%, transparent 24.8%) 37px 111px,
@@ -27,40 +32,14 @@ body {
 .header {
   font-size: 40px;
   text-align: center;
-}
-
-.table-header {
-  font-size: 18px;
-}
-
-thead {
-  text-transform: uppercase;
-}
-
-.table tbody td {
-  border-bottom: 2px solid $lightBlue;
-}
-
-.dashboard-table .table thead th {
-  padding-top: 15px;
-  border-top: 2px solid $darkBlue;
-  border-bottom: 2px solid $lightBlue;
-}
-
-.dashboard-table {
-  position: relative;
-  padding: 20px;
-  margin-right: 7px;
-  margin-bottom: 20px;
-  background-color: $basecolor;
-  border-radius: 5px;
+  transition: all;
 }
 
 .radio-buttons {
   margin-right: 40px;
 }
 
-.table-form {
+.filter-form {
   display: flex;
   font-size: 17px;
 }
@@ -69,11 +48,126 @@ thead {
   margin-bottom: 10px;
 }
 
-.table-form input,
-.table-form label {
-  cursor: pointer;
+.widget-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.list-col {
+  min-width: 428px;
+}
+
+.map-col {
+  flex-grow: 2;
+  min-width: 455px;
+}
+
+footer {
+  height: 42px;
+  padding-right: 20px;
+  padding-left: 20px;
+  background: $basecolor;
 }
 
 .logo {
   height: 20px;
+  margin-right: 20px;
+  margin-left: 20px;
+  background-repeat: no-repeat;
+}
+
+footer a {
+  color: $darkBlue;
+}
+
+.footer-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1400px;
+  padding-top: 10px;
+  margin: 0 auto;
+}
+
+.content {
+  min-height: 100vh;
+  margin-bottom: -42px;
+}
+
+.content::after {
+  display: block;
+  height: 42px;
+  content: '';
+}
+
+@media (max-width: 1500px) {
+  .country-list {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 1350px) {
+  .list-col {
+    min-width: auto;
+  }
+
+  .wrapper {
+    width: 280px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .filter label,
+  .filter button {
+    font-size: 14px;
+  }
+
+  .wrapper {
+    width: 100%;
+  }
+
+  .list-col {
+    flex-grow: 2;
+    order: 2;
+    margin-right: 5px;
+  }
+
+  .map-col {
+    order: 1;
+    width: 100%;
+  }
+
+  .map-col .interactive-map {
+    height: 550px;
+  }
+
+  .chart-col {
+    order: 2;
+  }
+
+  .list-col .wrapper {
+    height: 610px;
+  }
+
+  .list-col .country-list {
+    height: 540px;
+  }
+}
+
+@media (max-width: 830px) {
+  .header {
+    font-size: 20px;
+  }
+
+  .wrapper {
+    width: 280px;
+  }
+}
+
+@media (max-width: 730px) {
+  .chart-container,
+  .chart-col,
+  .wrapper {
+    width: 100%;
+  }
 }
