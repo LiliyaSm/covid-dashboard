@@ -1,0 +1,29 @@
+{
+  "files": {
+    "main.css": "/covid-dashboard/static/css/main.f45e6572.chunk.css",
+    "main.js": "/covid-dashboard/static/js/main.b1dd4005.chunk.js",
+    "main.js.map": "/covid-dashboard/static/js/main.b1dd4005.chunk.js.map",
+    "runtime-main.js": "/covid-dashboard/static/js/runtime-main.d671a571.js",
+    "runtime-main.js.map": "/covid-dashboard/static/js/runtime-main.d671a571.js.map",
+    "static/css/2.aab3fb4c.chunk.css": "/covid-dashboard/static/css/2.aab3fb4c.chunk.css",
+    "static/js/2.a892e904.chunk.js": "/covid-dashboard/static/js/2.a892e904.chunk.js",
+    "static/js/2.a892e904.chunk.js.map": "/covid-dashboard/static/js/2.a892e904.chunk.js.map",
+    "static/js/3.fc952b18.chunk.js": "/covid-dashboard/static/js/3.fc952b18.chunk.js",
+    "static/js/3.fc952b18.chunk.js.map": "/covid-dashboard/static/js/3.fc952b18.chunk.js.map",
+    "index.html": "/covid-dashboard/index.html",
+    "static/css/2.aab3fb4c.chunk.css.map": "/covid-dashboard/static/css/2.aab3fb4c.chunk.css.map",
+    "static/css/main.f45e6572.chunk.css.map": "/covid-dashboard/static/css/main.f45e6572.chunk.css.map",
+    "static/js/2.a892e904.chunk.js.LICENSE.txt": "/covid-dashboard/static/js/2.a892e904.chunk.js.LICENSE.txt",
+    "static/media/ExpandBtn.scss": "/covid-dashboard/static/media/expandBtn.52d0c667.svg",
+    "static/media/dx.light.css": "/covid-dashboard/static/media/dxicons.d8b3a23c.ttf",
+    "static/media/Input.scss": "/covid-dashboard/static/media/keyboard.1b34bf3f.svg",
+    "static/media/rs_school_js.ad178c0d.svg": "/covid-dashboard/static/media/rs_school_js.ad178c0d.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.d671a571.js",
+    "static/css/2.aab3fb4c.chunk.css",
+    "static/js/2.a892e904.chunk.js",
+    "static/css/main.f45e6572.chunk.css",
+    "static/js/main.b1dd4005.chunk.js"
+  ]
+}
