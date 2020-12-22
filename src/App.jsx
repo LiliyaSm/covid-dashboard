@@ -142,7 +142,7 @@ const App = () => {
         <Container fluid className="main-wrapper">
           {notify ? <Alerts /> : null}
           <Header />
-          <FilterCommon />
+          <FilterCommon infoWorld={infoWorld} />
           <div className="widget-wrapper">
             <div className="list-col">
               <CountryList

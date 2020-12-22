@@ -5,7 +5,7 @@ import DropdownDisplayOptions from '../DropdownDisplayOptions/DropdownDisplayOpt
 import FilterForm from './FilterForm';
 import { CommonContext } from '../../Providers/CommonProvider';
 
-const FilterCommon = () => {
+const FilterCommon = ({ infoWorld }) => {
   const { showingData, changeShowingData, isFullScreenOptions } = useContext(CommonContext);
 
   return (
@@ -15,7 +15,7 @@ const FilterCommon = () => {
         options={constants.VARIANTS_FOR_DISPLAYING}
         selectedKey={showingData}
       />
-      <FilterForm />
+      <FilterForm infoWorld={infoWorld} />
     </div>
   );
 };
