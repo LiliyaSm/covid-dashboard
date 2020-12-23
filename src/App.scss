@@ -119,6 +119,14 @@ footer a {
   left: 50%;
 }
 
+.keyboard__key {
+  background-image: linear-gradient(109.6deg, rgba(48, 207, 208, 1) 11.2%, rgba(51, 8, 103, 1) 92.5%);
+}
+
+.keyboard__key--dark {
+  background-image: linear-gradient(109.6deg, rgb(2, 29, 29) 11.2%, rgb(74, 9, 148) 92.5%);
+}
+
 @media (max-width: 1500px) {
   .country-list {
     font-size: 14px;
