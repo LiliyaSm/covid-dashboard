@@ -11,7 +11,7 @@ const FilterCommon = () => {
   );
 
   return (
-    <div className={isFullScreenOptions ? 'filter filter__full' : 'filter'}>
+    <div className='filter'>
       <DropdownDisplayOptions
         setCurrShowingData={changeShowingData}
         options={constants.VARIANTS_FOR_DISPLAYING}

@@ -20,19 +20,21 @@ const FilterForm = () => {
 
   return (
     <Form className="filter-form">
-      <Switcher
-        className="period-switcher"
-        handleOnChange={handleSelectedPeriod}
-        label={periodSwitcher.label}
-        id={periodSwitcher.id}
-        checked={isLastDay}
-      />
-      <Switcher
-        handleOnChange={handleIsFor100}
-        label={switcherFor100.label}
-        id={switcherFor100.id}
-        checked={isFor100}
-      />
+      <div className="switcherForm">
+        <Switcher
+          className="period-switcher"
+          handleOnChange={handleSelectedPeriod}
+          label={periodSwitcher.label}
+          id={periodSwitcher.id}
+          checked={isLastDay}
+        />
+        <Switcher
+          handleOnChange={handleIsFor100}
+          label={switcherFor100.label}
+          id={switcherFor100.id}
+          checked={isFor100}
+        />
+      </div>
     </Form>
   );
 };

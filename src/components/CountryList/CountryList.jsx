@@ -6,7 +6,7 @@ import Input from '../Input/Input';
 import * as constants from '../../data/constants';
 import { countFor100, getDataForPeriod } from '../../helpers/helpers';
 import './CountryList.scss';
-// import FilterCommon from '../FilterCommon/FilterCommon';
+import FilterCommon from '../FilterCommon/FilterCommon';
 
 const CountryList = React.memo(
   ({ countriesList, countryCode, selectCountry, showingData, isFor100, isLastDay, population }) => {
@@ -48,7 +48,7 @@ const CountryList = React.memo(
     return (
       <div className={isFullScreenSize ? 'wrapper full-container' : 'wrapper'}>
         <ExpandBtn setIsFullScreenSize={setIsFullScreenSize} isFullScreenSize={isFullScreenSize} />
-        {/* <FilterCommon /> */}
+        <FilterCommon />
         <Input filterCountries={filterCountries} placeholder="Country Enter" />
         <div className={isFullScreenSize ? 'country-list__fullscreen' : 'country-list'}>
           <Table striped hover size="sm" variant="dark">

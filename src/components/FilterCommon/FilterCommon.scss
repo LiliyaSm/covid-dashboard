@@ -18,7 +18,7 @@
 .filter-form {
   display: flex;
   align-items: baseline;
-  margin-top: 20px;
+  margin-top: 15px;
   margin-bottom: 20px;
 }
 
@@ -31,10 +31,23 @@
   margin-right: 20px;
 }
 
-.filter-form > .custom-control {
-  margin-right: 10px;
-}
+// .filter-form > .custom-control {
+//   margin-right: 10px;
+// }
 
 .filter button {
   margin-right: 15px;
+}
+
+.switcherForm {
+  display: flex;
+}
+
+.switcherForm > .custom-control {
+  margin-right: 10px;
+}
+
+.wrapper .switcherForm {
+  display: flex;
+  flex-direction: column;
 }

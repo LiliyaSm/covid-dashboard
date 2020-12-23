@@ -1,16 +1,25 @@
 import Dropdown from 'react-bootstrap/Dropdown';
 import React from 'react';
 import PropTypes from 'prop-types';
+import useResize from '../../hooks/useResize';
 import * as constants from '../../data/constants';
 
 const DropdownDisplayOptions = ({ setCurrShowingData, options, selectedKey }) => {
   const handleSelect = (e) => {
     setCurrShowingData(e);
   };
+  let width = useResize();
+
+  console.log(width);
+
   return (
     <Dropdown onSelect={handleSelect}>
       <Dropdown.Toggle className="dropdown-toggle" key="info" variant="info" title="variants">
-        {selectedKey ? constants.VARIANTS_FOR_DISPLAYING[selectedKey] : 'Variants for displaying'}
+        {width > 1490 || width < 1200
+          ? selectedKey
+            ? constants.VARIANTS_FOR_DISPLAYING[selectedKey]
+            : 'Variants for displaying'
+          : ''}
       </Dropdown.Toggle>
       <Dropdown.Menu>
         {Object.keys(options).map((key) => (

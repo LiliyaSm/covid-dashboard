@@ -1,7 +1,7 @@
 .expand-btn {
   position: absolute;
-  top: 0;
-  right: 0;
+  top: -5px;
+  right: -5px;
   z-index: 2;
   width: 22px;
   height: 22px;
@@ -30,9 +30,9 @@
 
 .full-container {
   position: fixed !important;
-  top: 65px;
-  left: 15px;
+  top: 5px;
+  left: 5px;
   z-index: 999;
-  width: calc(100vw - 25px) !important;
-  height: calc(100vh - 75px) !important;
+  width: calc(100vw - 15px) !important;
+  height: calc(100vh - 15px) !important;
 }

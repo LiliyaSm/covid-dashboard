@@ -9,14 +9,14 @@ $lightBlue: #a7d3ff;
   position: relative;
   z-index: 1;
   width: 100%;
-  height: calc(100%);
+  height: calc(100% - 65px);
   margin: 0 auto;
 }
 
 .interactive-map {
   position: relative;
   max-width: 100%;
-  height: calc(100vh - 180px);
+  height: calc(100vh - 120px);
   padding: 10px;
   margin-right: 5px;
   margin-bottom: 5px;

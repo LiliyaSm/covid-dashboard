@@ -1,6 +1,6 @@
 .country-list {
   width: 100%;
-  height: calc(100vh - 260px);
+  height: calc(100vh - 270px);
   overflow-y: auto;
 
   &__row {
@@ -13,12 +13,14 @@
   &__fullscreen {
     max-height: 1100px;
     overflow-y: auto;
+  height: calc(100vh - 165px);
+
   }
 }
 
 .wrapper {
   position: relative;
-  height: calc(100vh - 180px);
+  height: calc(100vh - 120px);
   padding: 10px;
   margin-right: 5px;
   margin-bottom: 5px;
