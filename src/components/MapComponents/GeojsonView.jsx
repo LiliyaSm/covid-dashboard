@@ -1,21 +1,22 @@
-import React, { useContext } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { GeoJSON } from 'react-leaflet';
 import PropTypes from 'prop-types';
 import L from 'leaflet';
-import * as constants from '../../data/constants';
-import { CommonContext } from '../../Providers/CommonProvider';
+import { useTranslation } from 'react-i18next';
 
-const GeojsonView = ({ currShowingData, responseData, countries }) => {
-  const { selectCountry: setCurrentCountry, isFor100, isLastDay } = useContext(CommonContext);
+const GeojsonView = React.memo(({ currShowingData, responseData, selectCountry, isFor100, isLastDay, countries }) => {
+  const { t } = useTranslation();
+  const handleGeojson = useCallback(
+    (code) => {
+      const isCountryExists = responseData.find((el) => el.countryInfo.iso3 === code);
+      if (isCountryExists.country) {
+        selectCountry({ code, name: isCountryExists.country, population: isCountryExists.population });
+      }
+    },
+    [responseData, selectCountry],
+  );
 
-  const handleGeojson = (code) => {
-    const isCountryExists = responseData.find((el) => el.countryInfo.iso3 === code);
-    if (isCountryExists.country) {
-      setCurrentCountry({ code, name: isCountryExists.country, population: isCountryExists.population });
-    }
-  };
-
-  const geojsonStyle = { weight: 0, fillOpacity: 0 };
+  const geojsonStyle = useMemo(() => ({ weight: 0, fillOpacity: 0 }), []);
 
   return (
     <GeoJSON
@@ -24,9 +25,9 @@ const GeojsonView = ({ currShowingData, responseData, countries }) => {
       style={geojsonStyle}
       onEachFeature={(feature, layer) => {
         // eslint-disable-next-line no-param-reassign
-        feature.properties.tooltipText = `${constants.VARIANTS_FOR_DISPLAYING[currShowingData]} ${
-          isLastDay ? 'for last day' : 'for whole period'
-        } ${isFor100 ? 'per 100K' : ''} <br> for: ${feature.properties.name} `;
+        feature.properties.tooltipText = `${t(`map.tooltip.${currShowingData}`)}
+        ${isLastDay ? t('map.tooltip.lastDay') : t('map.tooltip.wholePeriod')}
+        ${isFor100 ? t('map.tooltip.per100') : ''} <br> ${t('map.tooltip.for')}: ${feature.properties.name}`;
 
         layer.on({
           click: () => {
@@ -50,17 +51,19 @@ const GeojsonView = ({ currShowingData, responseData, countries }) => {
       }}
     />
   );
-};
+});
 
 GeojsonView.propTypes = {
   responseData: PropTypes.arrayOf(PropTypes.object).isRequired,
-  countries: PropTypes.objectOf(PropTypes.object),
-  currShowingData: PropTypes.string,
+  selectCountry: PropTypes.func.isRequired,
+  currShowingData: PropTypes.string.isRequired,
+  isFor100: PropTypes.bool.isRequired,
+  isLastDay: PropTypes.bool.isRequired,
+  countries: PropTypes.objectOf(PropTypes.any),
 };
 
 GeojsonView.defaultProps = {
-  currShowingData: '',
-  countries: '',
+  countries: {},
 };
 
 export default GeojsonView;

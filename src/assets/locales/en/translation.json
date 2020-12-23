@@ -1,0 +1,51 @@
+{
+  "whole-world-name": "Whole world",
+  "input-placeholder": "Country Enter",
+  "error": {
+    "error-message": "Please, try later!",
+    "error-header": "Error",
+    "caching-data-message": "Caching in progress"
+  },
+  "chart": {
+    "cases": "Cases",
+    "deaths": "Deaths",
+    "recovered": "Recovered"
+  },
+  "dropdown": {
+    "variants": {
+      "cases": "Number of cases",
+      "deaths": "Number of deaths",
+      "recovered": "Number of recovered"
+    },
+    "titles": {
+      "options": "Variants for Display",
+      "language": "Language"
+    }
+  },
+  "switcher": {
+    "for100Label": "per 100,000 population",
+    "periodLabel": "for the last day"
+  },
+  "footer": {
+    "by": "by",
+    "and": "and"
+  },
+  "map": {
+    "tooltip": {
+      "cases": "Number of cases",
+      "deaths": "Number of deaths",
+      "recovered": "Number of recovered",
+      "lastDay": "for the last day",
+      "wholePeriod": "for whole period",
+      "per100": "per 100K",
+      "for": "for"
+    },
+    "legend": "and above"
+  },
+  "dashboardTable": "Info displayed for:",
+  "heading": {
+    "confirmed": "confirmed",
+    "deaths": "deaths",
+    "recovered": "recovered"
+  }
+}

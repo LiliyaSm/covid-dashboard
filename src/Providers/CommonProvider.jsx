@@ -11,7 +11,7 @@ export const CommonContext = React.createContext({
   changeIsFor100: () => {},
   isFullScreenOptions: false,
   changeIsFullScreenOptions: () => {},
-  selectedPeriod: constants.PERIODS.wholePeriod,
+  isLastDay: constants.PERIODS.wholePeriod,
   changeSelectedPeriod: () => {},
   population: 0,
   changePopulation: () => {},
@@ -19,8 +19,8 @@ export const CommonContext = React.createContext({
 
 export default function CommonProvider({ children }) {
   const [currentCountry, setCurrentCountry] = useState({
-    name: constants.WHOLE_WORLD_NAME,
-    code: constants.WHOLE_WORLD_NAME,
+    name: null,
+    code: null,
     population: 0,
   });
   const selectCountry = useCallback(({ name, code, population }) => setCurrentCountry({ name, code, population }), [

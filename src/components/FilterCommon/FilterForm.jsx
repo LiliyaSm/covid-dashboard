@@ -1,12 +1,14 @@
 import React, { useContext, useCallback } from 'react';
 import Form from 'react-bootstrap/Form';
+import { useTranslation } from 'react-i18next';
 import Switcher from './Switcher';
 import { CommonContext } from '../../Providers/CommonProvider';
 
 const FilterForm = () => {
+  const { t } = useTranslation();
   const { isFor100, changeIsFor100, isLastDay, changeSelectedPeriod } = useContext(CommonContext);
-  const switcherFor100 = { label: 'per 100,000 population', id: 'tableSwitcher' };
-  const periodSwitcher = { label: 'for the last day', id: 'periodSwitcher' };
+  const periodSwitcher = { label: t('switcher.periodLabel'), id: 'periodSwitcher' };
+  const switcherFor100 = { label: t('switcher.for100Label'), id: 'tableSwitcher' };
 
   const handleIsFor100 = useCallback(() => {
     changeIsFor100(!isFor100);

@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useMemo } from 'react';
 import './App.scss';
 import Container from 'react-bootstrap/Container';
+import { useTranslation } from 'react-i18next';
 import { NotifyContext } from './Providers/NotifyProvider';
 import { CommonContext } from './Providers/CommonProvider';
 import DashboardTable from './components/TableComponents/DashboardTable';
@@ -14,10 +15,15 @@ import Loader from './components/Loader/Loader';
 import CountryList from './components/CountryList/CountryList';
 import Charts from './components/Charts/Charts';
 import FilterCommon from './components/FilterCommon/FilterCommon';
+import GeojsonView from './components/MapComponents/GeojsonView';
+import RenderOverlay from './components/MapComponents/RenderOverlay';
 
 const App = () => {
+  const { t } = useTranslation();
   const { notify, addNotify } = useContext(NotifyContext);
-  const { currentCountry, changePopulation } = useContext(CommonContext);
+  const { currentCountry, changePopulation, showingData, selectCountry, isFor100, isLastDay, population } = useContext(
+    CommonContext,
+  );
   const [info, setInfo] = useState(null);
   const [geoJson, setGeoJson] = useState(null);
   const [infoWorld, setInfoWorld] = useState(null);
@@ -41,7 +47,7 @@ const App = () => {
 
   const getCovidHistory = async (country) => {
     const data = await requestService.getCovidHistory(country);
-    const covidHistory = country === 'all' ? data : data.timeline;
+    const covidHistory = country === constants.ALL_HISTORY ? data : data.timeline;
     const arrayForChart = Object.entries(covidHistory).reduce((acc, item) => {
       Object.entries(item[1]).forEach((el) => {
         const obj = acc.find((i) => i.data === el[0]);
@@ -66,7 +72,7 @@ const App = () => {
       await getCovidInfoWorld();
       await getWorldGeojson();
     } catch (exception) {
-      addNotify(constants.NOTIFY_TYPES.error, constants.ERROR_HEADER, constants.ERROR_MESSAGE);
+      addNotify(constants.NOTIFY_TYPES.error, t('error.error-header'), t('error.error-message'));
     } finally {
       setIsLoading(false);
     }
@@ -74,10 +80,10 @@ const App = () => {
 
   useEffect(async () => {
     try {
-      const country = currentCountry.name === constants.WHOLE_WORLD_NAME ? 'all' : currentCountry.name;
+      const country = currentCountry.name ?? constants.ALL_HISTORY;
       await getCovidHistory(country);
     } catch (exception) {
-      addNotify(constants.NOTIFY_TYPES.error, constants.ERROR_HEADER, constants.ERROR_MESSAGE);
+      addNotify(constants.NOTIFY_TYPES.error, t('error.error-header'), t('error.error-message'));
     }
   }, [currentCountry]);
 
@@ -85,7 +91,45 @@ const App = () => {
     getAllData();
   }, []);
 
-  const renderTable = () => <DashboardTable responseData={info} responseDataWorld={infoWorld} />;
+  const renderTable = useMemo(
+    () => (
+      <DashboardTable
+        responseData={info}
+        responseDataWorld={infoWorld}
+        currentCountry={currentCountry}
+        isFor100={isFor100}
+        isLastDay={isLastDay}
+      />
+    ),
+    [info, infoWorld, currentCountry, isFor100, isLastDay],
+  );
+
+  const renderGeoJsonView = useMemo(
+    () => (
+      <GeojsonView
+        currShowingData={showingData}
+        responseData={info ?? []}
+        selectCountry={selectCountry}
+        isFor100={isFor100}
+        isLastDay={isLastDay}
+        countries={geoJson}
+      />
+    ),
+    [showingData, info, selectCountry, isFor100, isLastDay, geoJson],
+  );
+
+  const renderOverlay = useMemo(
+    () => (
+      <RenderOverlay
+        responseData={info ?? []}
+        showingData={showingData}
+        selectCountry={selectCountry}
+        isFor100={isFor100}
+        isLastDay={isLastDay}
+      />
+    ),
+    [showingData, info, selectCountry, isFor100, isLastDay],
+  );
 
   return isLoading ? (
     <Loader />
@@ -98,15 +142,34 @@ const App = () => {
           <FilterCommon />
           <div className="widget-wrapper">
             <div className="list-col">
-              <CountryList countriesList={info} />
+              <CountryList
+                countriesList={info}
+                countryCode={currentCountry.code}
+                selectCountry={selectCountry}
+                showingData={showingData}
+                isFor100={isFor100}
+                isLastDay={isLastDay}
+                population={population}
+              />
             </div>
             <div className="map-col">
-              <InteractiveMap responseData={info} geoJson={geoJson} />
+              <InteractiveMap
+                responseData={info ?? []}
+                countryCode={currentCountry.code}
+                GeojsonView={renderGeoJsonView}
+                renderOverlay={renderOverlay}
+              />
             </div>
             <div className="chart-col">
-              <div>{renderTable()}</div>
+              <div>{renderTable}</div>
               <div>
-                <Charts chartsList={history} />
+                <Charts
+                  chartsList={history}
+                  countryName={currentCountry.name}
+                  isFor100={isFor100}
+                  population={population}
+                  countryPopulation={currentCountry.population}
+                />
               </div>
             </div>
           </div>

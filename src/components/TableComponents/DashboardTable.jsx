@@ -1,52 +1,40 @@
-import React, { useState, useContext } from 'react';
-import './DashboardTable.scss';
+import React, { useState, useMemo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Table from 'react-bootstrap/Table';
+import { useTranslation } from 'react-i18next';
 import ExpandBtn from '../ExpandBtn/ExpandBtn';
-import * as constants from '../../data/constants';
-import { countFor100 } from '../../helpers/helpers';
-import { CommonContext } from '../../Providers/CommonProvider';
+import { countFor100, getDataForPeriodDashboard } from '../../helpers/helpers';
+import './DashboardTable.scss';
 
-const DashboardTable = ({ responseData, responseDataWorld }) => {
+const DashboardTable = React.memo(({ responseData, responseDataWorld, currentCountry, isFor100, isLastDay }) => {
+  const { t } = useTranslation();
   const [isFullScreenSize, setIsFullScreenSize] = useState(false);
 
-  const { currentCountry, isFor100, isLastDay } = useContext(CommonContext);
+  const getTotalPopulation = useCallback(
+    (country) => {
+      if (country) {
+        return responseData.find((el) => el.countryInfo.iso3 === country).population;
+      }
+      return responseDataWorld.population;
+    },
+    [responseDataWorld, responseData],
+  );
 
-  const getTotalPopulation = (country) => {
-    let totalPopulation;
-    if (country === constants.WHOLE_WORLD_NAME) {
-      totalPopulation = responseDataWorld.population;
-    } else {
-      totalPopulation = responseData.find((el) => el.countryInfo.iso3 === country).population;
-    }
-    return totalPopulation;
-  };
-
-  const getDataForPeriod = (lastDay, data) => {
-    const result = {};
-    if (!lastDay) {
-      result.confirmed = data.cases;
-      result.deaths = data.deaths;
-      result.recovered = data.recovered;
-    } else {
-      result.confirmed = data.todayCases;
-      result.deaths = data.todayDeaths;
-      result.recovered = data.todayRecovered;
-    }
-    return result;
-  };
-
-  const getTableData = (country, data) => {
-    if (country === constants.WHOLE_WORLD_NAME) {
+  const getTableData = useCallback(
+    (country, data) => {
+      if (country) {
+        return data.find((el) => el.countryInfo.iso3 === country);
+      }
       return responseDataWorld;
-    }
-    const dataForCountry = data.find((el) => el.countryInfo.iso3 === country);
-    return dataForCountry;
-  };
+    },
+    [responseDataWorld],
+  );
 
-  const renderTableRows = () => {
+  const HEADINGS = useMemo(() => [t('heading.confirmed'), t('heading.deaths'), t('heading.recovered')], [t]);
+
+  const renderTableRows = useMemo(() => {
     const data = getTableData(currentCountry.code, responseData);
-    const periodData = getDataForPeriod(isLastDay, data);
+    const periodData = getDataForPeriodDashboard(isLastDay, data);
     const totalPopulation = getTotalPopulation(currentCountry.code);
     if (isFor100) {
       periodData.confirmed = countFor100(periodData.confirmed, totalPopulation);
@@ -55,35 +43,36 @@ const DashboardTable = ({ responseData, responseDataWorld }) => {
     }
     return (
       <tr>
-        <td>{periodData.confirmed}</td>
-        <td>{periodData.deaths}</td>
-        <td>{periodData.recovered}</td>
+        <td>{periodData.confirmed.toLocaleString('ru')}</td>
+        <td>{periodData.deaths.toLocaleString('ru')}</td>
+        <td>{periodData.recovered.toLocaleString('ru')}</td>
       </tr>
     );
-  };
+  }, [currentCountry.code, responseData, isLastDay, isFor100]);
 
   return (
     <div className={isFullScreenSize ? 'dashboard-table full-container' : 'dashboard-table'}>
       <div className="table-wrapper">
         <ExpandBtn setIsFullScreenSize={setIsFullScreenSize} isFullScreenSize={isFullScreenSize} />
         <h1 className="table-header">
-          Info displayed for:&nbsp;
-          {currentCountry.name}
+          {t('dashboardTable')}
+          &nbsp;
+          {currentCountry.name ?? t('whole-world-name')}
         </h1>
         <Table>
           <thead>
             <tr>
-              {constants.HEADINGS.map((heading) => (
+              {HEADINGS.map((heading) => (
                 <th key={heading}>{heading}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {responseData ? (
-              renderTableRows()
+              renderTableRows
             ) : (
               <tr>
-                <td colSpan={constants.HEADINGS.length}>{constants.ERROR_MESSAGE}</td>
+                <td colSpan={HEADINGS.length}>{t('error.error-message')}</td>
               </tr>
             )}
           </tbody>
@@ -91,11 +80,14 @@ const DashboardTable = ({ responseData, responseDataWorld }) => {
       </div>
     </div>
   );
-};
+});
 
 DashboardTable.propTypes = {
   responseData: PropTypes.arrayOf(PropTypes.object),
   responseDataWorld: PropTypes.objectOf(PropTypes.any),
+  currentCountry: PropTypes.objectOf(PropTypes.any).isRequired,
+  isFor100: PropTypes.bool.isRequired,
+  isLastDay: PropTypes.bool.isRequired,
 };
 
 DashboardTable.defaultProps = {
