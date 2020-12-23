@@ -19,12 +19,11 @@ import { countFor100 } from '../../helpers/helpers';
 import './Charts.scss';
 
 const Charts = React.memo(({ chartsList, countryName, isFor100, population, countryPopulation, isLastDay }) => {
-    const { t } = useTranslation();
+  const { t } = useTranslation();
   const [isFullScreenSize, setIsFullScreenSize] = useState(false);
 
   const dataWithPer100 = useMemo(() => {
-    // const populationCount = countryName === WHOLE_WORLD_NAME ? population : countryPopulation;
-     const populationCount = countryName ? countryPopulation : population;
+    const populationCount = countryName ? countryPopulation : population;
     let chartsListForPeriod = [];
 
     if (isLastDay) {
