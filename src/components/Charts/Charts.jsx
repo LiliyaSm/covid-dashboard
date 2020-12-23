@@ -17,6 +17,7 @@ import ExpandBtn from '../ExpandBtn/ExpandBtn';
 import { WHOLE_WORLD_NAME } from '../../data/constants';
 import { countFor100 } from '../../helpers/helpers';
 import './Charts.scss';
+import FilterForm from '../FilterCommon/FilterForm';
 
 const Charts = React.memo(({ chartsList, countryName, isFor100, population, countryPopulation }) => {
   const [isFullScreenSize, setIsFullScreenSize] = useState(false);
@@ -62,6 +63,7 @@ const Charts = React.memo(({ chartsList, countryName, isFor100, population, coun
         </ValueAxis>
         <Tooltip enabled customizeTooltip={customizeTooltip} zIndex="101" />
       </Chart>
+      <FilterForm />
     </div>
   );
 });

@@ -8,6 +8,7 @@ import './InteractiveMap.scss';
 import 'leaflet-fullscreen/dist/Leaflet.fullscreen';
 import 'leaflet-fullscreen/dist/leaflet.fullscreen.css';
 import * as constants from '../../data/constants';
+import FilterCommon from '../FilterCommon/FilterCommon';
 
 const InteractiveMap = React.memo(({ responseData, GeojsonView, renderOverlay, countryCode }) => {
   const [isFullScreenSize, setIsFullScreenSize] = useState(false);
@@ -57,6 +58,7 @@ const InteractiveMap = React.memo(({ responseData, GeojsonView, renderOverlay, c
   return responseData.length ? (
     <div className={isFullScreenSize ? 'interactive-map full-container' : 'interactive-map'}>
       <ExpandBtn setIsFullScreenSize={setIsFullScreenSize} isFullScreenSize={isFullScreenSize} />
+      <FilterCommon />
       <MapContainer
         id="someID"
         fullscreenControl

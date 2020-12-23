@@ -13,16 +13,23 @@ import Alerts from './components/Alerts/Alerts';
 import Loader from './components/Loader/Loader';
 import CountryList from './components/CountryList/CountryList';
 import Charts from './components/Charts/Charts';
-import FilterCommon from './components/FilterCommon/FilterCommon';
 import GeojsonView from './components/MapComponents/GeojsonView';
 import RenderOverlay from './components/MapComponents/RenderOverlay';
 import { filterData } from './helpers/helpers';
 
 const App = () => {
   const { notify, addNotify } = useContext(NotifyContext);
-  const { currentCountry, changePopulation, showingData, selectCountry, isFor100, isLastDay, population } = useContext(
-    CommonContext,
-  );
+  const {
+    currentCountry,
+    changePopulation,
+    showingData,
+    selectCountry,
+    isFor100,
+    isLastDay,
+    population,
+    changeSelectedPeriod,
+    changeIsFor100,
+  } = useContext(CommonContext);
   const [info, setInfo] = useState(null);
   const [geoJson, setGeoJson] = useState(null);
   const [infoWorld, setInfoWorld] = useState(null);
@@ -100,6 +107,9 @@ const App = () => {
         currentCountry={currentCountry}
         isFor100={isFor100}
         isLastDay={isLastDay}
+        selectCountry={selectCountry}
+        changeSelectedPeriod={changeSelectedPeriod}
+        changeIsFor100={changeIsFor100}
       />
     ),
     [info, infoWorld, currentCountry, isFor100, isLastDay],
@@ -140,7 +150,6 @@ const App = () => {
         <Container fluid className="main-wrapper">
           {notify ? <Alerts /> : null}
           <Header />
-          <FilterCommon infoWorld={infoWorld} />
           <div className="widget-wrapper">
             <div className="list-col">
               <CountryList
