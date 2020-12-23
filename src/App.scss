@@ -63,7 +63,7 @@ body {
 
 .map-col {
   flex-grow: 2;
-  min-width: 455px;
+  // min-width: 455px;
 }
 
 footer {
@@ -143,7 +143,7 @@ footer a:hover {
   }
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1023px) {
   .filter label,
   .filter button {
     font-size: 14px;
