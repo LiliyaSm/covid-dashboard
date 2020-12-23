@@ -18,6 +18,7 @@ module.exports = {
     indent: ['error', 2],
     'max-len': ['error', { code: 120 }],
     'object-curly-newline': 'off',
+    'import/no-unresolved': [2, { caseSensitive: false }],
   },
   plugins: ['react'],
   settings: {
