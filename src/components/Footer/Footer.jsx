@@ -17,11 +17,12 @@ function Footer() {
             {' '}
             <a href="https://github.com/gentaliana">Gentaliana</a>
           </span>
-          <a href="https://rs.school/js/"> </a>
         </div>
         <span>
           {' '}
-          <img alt="logo" className="logo" src={logo} />
+          <a href="https://rs.school/js/">
+            <img alt="logo" className="logo" src={logo} />
+          </a>
           2020
         </span>
       </div>

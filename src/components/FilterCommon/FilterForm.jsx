@@ -54,5 +54,5 @@ const FilterForm = ({ infoWorld }) => {
 export default FilterForm;
 
 FilterForm.propTypes = {
-  infoWorld: PropTypes.object.isRequired,
+  infoWorld: PropTypes.objectOf(PropTypes.any).isRequired,
 };

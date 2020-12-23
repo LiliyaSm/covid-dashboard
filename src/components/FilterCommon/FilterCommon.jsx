@@ -24,5 +24,5 @@ const FilterCommon = ({ infoWorld }) => {
 export default FilterCommon;
 
 FilterCommon.propTypes = {
-  infoWorld: PropTypes.object.isRequired,
+  infoWorld: PropTypes.objectOf(PropTypes.any).isRequired,
 };
