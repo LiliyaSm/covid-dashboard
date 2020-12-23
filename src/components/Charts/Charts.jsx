@@ -13,16 +13,18 @@ import Chart, {
   ValueAxis,
   Tooltip,
 } from 'devextreme-react/chart';
+import { useTranslation } from 'react-i18next';
 import ExpandBtn from '../ExpandBtn/ExpandBtn';
-import { WHOLE_WORLD_NAME } from '../../data/constants';
 import { countFor100 } from '../../helpers/helpers';
 import './Charts.scss';
 
 const Charts = React.memo(({ chartsList, countryName, isFor100, population, countryPopulation, isLastDay }) => {
+    const { t } = useTranslation();
   const [isFullScreenSize, setIsFullScreenSize] = useState(false);
 
   const dataWithPer100 = useMemo(() => {
-    const populationCount = countryName === WHOLE_WORLD_NAME ? population : countryPopulation;
+    // const populationCount = countryName === WHOLE_WORLD_NAME ? population : countryPopulation;
+     const populationCount = countryName ? countryPopulation : population;
     let chartsListForPeriod = [];
 
     if (isLastDay) {
@@ -49,7 +51,7 @@ const Charts = React.memo(({ chartsList, countryName, isFor100, population, coun
       deathsIsFor100: countFor100(item.deaths, populationCount),
       recoveredIsFor100: countFor100(item.recovered, populationCount),
     }));
-  }, [chartsList, countryName, population, isLastDay]);
+  }, [chartsList, countryName, population, isLastDay, countryPopulation]);
 
   const customizeTooltip = useCallback((pointInfo) => ({
     text: `${pointInfo.argumentText}<br/>${pointInfo.value.toLocaleString('ru')}`,
@@ -62,14 +64,19 @@ const Charts = React.memo(({ chartsList, countryName, isFor100, population, coun
   return (
     <div className={isFullScreenSize ? 'chart-container full-container' : 'chart-container'}>
       <ExpandBtn setIsFullScreenSize={setIsFullScreenSize} isFullScreenSize={isFullScreenSize} />
-      <Chart dataSource={dataWithPer100} title={countryName ?? WHOLE_WORLD_NAME} theme="generic.darkmoon" size={size}>
+      <Chart
+        dataSource={dataWithPer100}
+        title={countryName ?? t('whole-world-name')}
+        theme="generic.darkmoon"
+        size={size}
+      >
         <CommonSeriesSettings argumentField="data" type="spline" />
         <CommonAxisSettings>
           <Grid />
         </CommonAxisSettings>
-        <Series valueField={isFor100 ? 'casesIsFor100' : 'cases'} name="Cases" />
-        <Series valueField={isFor100 ? 'deathsIsFor100' : 'deaths'} name="Deaths" />
-        <Series valueField={isFor100 ? 'recoveredIsFor100' : 'recovered'} name="Recovered" />
+        <Series valueField={isFor100 ? 'casesIsFor100' : 'cases'} name={t('chart.cases')} />
+        <Series valueField={isFor100 ? 'deathsIsFor100' : 'deaths'} name={t('chart.deaths')} />
+        <Series valueField={isFor100 ? 'recoveredIsFor100' : 'recovered'} name={t('chart.recovered')} />
         <ArgumentAxis>
           <Label>
             <Format type="string" />
@@ -88,7 +95,7 @@ const Charts = React.memo(({ chartsList, countryName, isFor100, population, coun
 
 Charts.propTypes = {
   chartsList: PropTypes.arrayOf(PropTypes.object),
-  countryName: PropTypes.string.isRequired,
+  countryName: PropTypes.string,
   isFor100: PropTypes.bool.isRequired,
   isLastDay: PropTypes.bool.isRequired,
   population: PropTypes.number.isRequired,
@@ -97,6 +104,7 @@ Charts.propTypes = {
 
 Charts.defaultProps = {
   chartsList: [],
+  countryName: null,
 };
 
 export default Charts;

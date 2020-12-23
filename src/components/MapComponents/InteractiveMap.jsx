@@ -3,6 +3,7 @@ import { MapContainer } from 'react-leaflet';
 import PropTypes from 'prop-types';
 import {} from 'mapbox-gl-leaflet';
 import L from 'leaflet';
+import { useTranslation } from 'react-i18next';
 import ExpandBtn from '../ExpandBtn/ExpandBtn';
 import './InteractiveMap.scss';
 import 'leaflet-fullscreen/dist/Leaflet.fullscreen';
@@ -10,6 +11,7 @@ import 'leaflet-fullscreen/dist/leaflet.fullscreen.css';
 import * as constants from '../../data/constants';
 
 const InteractiveMap = React.memo(({ responseData, GeojsonView, renderOverlay, countryCode }) => {
+  const { t } = useTranslation();
   const [isFullScreenSize, setIsFullScreenSize] = useState(false);
   const [style, setStyle] = useState('');
   const [map, setMap] = useState('');
@@ -23,11 +25,8 @@ const InteractiveMap = React.memo(({ responseData, GeojsonView, renderOverlay, c
   );
 
   const positionCalc = useMemo(() => {
-    if (countryCode === constants.WHOLE_WORLD_NAME) {
-      return [constants.DEFAULT_LAT, constants.DEFAULT_LONG];
-    }
     const position = responseData.find((el) => el.countryInfo.iso3 === countryCode);
-    if (!position) {
+    if (!position || !countryCode) {
       return [constants.DEFAULT_LAT, constants.DEFAULT_LONG];
     }
     return [position.countryInfo.lat, position.countryInfo.long];
@@ -75,7 +74,7 @@ const InteractiveMap = React.memo(({ responseData, GeojsonView, renderOverlay, c
       </MapContainer>
     </div>
   ) : (
-    <div>{constants.ERROR_MESSAGE}</div>
+    <div>{t('error.error-message')}</div>
   );
 });
 
@@ -83,7 +82,11 @@ InteractiveMap.propTypes = {
   responseData: PropTypes.arrayOf(PropTypes.object).isRequired,
   GeojsonView: PropTypes.element.isRequired,
   renderOverlay: PropTypes.element.isRequired,
-  countryCode: PropTypes.string.isRequired,
+  countryCode: PropTypes.string,
+};
+
+InteractiveMap.defaultProps = {
+  countryCode: null,
 };
 
 export default InteractiveMap;

@@ -1,0 +1,52 @@
+{
+  "whole-world-name": "Весь мир",
+  "input-placeholder": "Введите страну",
+  "error": {
+    "error-message": "Пожалуйста, попробуйте позже!",
+    "error-header": "Ошибка",
+    "caching-data-message": "Выполняется кеширование"
+  },
+  "chart": {
+    "cases": "Заражения",
+    "deaths": "Смерти",
+    "recovered": "Выздоровления"
+  },
+  "dropdown": {
+    "variants": {
+      "cases": "Число новых заражений",
+      "deaths": "Число новых смертей",
+      "recovered": "Число новых выздоровлений"
+    },
+    "titles": {
+      "options": "Варианты отображения",
+      "language": "Язык",
+      "reset": "Сбросить"
+    }
+  },
+  "switcher": {
+    "for100Label": "на 100,000 населения",
+    "periodLabel": "за последний день"
+  },
+  "footer": {
+    "by": "Авторы: ",
+    "and": "и"
+  },
+  "map": {
+    "tooltip": {
+      "cases": "Число новых заражений",
+      "deaths": "Число новых смертей",
+      "recovered": "Число новых выздоровлений",
+      "lastDay": "за последний день",
+      "wholePeriod": "за весь период",
+      "per100": "на 100K",
+      "for": "для"
+    },
+    "legend": "и выше"
+  },
+  "dashboardTable": "Информация отображается для:",
+  "heading": {
+    "confirmed": "заражено",
+    "deaths": "смертей",
+    "recovered": "выздоровлений"
+  }
+}

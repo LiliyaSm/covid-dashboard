@@ -2,9 +2,10 @@ import React, { useCallback, useMemo } from 'react';
 import { GeoJSON } from 'react-leaflet';
 import PropTypes from 'prop-types';
 import L from 'leaflet';
-import * as constants from '../../data/constants';
+import { useTranslation } from 'react-i18next';
 
 const GeojsonView = React.memo(({ currShowingData, responseData, selectCountry, isFor100, isLastDay, countries }) => {
+  const { t } = useTranslation();
   const handleGeojson = useCallback(
     (code) => {
       const isCountryExists = responseData.find((el) => el.countryInfo.iso3 === code);
@@ -24,9 +25,9 @@ const GeojsonView = React.memo(({ currShowingData, responseData, selectCountry, 
       style={geojsonStyle}
       onEachFeature={(feature, layer) => {
         // eslint-disable-next-line no-param-reassign
-        feature.properties.tooltipText = `${constants.VARIANTS_FOR_DISPLAYING[currShowingData]} ${
-          isLastDay ? 'for last day' : 'for whole period'
-        } ${isFor100 ? 'per 100K' : ''} <br> for: ${feature.properties.name} `;
+        feature.properties.tooltipText = `${t(`map.tooltip.${currShowingData}`)}
+        ${isLastDay ? t('map.tooltip.lastDay') : t('map.tooltip.wholePeriod')}
+        ${isFor100 ? t('map.tooltip.per100') : ''} <br> ${t('map.tooltip.for')}: ${feature.properties.name}`;
 
         layer.on({
           click: () => {
