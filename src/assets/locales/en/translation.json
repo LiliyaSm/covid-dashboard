@@ -19,7 +19,8 @@
     },
     "titles": {
       "options": "Variants for Display",
-      "language": "Language"
+      "language": "Language",
+      "reset": "Reset filters"
     }
   },
   "switcher": {

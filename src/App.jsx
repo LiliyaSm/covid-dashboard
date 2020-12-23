@@ -17,6 +17,7 @@ import Charts from './components/Charts/Charts';
 import FilterCommon from './components/FilterCommon/FilterCommon';
 import GeojsonView from './components/MapComponents/GeojsonView';
 import RenderOverlay from './components/MapComponents/RenderOverlay';
+import { filterData } from './helpers/helpers';
 
 const App = () => {
   const { t } = useTranslation();
@@ -32,8 +33,10 @@ const App = () => {
 
   const getCovidInfo = async () => {
     const covidInfo = await requestService.getCovidInfo();
-    setInfo(covidInfo);
+    const covidHistory = await requestService.getAllCovidHistory();
+    setInfo(filterData(covidInfo, covidHistory));
   };
+
   const getWorldGeojson = async () => {
     const geoJsonWorld = await requestService.getGeojson();
     setGeoJson(geoJsonWorld);
@@ -132,7 +135,7 @@ const App = () => {
   );
 
   return isLoading ? (
-    <Loader />
+    <Loader className="page-center" />
   ) : (
     <>
       <div className="content">

@@ -19,7 +19,8 @@
     },
     "titles": {
       "options": "Варианты отображения",
-      "language": "Язык"
+      "language": "Язык",
+      "reset": "Сбросить"
     }
   },
   "switcher": {

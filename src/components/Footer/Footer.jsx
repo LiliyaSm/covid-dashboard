@@ -8,9 +8,6 @@ function Footer() {
   return (
     <footer>
       <div className="footer-wrapper">
-        <a href="https://rs.school/js/" target="_blank" rel="noreferrer">
-          <img alt="logo" className="logo" src={logo} />
-        </a>
         <div>
           <span>
             {t('footer.by')}
@@ -28,7 +25,12 @@ function Footer() {
             </a>
           </span>
         </div>
-        2020
+        <span>
+          <a href="https://rs.school/js/" target="_blank" rel="noreferrer">
+            <img alt="logo" className="logo" src={logo} />
+          </a>
+          2020
+        </span>
       </div>
     </footer>
   );
