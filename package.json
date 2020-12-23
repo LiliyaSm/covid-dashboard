@@ -1,0 +1,67 @@
+{
+  "name": "covid-dashboard",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/react": "^11.1.0",
+    "@testing-library/user-event": "^12.1.10",
+    "axios": "^0.21.0",
+    "axios-react": "^2.0.2",
+    "bootstrap": "^4.5.3",
+    "devextreme": "20.2.4",
+    "devextreme-react": "20.2.4",
+    "geojson-world-map": "0.0.2",
+    "i18next": "^19.8.4",
+    "i18next-http-backend": "^1.0.21",
+    "leaflet": "^1.7.1",
+    "leaflet-fullscreen": "^1.0.2",
+    "mapbox-gl": "^1.13.0",
+    "mapbox-gl-leaflet": "0.0.14",
+    "node-sass": "^4.14.1",
+    "prop-types": "^15.7.2",
+    "react": "^17.0.1",
+    "react-bootstrap": "^1.4.0",
+    "react-dom": "^17.0.1",
+    "react-i18next": "^11.8.4",
+    "react-leaflet": "^3.0.2",
+    "react-scripts": "4.0.1",
+    "web-vitals": "^0.2.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "lint": "eslint --fix --ext .js,.jsx ."
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "eslint": "^7.15.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.21.5",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "stylelint": "^13.7.2",
+    "stylelint-config-recess-order": "^2.1.0",
+    "stylelint-config-standard": "^19.0.0",
+    "stylelint-scss": "^3.18.0"
+  }
+}

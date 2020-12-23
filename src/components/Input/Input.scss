@@ -1,0 +1,31 @@
+.input__keyboard {
+  position: absolute;
+  top: 1px;
+  right: 5px;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  background-image: url('../../assets/icons/keyboard.svg');
+  background-repeat: no-repeat;
+  opacity: 0.5;
+  transition: opacity 0.3s;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.input__container {
+  position: relative;
+  margin: 10px 0;
+}
+
+.use-keyboard-input {
+  width: 100%;
+  padding-left: 10px;
+  border-radius: 5px;
+}
+
+.keyboard button:focus {
+  outline: none;
+}

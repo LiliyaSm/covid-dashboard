@@ -1,0 +1,55 @@
+.filter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  margin-bottom: 10px;
+  color: white;
+  background-color: grey;
+  border-radius: 5px;
+
+  &__full {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 100;
+    width: calc(100vw - 25px);
+  }
+}
+
+.filter-form {
+  display: flex;
+  align-items: baseline;
+}
+
+.filter-form input,
+.filter-form label {
+  cursor: pointer;
+}
+
+.period-switcher {
+  margin-right: 20px;
+}
+
+.filter-form > .custom-control {
+  margin-right: 10px;
+}
+
+.filter button {
+  margin-right: 15px;
+}
+
+.buttons-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 830px) {
+  .filter {
+    flex-direction: column;
+  }
+
+  .buttons-wrapper {
+    margin-bottom: 10px;
+  }
+}

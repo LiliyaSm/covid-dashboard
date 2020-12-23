@@ -1,0 +1,50 @@
+.expand-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  background-image: url('../../assets/icons/expandBtn.svg');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 16px;
+  border: 1px solid black;
+  border-radius: 50%;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.shrink-background {
+  background-image: url('../../assets/icons/closeBtn.svg');
+}
+
+.expand-btn:hover {
+  box-shadow: 0 0 5px #06203a;
+}
+
+.expand-btn:focus {
+  outline: none;
+}
+
+.full-container {
+  position: fixed !important;
+  top: 73px;
+  left: 15px;
+  z-index: 99;
+  width: calc(100vw - 25px) !important;
+  height: calc(100vh - 75px) !important;
+}
+
+@media (max-width: 1023px) {
+  .full-container {
+    top: 70px;
+  }
+}
+
+@media (max-width: 830px) {
+  .full-container {
+    top: 105px;
+  }
+}

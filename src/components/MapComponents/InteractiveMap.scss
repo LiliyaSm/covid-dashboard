@@ -1,0 +1,125 @@
+$yellow: #ffae00;
+$orange: #f60;
+$red: #ff1e00;
+$basecolor: #b9f7ed;
+$darkBlue: #06203a;
+$lightBlue: #a7d3ff;
+
+.leaflet-container {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: calc(100%);
+  margin: 0 auto;
+}
+
+.interactive-map {
+  position: relative;
+  max-width: 100%;
+  height: calc(100vh - 180px);
+  padding: 10px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  background-color: grey;
+  border-radius: 5px;
+}
+
+@mixin icon-marker {
+  position: relative;
+  right: 20px;
+  bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.6em;
+  height: 3.6em;
+  font-weight: bold;
+  color: black;
+  cursor: pointer;
+  border-radius: 100%;
+  box-shadow: 0 2px 5px rgba(black, 0.9);
+}
+
+.icon-marker-low {
+  @include icon-marker;
+
+  width: 3.6em;
+  height: 3.6em;
+  background-color: $yellow;
+}
+
+.icon-marker-medium {
+  @include icon-marker;
+
+  width: 4.6em;
+  height: 4.6em;
+  background-color: $orange;
+}
+
+.icon-marker-hight {
+  @include icon-marker;
+
+  width: 5.6em;
+  height: 5.6em;
+  background-color: $red;
+}
+
+.switchGroup {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: 40px;
+  padding-bottom: 10px;
+  padding-left: 10px;
+}
+
+.map-overlay {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  margin-right: 20px;
+  overflow: auto;
+  font-family: Arial, sans-serif;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 3px;
+}
+
+#features {
+  top: 0;
+  z-index: 100;
+  width: 250px;
+  height: 100px;
+  margin-top: 20px;
+}
+
+#legend {
+  z-index: 100;
+  width: 190px;
+  height: 90px;
+  padding: 10px;
+  margin-bottom: 30px;
+  font-size: 15px;
+  line-height: 20px;
+  border: 2px solid $lightBlue;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.legend-key {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 5px;
+  border-radius: 20%;
+}
+
+.toolTip {
+  font-size: 14px;
+  border: 1px solid $lightBlue;
+  box-shadow: 1px 1px 5px $darkBlue;
+}
+
+@media (max-width: 1023px) {
+  .interactive-map {
+    margin-right: 0;
+  }
+}

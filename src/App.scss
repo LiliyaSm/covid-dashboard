@@ -1,0 +1,200 @@
+@import url('https://fonts.googleapis.com/css2?family=Titillium+Web&display=swap');
+
+$basecolor: #b9f7ed;
+$darkBlue: #06203a;
+$lightBlue: #a7d3ff;
+
+html {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+  font-family: 'Titillium Web', sans-serif !important;
+}
+
+body {
+  background: linear-gradient(225deg, transparent 24.5%, #44b466 24.6%, transparent 24.8%) 37px -37px,
+    linear-gradient(135deg, transparent 24.5%, #44b469 24.6%, transparent 24.8%) 37px 111px,
+    linear-gradient(135deg, transparent 24.5%, #44b466 24.6%, transparent 24.8%) 37px 37px,
+    linear-gradient(225deg, transparent 24.5%, #44b46f 24.6%, transparent 24.8%) 37px 37px,
+    linear-gradient(135deg, transparent 24.5%, #44b44d 24.6%, transparent 24.8%) 74px 0,
+    linear-gradient(225deg, transparent 24.5%, #44b44a 24.6%, transparent 24.8%) 74px 0,
+    linear-gradient(135deg, transparent 24.5%, #44b46f 24.6%, transparent 24.8%) 74px 74px,
+    linear-gradient(225deg, transparent 24.5%, #44b44d 24.6%, transparent 24.8%) 74px 74px;
+  background-color: #f5f5f5 !important;
+  background-size: 148px 148px;
+}
+
+.main-wrapper {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.header {
+  font-size: 40px;
+  text-align: center;
+  text-transform: uppercase;
+  transition: all;
+}
+
+.radio-buttons {
+  margin-right: 40px;
+}
+
+.filter-form {
+  display: flex;
+  font-size: 17px;
+}
+
+.form-check {
+  margin-bottom: 10px;
+}
+
+.widget-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.list-col {
+  min-width: 428px;
+}
+
+.map-col {
+  flex-grow: 2;
+  // min-width: 455px;
+}
+
+footer {
+  width: 100%;
+  height: 42px;
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+.logo {
+  height: 20px;
+  margin-right: 20px;
+  margin-left: 20px;
+  background-repeat: no-repeat;
+}
+
+footer a {
+  color: $darkBlue;
+}
+
+footer a:hover {
+  text-decoration: none;
+}
+
+.footer-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+  padding-right: 10px;
+  padding-left: 10px;
+  margin: 0 auto;
+  text-align: center;
+  background: $basecolor;
+  border-radius: 5px;
+}
+
+.content {
+  min-height: 100vh;
+  margin-bottom: -42px;
+}
+
+.content::after {
+  display: block;
+  height: 42px;
+  content: '';
+}
+
+.page-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+
+.keyboard__key {
+  background-image: linear-gradient(109.6deg, rgba(48, 207, 208, 1) 11.2%, rgba(51, 8, 103, 1) 92.5%);
+}
+
+.keyboard__key--dark {
+  background-image: linear-gradient(109.6deg, rgb(2, 29, 29) 11.2%, rgb(74, 9, 148) 92.5%);
+}
+
+@media (max-width: 1500px) {
+  .country-list {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 1350px) {
+  .list-col {
+    min-width: auto;
+  }
+
+  .wrapper {
+    width: 280px;
+  }
+}
+
+@media (max-width: 1023px) {
+  .filter label,
+  .filter button {
+    font-size: 14px;
+  }
+
+  .widget-wrapper {
+    justify-content: center;
+  }
+
+  .list-col {
+    flex-grow: 2;
+    order: 2;
+    margin-right: 5px;
+  }
+
+  .map-col {
+    order: 1;
+    width: 100%;
+  }
+
+  .map-col .interactive-map {
+    height: 550px;
+  }
+
+  .chart-col {
+    order: 2;
+  }
+
+  .list-col .wrapper {
+    height: 610px;
+  }
+
+  .list-col .country-list {
+    height: 540px;
+  }
+}
+
+@media (max-width: 830px) {
+  .header {
+    font-size: 20px;
+  }
+
+  .list-col {
+    margin-right: 0;
+  }
+}
+
+@media (max-width: 730px) {
+  .chart-container,
+  .chart-col,
+  .wrapper {
+    width: 100%;
+  }
+}
