@@ -5,7 +5,6 @@ function Footer() {
   return (
     <footer>
       <div className="footer-wrapper">
-        <img alt="logo" className="logo" src={logo} />
         <div>
           <span>
             by
@@ -18,10 +17,13 @@ function Footer() {
             {' '}
             <a href="https://github.com/gentaliana">Gentaliana</a>
           </span>
-          {' '}
           <a href="https://rs.school/js/"> </a>
         </div>
-        2020
+        <span>
+          {' '}
+          <img alt="logo" className="logo" src={logo} />
+          2020
+        </span>
       </div>
     </footer>
   );
