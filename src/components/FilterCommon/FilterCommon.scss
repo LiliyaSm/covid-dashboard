@@ -12,7 +12,7 @@
     position: fixed;
     top: 15px;
     left: 15px;
-    z-index: 1000;
+    z-index: 100;
     width: calc(100vw - 25px);
   }
 }
@@ -37,4 +37,19 @@
 
 .filter button {
   margin-right: 15px;
+}
+
+.buttons-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 830px) {
+  .filter {
+    flex-direction: column;
+  }
+
+  .buttons-wrapper {
+    margin-bottom: 10px;
+  }
 }

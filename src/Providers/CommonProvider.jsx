@@ -5,7 +5,7 @@ import * as constants from '../data/constants';
 export const CommonContext = React.createContext({
   currentCountry: { name: null, code: null, population: 0 },
   selectCountry: () => {},
-  showingData: 'cases',
+  showingData: constants.DEFAULT_DATA,
   changeShowingData: () => {},
   isFor100: false,
   changeIsFor100: () => {},
@@ -27,7 +27,7 @@ export default function CommonProvider({ children }) {
     setCurrentCountry,
   ]);
 
-  const [showingData, setShowingData] = useState('cases');
+  const [showingData, setShowingData] = useState(constants.DEFAULT_DATA);
   const changeShowingData = useCallback((data) => setShowingData(data), [setShowingData]);
 
   const [isFor100, setIsFor100] = useState(false);
