@@ -19,18 +19,39 @@ import { countFor100 } from '../../helpers/helpers';
 import './Charts.scss';
 import FilterForm from '../FilterCommon/FilterForm';
 
-const Charts = React.memo(({ chartsList, countryName, isFor100, population, countryPopulation }) => {
+const Charts = React.memo(({ chartsList, countryName, isFor100, isLastDay, population, countryPopulation }) => {
   const [isFullScreenSize, setIsFullScreenSize] = useState(false);
 
   const dataWithPer100 = useMemo(() => {
+    console.log(chartsList);
     const populationCount = countryName === WHOLE_WORLD_NAME ? population : countryPopulation;
-    return chartsList?.map((item) => ({
+    let chartsListForPeriod = [];
+
+    if (isLastDay) {
+      for (let i = 1; i < chartsList.length; i++) {
+        let getDiff = (value) => chartsList[i][value] - chartsList[i - 1][value];
+        let cases = getDiff('cases');
+        let deaths = getDiff('deaths');
+        let recovered = getDiff('recovered');
+        if (cases >= 0 && deaths >= 0 && recovered >= 0) {
+          chartsListForPeriod.push({
+            ...chartsList[i],
+            cases,
+            deaths,
+            recovered,
+          });
+        }
+      }
+    } else {
+      chartsListForPeriod = chartsList;
+    }
+    return chartsListForPeriod?.map((item) => ({
       ...item,
       casesIsFor100: countFor100(item.cases, populationCount),
       deathsIsFor100: countFor100(item.deaths, populationCount),
       recoveredIsFor100: countFor100(item.recovered, populationCount),
     }));
-  }, [chartsList, countryName, population]);
+  }, [chartsList, countryName, population, isLastDay]);
 
   const customizeTooltip = useCallback((pointInfo) => ({
     text: `${pointInfo.argumentText}<br/>${pointInfo.value.toLocaleString('ru')}`,

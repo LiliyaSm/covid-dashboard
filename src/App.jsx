@@ -179,6 +179,7 @@ const App = () => {
                   isFor100={isFor100}
                   population={population}
                   countryPopulation={currentCountry.population}
+                  isLastDay={isLastDay}
                 />
               </div>
             </div>

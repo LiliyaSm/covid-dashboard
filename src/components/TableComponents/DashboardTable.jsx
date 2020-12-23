@@ -77,6 +77,9 @@ const DashboardTable = React.memo(
       <div className={isFullScreenSize ? 'dashboard-table full-container' : 'dashboard-table'}>
         <div className="table-wrapper">
           <ExpandBtn setIsFullScreenSize={setIsFullScreenSize} isFullScreenSize={isFullScreenSize} />
+          <Button className ="reset-btn" variant="info" onClick={handleReset}>
+            Reset filters
+          </Button>
           <h1 className="table-header">
             Info displayed for:&nbsp;
             {currentCountry.name}
@@ -100,9 +103,6 @@ const DashboardTable = React.memo(
             </tbody>
           </Table>
           <FilterForm />
-          <Button variant="info" onClick={handleReset}>
-            Reset filters
-          </Button>
         </div>
       </div>
     );
