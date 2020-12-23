@@ -3,6 +3,7 @@ export const PERIODS = {
   lastDay: 'lastDay',
 };
 
+export const DEFAULT_DATA = 'cases';
 export const ALL_HISTORY = 'all';
 export const PER_100_THOUSANDS = 100000;
 

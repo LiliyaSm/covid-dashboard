@@ -30,9 +30,21 @@
 
 .full-container {
   position: fixed !important;
-  top: 65px;
+  top: 73px;
   left: 15px;
-  z-index: 999;
+  z-index: 99;
   width: calc(100vw - 25px) !important;
   height: calc(100vh - 75px) !important;
+}
+
+@media (max-width: 1200px) {
+  .full-container {
+    top: 70px;
+  }
+}
+
+@media (max-width: 830px) {
+  .full-container {
+    top: 105px;
+  }
 }
