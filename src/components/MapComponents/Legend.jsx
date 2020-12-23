@@ -1,16 +1,18 @@
 import React, { useMemo } from 'react';
 import 'mapbox-gl-leaflet';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import * as constants from '../../data/constants';
 
 const Legend = React.memo(({ boundaries }) => {
+  const { t } = useTranslation();
   const layers = useMemo(
     () => ({
       low: `0 - ${boundaries.firstBoundary}`,
       medium: `${boundaries.firstBoundary} - ${boundaries.secondBoundary}`,
-      hight: `${boundaries.secondBoundary} and above`,
+      hight: `${boundaries.secondBoundary} ${t('map.legend')}`,
     }),
-    [boundaries],
+    [boundaries, t],
   );
 
   const legendKeys = useMemo(() => {

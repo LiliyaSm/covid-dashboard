@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import Table from 'react-bootstrap/Table';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import ExpandBtn from '../ExpandBtn/ExpandBtn';
 import Input from '../Input/Input';
-import * as constants from '../../data/constants';
 import { countFor100, getDataForPeriod } from '../../helpers/helpers';
 import './CountryList.scss';
 
@@ -11,6 +11,7 @@ const CountryList = React.memo(
   ({ countriesList, countryCode, selectCountry, showingData, isFor100, isLastDay, population }) => {
     const [isFullScreenSize, setIsFullScreenSize] = useState(false);
     const [countries, setCountries] = useState([]);
+    const { t } = useTranslation();
 
     const currShowingDataForPeriod = useMemo(() => getDataForPeriod(isLastDay, showingData), [isLastDay, showingData]);
 
@@ -38,7 +39,7 @@ const CountryList = React.memo(
 
     const onCountryClick = useCallback((el) => {
       if (countryCode === el.countryInfo.iso3) {
-        selectCountry({ name: constants.WHOLE_WORLD_NAME, code: constants.WHOLE_WORLD_NAME, population });
+        selectCountry({ name: null, code: null, population });
       } else {
         selectCountry({ name: el.country, code: el.countryInfo.iso3, population: el.population });
       }
@@ -47,7 +48,7 @@ const CountryList = React.memo(
     return (
       <div className={isFullScreenSize ? 'wrapper full-container' : 'wrapper'}>
         <ExpandBtn setIsFullScreenSize={setIsFullScreenSize} isFullScreenSize={isFullScreenSize} />
-        <Input filterCountries={filterCountries} placeholder="Country Enter" />
+        <Input filterCountries={filterCountries} placeholder={t('input-placeholder')} />
         <div className={isFullScreenSize ? 'country-list__fullscreen' : 'country-list'}>
           <Table striped hover size="sm" variant="dark">
             <tbody>
@@ -78,12 +79,16 @@ const CountryList = React.memo(
 
 CountryList.propTypes = {
   countriesList: PropTypes.arrayOf(PropTypes.object).isRequired,
-  countryCode: PropTypes.string.isRequired,
+  countryCode: PropTypes.string,
   selectCountry: PropTypes.func.isRequired,
   showingData: PropTypes.string.isRequired,
   isFor100: PropTypes.bool.isRequired,
   isLastDay: PropTypes.bool.isRequired,
   population: PropTypes.number.isRequired,
+};
+
+CountryList.defaultProps = {
+  countryCode: null,
 };
 
 export default CountryList;

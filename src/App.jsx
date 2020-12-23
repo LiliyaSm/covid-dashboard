@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext, useMemo } from 'react';
 import './App.scss';
 import Container from 'react-bootstrap/Container';
+import { useTranslation } from 'react-i18next';
 import { NotifyContext } from './Providers/NotifyProvider';
 import { CommonContext } from './Providers/CommonProvider';
 import DashboardTable from './components/TableComponents/DashboardTable';
@@ -19,6 +20,7 @@ import RenderOverlay from './components/MapComponents/RenderOverlay';
 import { filterData } from './helpers/helpers';
 
 const App = () => {
+  const { t } = useTranslation();
   const { notify, addNotify } = useContext(NotifyContext);
   const { currentCountry, changePopulation, showingData, selectCountry, isFor100, isLastDay, population } = useContext(
     CommonContext,
@@ -48,7 +50,7 @@ const App = () => {
 
   const getCovidHistory = async (country) => {
     const data = await requestService.getCovidHistory(country);
-    const covidHistory = country === 'all' ? data : data.timeline;
+    const covidHistory = country === constants.ALL_HISTORY ? data : data.timeline;
     const arrayForChart = Object.entries(covidHistory).reduce((acc, item) => {
       Object.entries(item[1]).forEach((el) => {
         const obj = acc.find((i) => i.data === el[0]);
@@ -73,7 +75,7 @@ const App = () => {
       await getCovidInfoWorld();
       await getWorldGeojson();
     } catch (exception) {
-      addNotify(constants.NOTIFY_TYPES.error, constants.ERROR_HEADER, constants.ERROR_MESSAGE);
+      addNotify(constants.NOTIFY_TYPES.error, t('error.error-header'), t('error.error-message'));
     } finally {
       setIsLoading(false);
     }
@@ -81,10 +83,10 @@ const App = () => {
 
   useEffect(async () => {
     try {
-      const country = currentCountry.name === constants.WHOLE_WORLD_NAME ? 'all' : currentCountry.name;
+      const country = currentCountry.name ?? constants.ALL_HISTORY;
       await getCovidHistory(country);
     } catch (exception) {
-      addNotify(constants.NOTIFY_TYPES.error, constants.ERROR_HEADER, constants.ERROR_MESSAGE);
+      addNotify(constants.NOTIFY_TYPES.error, t('error.error-header'), t('error.error-message'));
     }
   }, [currentCountry]);
 
@@ -140,7 +142,7 @@ const App = () => {
         <Container fluid className="main-wrapper">
           {notify ? <Alerts /> : null}
           <Header />
-          <FilterCommon infoWorld={infoWorld} />
+          <FilterCommon />
           <div className="widget-wrapper">
             <div className="list-col">
               <CountryList

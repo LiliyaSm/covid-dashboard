@@ -1,37 +1,36 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Table from 'react-bootstrap/Table';
+import { useTranslation } from 'react-i18next';
 import ExpandBtn from '../ExpandBtn/ExpandBtn';
-import * as constants from '../../data/constants';
 import { countFor100, getDataForPeriodDashboard } from '../../helpers/helpers';
 import './DashboardTable.scss';
 
 const DashboardTable = React.memo(({ responseData, responseDataWorld, currentCountry, isFor100, isLastDay }) => {
+  const { t } = useTranslation();
   const [isFullScreenSize, setIsFullScreenSize] = useState(false);
 
   const getTotalPopulation = useCallback(
     (country) => {
-      let totalPopulation;
-      if (country === constants.WHOLE_WORLD_NAME) {
-        totalPopulation = responseDataWorld.population;
-      } else {
-        totalPopulation = responseData.find((el) => el.countryInfo.iso3 === country).population;
+      if (country) {
+        return responseData.find((el) => el.countryInfo.iso3 === country).population;
       }
-      return totalPopulation;
+      return responseDataWorld.population;
     },
     [responseDataWorld, responseData],
   );
 
   const getTableData = useCallback(
     (country, data) => {
-      if (country === constants.WHOLE_WORLD_NAME) {
-        return responseDataWorld;
+      if (country) {
+        return data.find((el) => el.countryInfo.iso3 === country);
       }
-      const dataForCountry = data.find((el) => el.countryInfo.iso3 === country);
-      return dataForCountry;
+      return responseDataWorld;
     },
     [responseDataWorld],
   );
+
+  const HEADINGS = useMemo(() => [t('heading.confirmed'), t('heading.deaths'), t('heading.recovered')], [t]);
 
   const renderTableRows = useMemo(() => {
     const data = getTableData(currentCountry.code, responseData);
@@ -56,13 +55,14 @@ const DashboardTable = React.memo(({ responseData, responseDataWorld, currentCou
       <div className="table-wrapper">
         <ExpandBtn setIsFullScreenSize={setIsFullScreenSize} isFullScreenSize={isFullScreenSize} />
         <h1 className="table-header">
-          Info displayed for:&nbsp;
-          {currentCountry.name}
+          {t('dashboardTable')}
+          &nbsp;
+          {currentCountry.name ?? t('whole-world-name')}
         </h1>
         <Table>
           <thead>
             <tr>
-              {constants.HEADINGS.map((heading) => (
+              {HEADINGS.map((heading) => (
                 <th key={heading}>{heading}</th>
               ))}
             </tr>
@@ -72,7 +72,7 @@ const DashboardTable = React.memo(({ responseData, responseDataWorld, currentCou
               renderTableRows
             ) : (
               <tr>
-                <td colSpan={constants.HEADINGS.length}>{constants.ERROR_MESSAGE}</td>
+                <td colSpan={HEADINGS.length}>{t('error.error-message')}</td>
               </tr>
             )}
           </tbody>

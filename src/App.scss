@@ -35,8 +35,8 @@ body {
 .header {
   font-size: 40px;
   text-align: center;
-  transition: all;
   text-transform: uppercase;
+  transition: all;
 }
 
 .radio-buttons {
@@ -80,26 +80,26 @@ footer {
   background-repeat: no-repeat;
 }
 
-footer a:hover {
-  text-decoration: none;
-}
-
 footer a {
   color: $darkBlue;
 }
 
+footer a:hover {
+  text-decoration: none;
+}
+
 .footer-wrapper {
-  border-radius: 5px;
-  height: 100%;
-  background: $basecolor;
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  height: 100%;
   padding-right: 10px;
   padding-left: 10px;
   margin: 0 auto;
   text-align: center;
+  background: $basecolor;
+  border-radius: 5px;
 }
 
 .content {
